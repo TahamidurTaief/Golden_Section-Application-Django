@@ -1,0 +1,204 @@
+{% load static %}
+<!-- Popular Section -->
+<section class="py-16 md:py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="max-w-2xl mx-auto text-center mb-12" data-aos="fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold mb-3">
+                Our Popular <span class="bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Services</span>
+            </h2>
+            <p class="text-gray-600">Each listing is designed to be clear and concise, providing customers</p>
+        </div>
+
+        <!-- Service Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" data-aos="fade-up" data-aos-delay="100">
+            <button class="px-4 py-2 rounded-lg bg-orange-500 text-white text-sm transition">Computer Service</button>
+            <button class="px-4 py-2 rounded-lg bg-white hover:bg-orange-50 text-gray-700 text-sm transition">Removals</button>
+            <button class="px-4 py-2 rounded-lg bg-white hover:bg-orange-50 text-gray-700 text-sm transition">Man & Van</button>
+            <button class="px-4 py-2 rounded-lg bg-white hover:bg-orange-50 text-gray-700 text-sm transition">Furniture Assembly</button>
+            <button class="px-4 py-2 rounded-lg bg-white hover:bg-orange-50 text-gray-700 text-sm transition">Electrical</button>
+            <button class="px-4 py-2 rounded-lg bg-white hover:bg-orange-50 text-gray-700 text-sm transition">Construction</button>
+            <button class="px-4 py-2 rounded-lg bg-white hover:bg-orange-50 text-gray-700 text-sm transition">Plumbing</button>
+        </div>
+
+        <!-- Service Grid -->
+        <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <!-- Service Card 1 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="100">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-19.jpg' %}" alt="Computer Repair" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Computer Repair Service</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $40</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.8
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 2 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-08.jpg' %}" alt="Software Installation" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Software Installation</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $35</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.9
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 3 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-15.jpg' %}" alt="Data Recovery" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Data Recovery Service</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $60</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.7
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 4 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="400">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-20.jpg' %}" alt="Network Setup" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Network Setup</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $50</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.6
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 5 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="100">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-21.jpg' %}" alt="Virus Removal" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Virus & Malware Removal</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $45</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.8
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 6 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-22.jpg' %}" alt="Hardware Upgrade" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Hardware Upgrade</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $55</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.7
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 7 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-23.jpg' %}" alt="System Optimization" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">System Optimization</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $30</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.9
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 8 -->
+            <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition group" data-aos="fade-up" data-aos-delay="400">
+                <div class="relative h-48">
+                    <img src="{% static 'img/services/service-24.jpg' %}" alt="Cloud Setup" class="w-full h-full object-cover">
+                    <button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                        <i class="ti ti-heart text-lg"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h6 class="font-semibold mb-2 hover:text-orange-500 transition">
+                        <a href="#">Cloud Services Setup</a>
+                    </h6>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-900 font-medium">From $65</span>
+                        <span class="flex items-center text-gray-600">
+                            <i class="ti ti-star-filled text-yellow-400 mr-1"></i>4.8
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View All Button -->
+        <div class="text-center mt-10" data-aos="fade-up">
+            <a href="#" class="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition">
+                View All Services
+                <i class="ti ti-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- /Popular Section -->

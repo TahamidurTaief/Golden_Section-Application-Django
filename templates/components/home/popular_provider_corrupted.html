@@ -1,0 +1,149 @@
+{% load static %}
+<!-- Popular Providers Section -->
+<section class="py-16 md:py-20 bg-gray-50">
+	<div class="container mx-auto px-4">
+		<!-- Section Header -->
+		<div class="max-w-2xl mx-auto text-center mb-12" data-aos="fade-up">
+			<h2 class="text-3xl md:text-4xl font-bold mb-4 font-inter">
+				Popular <span class="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">Providers</span>
+			</h2>
+			<p class="text-gray-600 text-lg">Each listing is designed to be clear and concise, providing customers</p>
+		</div>
+
+		<!-- Provider Cards Grid -->
+		<div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<!-- Provider Card 1 -->
+			<div class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 hover:shadow-xl transition-all duration-300 group cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+				<div class="relative h-48 overflow-hidden bg-gradient-to-br from-orange-50 to-gray-50">
+					<img src="{% static 'img/profiles/avatar-18.jpg' %}" class="w-32 h-32 rounded-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ring-4 ring-white group-hover:scale-110 transition-transform duration-300" alt="Provider">
+				</div>
+				<div class="p-5">
+					<h3 class="text-lg font-semibold mb-2 text-gray-900 hover:text-orange-600 transition-colors text-center font-inter">
+						<a href="provider-details.html">Hendry Thompson</a>
+					</h3>
+					<p class="text-sm text-gray-500 text-center mb-3">Electrician</p>
+					<div class="flex items-center justify-center gap-1 text-sm mb-2">
+						<i class="ti ti-star-filled text-yellow-500"></i>
+						<span class="font-medium">4.4</span>
+						<span class="text-gray-500">(123)</span>
+					</div>
+					<p class="text-center text-sm text-gray-600">46 Services · From <span class="font-semibold text-orange-600">$60</span></p>
+				</div>
+			</div>
+
+			<!-- Provider Card 2 -->
+			<div class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 hover:shadow-xl transition-all duration-300 group cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+				<div class="relative h-48 overflow-hidden bg-gradient-to-br from-orange-50 to-gray-50">
+					<img src="{% static 'img/profiles/avatar-07.jpg' %}" class="w-32 h-32 rounded-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ring-4 ring-white group-hover:scale-110 transition-transform duration-300" alt="Provider">
+				</div>
+				<div class="p-5">
+					<h3 class="text-lg font-semibold mb-2 text-gray-900 hover:text-orange-600 transition-colors text-center font-inter">
+						<a href="provider-details.html">William Patterson</a>
+					</h3>
+					<p class="text-sm text-gray-500 text-center mb-3">Plumber</p>
+					<div class="flex items-center justify-center gap-1 text-sm mb-2">
+						<i class="ti ti-star-filled text-yellow-500"></i>
+						<span class="font-medium">4.8</span>
+						<span class="text-gray-500">(200)</span>
+					</div>
+					<p class="text-center text-sm text-gray-600">40 Services · From <span class="font-semibold text-orange-600">$70</span></p>
+				</div>
+			</div>
+
+			<!-- Provider Card 3 -->
+			<div class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 hover:shadow-xl transition-all duration-300 group cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+				<div class="relative h-48 overflow-hidden bg-gradient-to-br from-orange-50 to-gray-50">
+					<img src="{% static 'img/profiles/avatar-08.jpg' %}" class="w-32 h-32 rounded-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ring-4 ring-white group-hover:scale-110 transition-transform duration-300" alt="Provider">
+								</a>
+								<div>
+									<h6><a href="provider-details.html">Lorenzo Verduzco</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.6 (270
+										Reviews)</p>
+									<p class="mb-0">52 Services, From <span class="text-gray-9">$55</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
+						<div class="provider-item flex-fill">
+							<div class="d-flex align-items-center">
+								<a href="provider-details.html" class="avatar avatar-xl me-2">
+									<img src="{% static 'img/profiles/avatar-09.jpg' %}" alt="img" class="rounded-circle">
+								</a>
+								<div>
+									<h6><a href="provider-details.html">Rafael Smith</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.8 (300
+										Reviews)</p>
+									<p class="mb-0">40 Services, From <span class="text-gray-9">$05</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
+						<div class="provider-item flex-fill">
+							<div class="d-flex align-items-center">
+								<a href="provider-details.html" class="avatar avatar-xl me-2">
+									<img src="{% static 'img/profiles/avatar-08.jpg' %}" alt="img" class="rounded-circle">
+								</a>
+								<div>
+									<h6><a href="provider-details.html">Robert Boyd</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.8 (300
+										Reviews)</p>
+									<p class="mb-0">40 Services, From <span class="text-gray-9">$70</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
+						<div class="provider-item flex-fill">
+							<div class="d-flex align-items-center">
+								<a href="provider-details.html" class="avatar avatar-xl me-2">
+									<img src="{% static 'img/profiles/avatar-19.jpg' %}" alt="img" class="rounded-circle">
+								</a>
+								<div>
+									<h6><a href="provider-details.html">Joe Fletcher</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.9 (370
+										Reviews)</p>
+									<p class="mb-0">65 Services, From <span class="text-gray-9">$50</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
+						<div class="provider-item flex-fill">
+							<div class="d-flex align-items-center">
+								<a href="provider-details.html" class="avatar avatar-xl me-2">
+									<img src="{% static 'img/profiles/avatar-11.jpg' %}" alt="img" class="rounded-circle">
+								</a>
+								<div>
+									<h6><a href="provider-details.html">Benjamin Wade</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.2 (220
+										Reviews)</p>
+									<p class="mb-0">30 Services, From <span class="text-gray-9">$40</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
+						<div class="provider-item flex-fill">
+							<div class="d-flex align-items-center">
+								<a href="provider-details.html" class="avatar avatar-xl me-2">
+									<img src="{% static 'img/profiles/avatar-12.jpg' %}" alt="img" class="rounded-circle">
+								</a>
+								<div>
+									<h6><a href="provider-details.html">William Hughes</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.3 (280
+										Reviews)</p>
+									<p class="mb-0">35 Services, From <span class="text-gray-9">$45</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="text-center view-all wow fadeInUp" data-wow-delay="0.2s">
+					<a href="providers.html" class="btn btn-dark">View All<i class="ti ti-arrow-right ms-2"></i></a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- /Popular Providers -->

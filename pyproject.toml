@@ -1,0 +1,40 @@
+[project]
+name = "golden-section"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "asgiref==3.11.0",
+    "blinker==1.9.0",
+    "click==8.3.1",
+    "colorama==0.4.6",
+    "django==6.0",
+    "django-browser-reload==1.21.0",
+    "django-cotton==2.5.1",
+    "django-extensions==4.1",
+    "django-htmx==1.27.0",
+    "django-jazzmin==3.0.1",
+    "django-tailwind-cli==4.4.2",
+    "django-typer==3.5.0",
+    "flask==3.1.2",
+    "honeypot==0.1.1",
+    "itsdangerous==2.2.0",
+    "jinja2==3.1.6",
+    "markdown-it-py==4.0.0",
+    "markupsafe==3.0.3",
+    "mdurl==0.1.2",
+    "pillow==12.0.0",
+    "prompt-toolkit==3.0.52",
+    "pygments==2.19.2",
+    "rich==14.2.0",
+    "semver==3.0.4",
+    "shellingham==1.5.4",
+    "sqlparse==0.5.4",
+    "typer-slim==0.20.0",
+    "typing-extensions==4.15.0",
+    "tzdata==2025.2",
+    "wcwidth==0.2.14",
+    "werkzeug==3.1.4",
+    "whitenoise==6.11.0",
+]

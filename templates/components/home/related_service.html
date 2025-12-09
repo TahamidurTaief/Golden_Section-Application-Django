@@ -1,0 +1,144 @@
+{% load static %}
+<section class="section rated-section py-16 bg-gray-50">
+	<div class="container mx-auto px-4">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
+				<div class="section-header text-center mb-10">
+					<h2 class="text-3xl md:text-4xl font-bold mb-3">Browse <span class="text-[#E3651D]">High Rated Services</span></h2>
+					<p class="text-gray-600">Each listing is designed to be clear and concise, providing customers</p>
+				</div>
+			</div>
+		</div>
+		
+		<ul class="nav nav-tabs nav-tabs-solid justify-content-center mb-10 border-0 flex gap-2 flex-wrap">
+			<li class="nav-item"><a class="nav-link px-4 py-2 rounded-full font-medium" href="#rate-removals" data-bs-toggle="tab">Removals</a></li>
+			<li class="nav-item"><a class="nav-link px-4 py-2 rounded-full font-medium" href="#rate-furniture" data-bs-toggle="tab">Furniture Assembly</a></li>
+			<li class="nav-item"><a class="nav-link active px-4 py-2 rounded-full font-medium" href="#rate-electrical" data-bs-toggle="tab">Electrical Services</a></li>
+			<li class="nav-item"><a class="nav-link px-4 py-2 rounded-full font-medium" href="#rate-construction" data-bs-toggle="tab">Construction</a></li>
+			<li class="nav-item"><a class="nav-link px-4 py-2 rounded-full font-medium" href="#rate-man" data-bs-toggle="tab">Man & Van</a></li>
+			<li class="nav-item"><a class="nav-link px-4 py-2 rounded-full font-medium" href="#rate-plumbing" data-bs-toggle="tab">Plumbing</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="rate-electrical">
+				<div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+					
+					<div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
+						<div class="relative h-56 overflow-hidden">
+							<img src="{% static 'img/services/rated-service-01.jpg' %}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Wiring">
+							<div class="absolute top-3 left-3">
+								<img src="{% static 'img/profiles/avatar-01.jpg' %}" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Pro">
+							</div>
+							<button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm hover:text-red-500 hover:bg-red-50 transition-colors">
+								<i class="feather-heart text-lg"></i>
+							</button>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-bold mb-3 text-gray-900 group-hover:text-[#E3651D] transition-colors truncate">
+								<a href="service-details.html">Wiring and rewiring</a>
+							</h3>
+							<div class="flex items-center justify-between text-sm">
+								<div class="flex items-center gap-1.5">
+									<i class="ti ti-star-filled text-yellow-500 text-base"></i>
+									<span class="font-bold text-gray-900">4.9</span>
+									<span class="text-gray-500">(50 Reviews)</span>
+								</div>
+								<div class="text-gray-500 font-medium">
+									From <span class="font-bold text-gray-900 text-base">$120</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
+						<div class="relative h-56 overflow-hidden">
+							<img src="{% static 'img/services/rated-service-02.jpg' %}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Fan">
+							<div class="absolute top-3 left-3">
+								<img src="{% static 'img/profiles/avatar-02.jpg' %}" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Pro">
+							</div>
+							<button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm hover:text-red-500 hover:bg-red-50 transition-colors">
+								<i class="feather-heart text-lg"></i>
+							</button>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-bold mb-3 text-gray-900 group-hover:text-[#E3651D] transition-colors truncate">
+								<a href="service-details.html">Ceiling fan installation</a>
+							</h3>
+							<div class="flex items-center justify-between text-sm">
+								<div class="flex items-center gap-1.5">
+									<i class="ti ti-star-filled text-yellow-500 text-base"></i>
+									<span class="font-bold text-gray-900">4.7</span>
+									<span class="text-gray-500">(32 Reviews)</span>
+								</div>
+								<div class="text-gray-500 font-medium">
+									From <span class="font-bold text-gray-900 text-base">$80</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
+						<div class="relative h-56 overflow-hidden">
+							<img src="{% static 'img/services/rated-service-03.jpg' %}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Repair">
+							<div class="absolute top-3 left-3">
+								<img src="{% static 'img/profiles/avatar-03.jpg' %}" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Pro">
+							</div>
+							<button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm hover:text-red-500 hover:bg-red-50 transition-colors">
+								<i class="feather-heart text-lg"></i>
+							</button>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-bold mb-3 text-gray-900 group-hover:text-[#E3651D] transition-colors truncate">
+								<a href="service-details.html">Faulty wiring repair</a>
+							</h3>
+							<div class="flex items-center justify-between text-sm">
+								<div class="flex items-center gap-1.5">
+									<i class="ti ti-star-filled text-yellow-500 text-base"></i>
+									<span class="font-bold text-gray-900">4.8</span>
+									<span class="text-gray-500">(104 Reviews)</span>
+								</div>
+								<div class="text-gray-500 font-medium">
+									From <span class="font-bold text-gray-900 text-base">$150</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
+						<div class="relative h-56 overflow-hidden">
+							<img src="{% static 'img/services/rated-service-04.jpg' %}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Light">
+							<div class="absolute top-3 left-3">
+								<img src="{% static 'img/profiles/avatar-04.jpg' %}" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Pro">
+							</div>
+							<button class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm hover:text-red-500 hover:bg-red-50 transition-colors">
+								<i class="feather-heart text-lg"></i>
+							</button>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-bold mb-3 text-gray-900 group-hover:text-[#E3651D] transition-colors truncate">
+								<a href="service-details.html">Light fixture repair</a>
+							</h3>
+							<div class="flex items-center justify-between text-sm">
+								<div class="flex items-center gap-1.5">
+									<i class="ti ti-star-filled text-yellow-500 text-base"></i>
+									<span class="font-bold text-gray-900">4.6</span>
+									<span class="text-gray-500">(45 Reviews)</span>
+								</div>
+								<div class="text-gray-500 font-medium">
+									From <span class="font-bold text-gray-900 text-base">$90</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			</div>
+		<div class="text-center view-all mt-12 wow fadeInUp" data-wow-delay="0.2s">
+			<a href="services-grid.html" class="inline-flex items-center gap-2 px-8 py-3.5 bg-[#111827] text-white rounded-lg hover:bg-[#E3651D] transition-colors font-medium shadow-md">
+                View All
+                <i class="ti ti-arrow-right"></i>
+            </a>
+		</div>
+	</div>
+</section>

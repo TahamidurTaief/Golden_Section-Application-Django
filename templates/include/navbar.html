@@ -1,0 +1,236 @@
+{% load static %}	
+
+    <!-- Header -->
+	<header class="header header-new" style="font-family: 'Inter', 'Roboto', Arial, sans-serif; height: 70px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+		<div class="container" style="height: 100%;">
+			<nav class="navbar navbar-expand-lg header-nav" style="height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0;">
+				<div class="navbar-header" style="display: flex; align-items: center;">
+					<a href="index.html" class="navbar-brand logo" style="margin: 0; padding: 0;">
+						<img src="{% static 'img/logo.svg' %}" style="height: 50px; width: auto;" alt="Logo">
+					</a>
+					<a id="mobile_btn" href="javascript:void(0);" style="display: none; margin-left: auto; cursor: pointer; z-index: 1001;">
+						<span class="bar-icon" style="display: flex; flex-direction: column; gap: 5px;">
+							<span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: all 0.3s ease;"></span>
+							<span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: all 0.3s ease;"></span>
+							<span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: all 0.3s ease;"></span>
+						</span>
+					</a>
+				</div>
+				<div class="main-menu-wrapper" style="display: flex; align-items: center; flex: 1; justify-content: center;">
+					<ul class="main-nav" style="display: flex; align-items: center; margin: 0; padding: 0; list-style: none; gap: 30px;">
+						<li style="position: relative;">
+							<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Home</a>
+						</li>
+						<li style="position: relative;">
+							<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">About</a>
+						</li>
+						<li class="has-submenu" style="position: relative;">
+							<a href="services-list.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Services <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 5px;"></i></a>
+							<ul class="submenu" style="position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 0; min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; list-style: none; margin-top: 10px;">
+								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">House Cleaning</a></li>
+								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Plumbing</a></li>
+								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Electrical</a></li>
+								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Carpentry</a></li>
+								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Painting</a></li>
+								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Appliance Repair</a></li>
+							</ul>
+						</li>
+						<li style="position: relative;">
+							<a href="providers.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Provider</a>
+						</li>
+					</ul>
+				</div>
+				<ul class="nav header-navbar-rht" style="display: flex; align-items: center; margin: 0; padding: 0; list-style: none; gap: 10px;">
+					<li class="nav-item">
+						<a class="nav-link btn btn-light" href="#" data-bs-toggle="modal" data-bs-target="#login-modal" style="padding: 8px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; transition: all 0.3s;"><i class="ti ti-lock me-2"></i>Sign In</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link btn btn-linear-primary" href="#" data-bs-toggle="modal" data-bs-target="#register-modal" style="padding: 8px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; transition: all 0.3s;"><i class="ti ti-user-filled me-2"></i>Join Us</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- /Header -->
+	
+	<!-- Mobile Sidebar Overlay -->
+	<div class="sidebar-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; opacity: 0; transition: opacity 0.3s ease;"></div>
+	
+	<!-- Mobile Sidebar -->
+	<div class="mobile-sidebar" style="position: fixed; top: 0; right: -100%; width: 280px; height: 100%; background: #fff; z-index: 1002; box-shadow: -4px 0 12px rgba(0,0,0,0.15); transition: right 0.3s ease; overflow-y: auto; display: flex; flex-direction: column;">
+		<div class="sidebar-header" style="padding: 20px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center;">
+			<a href="index.html" class="menu-logo">
+				<img src="{% static 'img/logo.svg' %}" style="height: 40px; width: auto;" alt="Logo">
+			</a>
+			<a id="menu_close" class="menu-close" href="javascript:void(0);" style="font-size: 24px; color: #333; text-decoration: none; cursor: pointer; transition: color 0.3s;"><i class="fas fa-times"></i></a>
+		</div>
+		<div class="sidebar-content" style="flex: 1; padding: 20px;">
+			<ul class="mobile-nav" style="list-style: none; padding: 0; margin: 0;">
+				<li style="margin-bottom: 15px;">
+					<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: block; padding: 10px 0; transition: color 0.3s;">Home</a>
+				</li>
+				<li style="margin-bottom: 15px;">
+					<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: block; padding: 10px 0; transition: color 0.3s;">About</a>
+				</li>
+				<li class="has-submenu-mobile" style="margin-bottom: 15px;">
+					<a href="javascript:void(0);" class="submenu-toggle" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; transition: color 0.3s;">
+						Services 
+						<i class="fas fa-chevron-down" style="font-size: 12px; transition: transform 0.3s;"></i>
+					</a>
+					<ul class="mobile-submenu" style="list-style: none; padding-left: 15px; margin: 10px 0 0 0; display: none;">
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">House Cleaning</a></li>
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Plumbing</a></li>
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Electrical</a></li>
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Carpentry</a></li>
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Painting</a></li>
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Appliance Repair</a></li>
+					</ul>
+				</li>
+				<li style="margin-bottom: 15px;">
+					<a href="providers.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: block; padding: 10px 0; transition: color 0.3s;">Provider</a>
+				</li>
+			</ul>
+		</div>
+		<div class="sidebar-footer" style="padding: 20px; border-top: 1px solid #e5e5e5; display: flex; flex-direction: column; gap: 10px;">
+			<a class="btn btn-light" href="#" data-bs-toggle="modal" data-bs-target="#login-modal" style="padding: 12px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; text-align: center; display: flex; align-items: center; justify-content: center; transition: all 0.3s; background: #f8f9fa; color: #333; border: 1px solid #dee2e6;">
+				<i class="ti ti-lock me-2"></i>Sign In
+			</a>
+			<a class="btn btn-linear-primary" href="#" data-bs-toggle="modal" data-bs-target="#register-modal" style="padding: 12px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; text-align: center; display: flex; align-items: center; justify-content: center; transition: all 0.3s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border: none;">
+				<i class="ti ti-user-filled me-2"></i>Join Us
+			</a>
+		</div>
+	</div>
+
+	<!-- Navbar Styles & Scripts -->
+	<style>
+		/* Desktop Hover Effects */
+		.has-submenu:hover .submenu {
+			opacity: 1 !important;
+			visibility: visible !important;
+			transform: translateY(0) !important;
+		}
+		
+		.main-nav a:hover {
+			color: #667eea !important;
+		}
+		
+		.submenu li a:hover {
+			color: #667eea !important;
+			padding-left: 25px !important;
+		}
+		
+		.btn-light:hover {
+			background: #e2e6ea !important;
+		}
+		
+		.btn-linear-primary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
+		}
+		
+		/* Mobile Responsive */
+		@media (max-width: 991px) {
+			.header {
+				height: 60px !important;
+			}
+			
+			.navbar-header {
+				width: 100%;
+				justify-content: space-between !important;
+			}
+			
+			.navbar-header .logo img {
+				height: 40px !important;
+			}
+			
+			#mobile_btn {
+				display: block !important;
+			}
+			
+			.main-menu-wrapper,
+			.header-navbar-rht {
+				display: none !important;
+			}
+			
+			/* Sidebar Open State */
+			body.sidebar-open {
+				overflow: hidden;
+			}
+			
+			body.sidebar-open .sidebar-overlay {
+				display: block !important;
+				opacity: 1 !important;
+			}
+			
+			body.sidebar-open .mobile-sidebar {
+				right: 0 !important;
+			}
+			
+			/* Mobile Submenu Active State */
+			.has-submenu-mobile.active .mobile-submenu {
+				display: block !important;
+			}
+			
+			.has-submenu-mobile.active .fa-chevron-down {
+				transform: rotate(180deg) !important;
+			}
+		}
+		
+		/* Add padding to body to account for fixed header */
+		body {
+			padding-top: 70px;
+		}
+		
+		@media (max-width: 991px) {
+			body {
+				padding-top: 60px;
+			}
+		}
+	</style>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const mobileBtn = document.getElementById('mobile_btn');
+			const menuClose = document.getElementById('menu_close');
+			const sidebarOverlay = document.querySelector('.sidebar-overlay');
+			const body = document.body;
+
+			// Open mobile sidebar
+			if (mobileBtn) {
+				mobileBtn.addEventListener('click', function() {
+					body.classList.add('sidebar-open');
+				});
+			}
+
+			// Close mobile sidebar
+			function closeSidebar() {
+				body.classList.remove('sidebar-open');
+			}
+
+			if (menuClose) {
+				menuClose.addEventListener('click', closeSidebar);
+			}
+
+			if (sidebarOverlay) {
+				sidebarOverlay.addEventListener('click', closeSidebar);
+			}
+
+			// Handle mobile submenu toggles
+			const submenuToggles = document.querySelectorAll('.submenu-toggle');
+			submenuToggles.forEach(function(toggle) {
+				toggle.addEventListener('click', function(e) {
+					e.preventDefault();
+					const parent = this.parentElement;
+					parent.classList.toggle('active');
+				});
+			});
+
+			// Close sidebar on link click (optional, for better UX)
+			const mobileSidebarLinks = document.querySelectorAll('.mobile-sidebar a:not(.submenu-toggle):not(.menu-close)');
+			mobileSidebarLinks.forEach(function(link) {
+				link.addEventListener('click', function() {
+					closeSidebar();
+				});
+			});
+		});
+	</script>

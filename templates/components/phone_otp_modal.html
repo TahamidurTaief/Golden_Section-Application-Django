@@ -1,0 +1,50 @@
+	<!-- Phone otp Modal -->
+	<div class="modal fade" id="otp-phone-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header d-flex align-items-center justify-content-end pb-0 border-0">
+					<a href="javascript:void(0);" data-bs-dismiss="modal" aria-label="Close"><i
+							class="ti ti-circle-x-filled fs-20"></i></a>
+				</div>
+				<div class="modal-body p-4">
+					<form action="#" class="digit-group">
+						<div class="text-center mb-3">
+							<h3 class="mb-2">Phone OTP Verification</h3>
+							<p>OTP sent to your mobile number ending ******9575</p>
+						</div>
+						<div class="text-center otp-input">
+							<div class="d-flex align-items-center mb-3">
+								<input type="text" class=" rounded w-100 py-sm-3 py-2 text-center fs-26 fw-bold me-3"
+									id="digit-5" name="digit-5" data-next="digit-6" maxlength="1">
+								<input type="text" class=" rounded w-100 py-sm-3 py-2 text-center fs-26 fw-bold me-3"
+									id="digit-6" name="digit-6" data-next="digit-7" data-previous="digit-5"
+									maxlength="1">
+								<input type="text" class=" rounded w-100 py-sm-3 py-2 text-center fs-26 fw-bold me-3"
+									id="digit-7" name="digit-7" data-next="digit-8" data-previous="digit-6"
+									maxlength="1">
+								<input type="text" class=" rounded w-100 py-sm-3 py-2 text-center fs-26 fw-bold"
+									id="digit-8" name="digit-8" data-next="digit-9" data-previous="digit-7"
+									maxlength="1">
+							</div>
+							<div>
+								<div class="badge bg-danger-transparent mb-3">
+									<p class="d-flex align-items-center "><i class="ti ti-clock me-1"></i>09:59</p>
+								</div>
+								<div class="mb-3 d-flex justify-content-center">
+									<p>Didn't get the OTP? <a href="javascript:void(0);" class="text-primary">Resend
+											OTP</a></p>
+								</div>
+								<div>
+									<button type="button" class="btn btn-lg btn-linear-primary w-100"
+										data-bs-toggle="modal" data-bs-target="#reset-password">Verify &
+										Proceed</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- /Phone otp Modal -->

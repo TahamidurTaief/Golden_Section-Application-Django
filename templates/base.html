@@ -1,0 +1,129 @@
+{% load static %}
+{% load tailwind_cli %}
+<!DOCTYPE html>
+<!-- Consider setting the lang attribute dynamically based on request language -->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Search Engine Optimization (SEO) Tags -->
+    <!-- Title Tag: Crucial for SEO. Keep it concise (50-60 chars) and relevant. -->
+    <title>{% block page_title %}Default Page Title - My App{% endblock page_title %}</title>
+    
+    <!-- Meta Description: A brief summary of the page (150-160 chars). -->
+    <meta name="description" content="{% block meta_description %}Default description for My App. Describe your page content here.{% endblock meta_description %}">
+    
+    <!-- Meta Keywords (Less important for Google, but can be used by others) -->
+    <meta name="keywords" content="{% block meta_keywords %}default, keywords, my, app{% endblock meta_keywords %}">
+    
+    <!-- Canonical URL: Helps prevent duplicate content issues. -->
+    <!-- This provides a default, but you should override `canonical_url` in child templates for accuracy. -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}">
+    
+    <!-- Open Graph (OG) Tags for Social Media (Facebook, LinkedIn, etc.) -->
+    <!-- By default, they inherit from page_title and meta_description, but can be overridden -->
+    <meta property="og:title" content="{% block og_title %}{% block page_title_og %}{% endblock page_title_og %}{% endblock og_title %}">
+    <meta property="og:description" content="{% block og_description %}{% block meta_description_og %}{% endblock meta_description_og %}{% endblock og_description %}">
+    <meta property="og:type" content="website">
+    <!-- Replace with your default site image -->
+    <meta property="og:image" content="{% block og_image %}{% static 'images/default_og_image.png' %}{% endblock og_image %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock og_url %}">
+    <meta property="og:site_name" content="My App">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Replace with your Twitter handle if you have one -->
+    <meta name="twitter:site" content="@YourTwitterHandle">
+    <meta name="twitter:title" content="{% block twitter_title %}{% block page_title_twitter %}{% endblock page_title_twitter %}{% endblock twitter_title %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% block meta_description_twitter %}{% endblock meta_description_twitter %}{% endblock twitter_description %}">
+    <!-- Replace with your default site image -->
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/default_twitter_image.png' %}{% endblock twitter_image %}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'apple-touch-icon.png' %}">
+
+    <!-- Google Fonts: Inter & Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_template.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+    
+    <!-- Plugin CSS Files -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/owlcarousel/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/intltelinput/css/intlTelInput.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tabler-icons/tabler-icons.css' %}">
+    
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <!-- Tailwind CSS -->
+    {% tailwind_css %}
+    
+    <!-- JavaScript Files -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}" defer></script>
+    <script src="{% static 'js/cursor.js' %}" defer></script>
+    <script src="{% static 'js/validation.js' %}" defer></script>
+    <script src="{% static 'js/wow.min.js' %}" defer></script>
+    <script src="{% static 'js/index.umd.js' %}" defer></script>
+    
+    <!-- Plugin JavaScript Files -->
+    <script src="{% static 'plugins/select2/js/select2.min.js' %}" defer></script>
+    <script src="{% static 'plugins/owlcarousel/owl.carousel.min.js' %}" defer></script>
+    <script src="{% static 'plugins/intltelinput/js/intlTelInput.js' %}" defer></script>
+    <script src="{% static 'plugins/intltelinput/js/utils.js' %}" defer></script>
+    <script src="{% static 'plugins/ityped/index.js' %}" defer></script>
+    
+    <!-- Alpine.js -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Allow extra head content -->
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body x-data="{ darkMode: false }" :data-theme="darkMode ? 'dark' : 'light'" class="min-h-screen bg-base-100 text-base-content antialiased flex flex-col">
+    
+
+    <!-- Include the navbar -->
+    {% include 'include/navbar.html' %}
+    
+    
+    <!-- Main content area -->
+    <main id="main-content" class="p-4 md:p-8 flex-grow">
+        <!-- Replaced the original title block with page_title for consistency -->
+        {% block content %}{% endblock %}
+    </main>
+    
+    
+    {% include 'include/footer.html' %}
+    
+    <!-- AOS Initialization -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
+    
+    <!-- Extra body scripts -->
+    {% block extra_scripts %}{% endblock extra_scripts %}
+</body>
+</html>
