@@ -1,0 +1,23 @@
+{% load static %}
+    <!-- Breadcrumb -->
+	<div class="breadcrumb-bar text-center">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-12">
+					<h2 class="breadcrumb-title mb-2">Book a Service</h2>
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb justify-content-center mb-0">
+							<li class="breadcrumb-item"><a href="{% url 'core:home' %}"><i class="ti ti-home-2"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'core:services' %}">Services</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Book a Service</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+			<div class="breadcrumb-bg">
+				<img src="{% static 'img/bg/work-bg-01.svg' %}" class="breadcrumb-bg-1" alt="Background Pattern" loading="lazy">
+				<img src="{% static 'img/bg/work-bg-02.svg' %}" class="breadcrumb-bg-2" alt="Background Pattern" loading="lazy">
+			</div>
+		</div>
+	</div>
+	<!-- /Breadcrumb -->

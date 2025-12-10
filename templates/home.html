@@ -3,15 +3,11 @@
 
 {% block content %}
 {% include 'components/home/hero.html' %}
-{% include 'components/home/explore_categories.html' %}
-{% include 'components/home/featured_service.html' %}
-{% include 'components/home/popular_provider.html' %}
-{% include 'components/home/popular_service.html' %}
-{% include 'components/home/prefered_service.html' %}
-{% include 'components/home/work_section.html' %}
-{% include 'components/home/became_provider.html' %}
-{% include 'components/home/business_section.html' %}
-{% include 'components/home/testimonial.html' %}
-{% include 'components/home/blogs.html' %}
-{% include 'components/home/like.html' %}
+<div hx-get="{% url 'core:home_content' %}" hx-trigger="load" hx-swap="outerHTML">
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>
 {% endblock %}

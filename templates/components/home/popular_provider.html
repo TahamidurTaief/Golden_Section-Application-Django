@@ -15,129 +15,34 @@
 					</div>
 				</div>
 				<div class="row gx-0">
+					{% for provider in popular_providers %}
 					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
 						<div class="provider-item flex-fill">
 							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-18.jpg' %}" alt="img" class="rounded-circle">
+								<a href="{% url 'providers:detail' provider.id %}" class="avatar avatar-xl me-2">
+									{% if provider.business_logo %}
+									<img src="{{ provider.business_logo }}" alt="{{ provider.business_name }}" class="rounded-circle">
+									{% else %}
+									<img src="https://i.pravatar.cc/150?img={{ forloop.counter }}" alt="{{ provider.business_name }}" class="rounded-circle">
+									{% endif %}
 								</a>
 								<div>
-									<h6><a href="provider-details.html">Hendry Thompson</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.4 (123
+									<h6><a href="{% url 'providers:detail' provider.id %}">{{ provider.business_name }}</a></h6>
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>{{ provider.rating }} ({{ provider.total_reviews }}
 										Reviews)</p>
-									<p class="mb-0">46 Services, From <span class="text-gray-9">$60</span></p>
+									<p class="mb-0">{{ provider.services.count }} Services</p>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-07.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">William Patterson</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.8 (200
-										Reviews)</p>
-									<p class="mb-0">40 Services, From <span class="text-gray-9">$70</span></p>
-								</div>
-							</div>
-						</div>
+					{% empty %}
+					<div class="col-12">
+						<p class="text-center">No popular providers available at the moment.</p>
 					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-08.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">Lorenzo Verduzco</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.6 (270
-										Reviews)</p>
-									<p class="mb-0">52 Services, From <span class="text-gray-9">$55</span></p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-09.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">Rafael Smith</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.8 (300
-										Reviews)</p>
-									<p class="mb-0">40 Services, From <span class="text-gray-9">$05</span></p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-08.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">Robert Boyd</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.8 (300
-										Reviews)</p>
-									<p class="mb-0">40 Services, From <span class="text-gray-9">$70</span></p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-19.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">Joe Fletcher</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.9 (370
-										Reviews)</p>
-									<p class="mb-0">65 Services, From <span class="text-gray-9">$50</span></p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-11.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">Benjamin Wade</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.2 (220
-										Reviews)</p>
-									<p class="mb-0">30 Services, From <span class="text-gray-9">$40</span></p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-						<div class="provider-item flex-fill">
-							<div class="d-flex align-items-center">
-								<a href="provider-details.html" class="avatar avatar-xl me-2">
-									<img src="{% static 'img/profiles/avatar-12.jpg' %}" alt="img" class="rounded-circle">
-								</a>
-								<div>
-									<h6><a href="provider-details.html">William Hughes</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>4.3 (280
-										Reviews)</p>
-									<p class="mb-0">35 Services, From <span class="text-gray-9">$45</span></p>
-								</div>
-							</div>
-						</div>
-					</div>
+					{% endfor %}
 				</div>
 				<div class="text-center view-all wow fadeInUp" data-wow-delay="0.2s">
-					<a href="providers.html" class="btn btn-dark">View All<i class="ti ti-arrow-right ms-2"></i></a>
+					<a href="{% url 'providers:list' %}" class="btn btn-dark">View All<i class="ti ti-arrow-right ms-2"></i></a>
 				</div>
 			</div>
 		</div>

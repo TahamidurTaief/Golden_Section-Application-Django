@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Service Details{% endblock %}
+
+{% block content %}
+	
+	{% include 'components/service_details/breadcrumb.html' %}
+
+	<div class="page-wrapper">
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-8">
+						{% include 'components/service_details/left_side.html' %}
+						{% comment %} {% include 'components/service_details/reviews.html' %} {% endcomment %}
+					</div>
+
+					{% include 'components/service_details/right_side.html' %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="back-to-top">
+		<a class="back-to-top-icon align-items-center justify-content-center d-flex"  href="#top"><i class="fa-solid fa-arrow-up"></i></a>
+	</div>	
+
+	<!-- Cursor -->
+	<div class="xb-cursor tx-js-cursor">
+        <div class="xb-cursor-wrapper">
+            <div class="xb-cursor--follower xb-js-follower"></div>
+        </div>
+    </div>
+	<!-- /Cursor -->
+
+{% endblock %}

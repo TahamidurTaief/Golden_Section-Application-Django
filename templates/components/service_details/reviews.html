@@ -1,0 +1,199 @@
+{% load static %}
+<div class="card border-0 mb-xl-0 mb-3">
+	<div class="card-body">
+		<div class="d-flex align-items-center justify-content-between flex-wrap">
+			<h4 class="mb-3">Reviews (45)</h4>
+			<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add-review" class="btn btn-dark btn-sm mb-3">Write a Review</a>
+		</div>
+		<div class="row align-items-center">
+			<div class="col-md-5">
+				<div class="rating-item bg-light-500 text-center mb-3">
+					<h5 class="mb-3">Customer Reviews & Ratings</h5>
+					<div class="d-inline-flex align-items-center justify-content-center">
+						<i class="ti ti-star-filled text-warning me-1"></i>
+						<i class="ti ti-star-filled text-warning me-1"></i>
+						<i class="ti ti-star-filled text-warning me-1"></i>
+						<i class="ti ti-star-filled text-warning me-1"></i>
+						<i class="ti ti-star-filled text-warning"></i>
+					</div>
+					<p class="mb-3">(4.9 out of 5.0)</p>
+					<p class="text-gray-9">Based On 2,459 Reviews</p>
+				</div>
+			</div>
+			<div class="col-md-7">
+				<div class="rating-progress mb-3">
+					<div class="d-flex align-items-center mb-2">
+						<p class="me-2 text-nowrap mb-0">5 Star Ratings</p>
+						<div class="progress w-100" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar bg-warning" style="width: 90%"></div>
+							</div>
+						<p class="progress-count ms-2">2,547</p>
+					</div>
+					<div class="d-flex align-items-center mb-2">
+						<p class="me-2 text-nowrap mb-0">4 Star Ratings</p>
+						<div class="progress mb-0 w-100" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar bg-warning" style="width: 80%"></div>
+						</div>
+						<p class="progress-count ms-2">1,245</p>
+					</div>
+					<div class="d-flex align-items-center mb-2">
+						<p class="me-2 text-nowrap mb-0">3 Star Ratings</p>
+						<div class="progress mb-0 w-100" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar bg-warning" style="width: 70%"></div>
+						</div>
+						<p class="progress-count ms-2">600</p>
+					</div>
+					<div class="d-flex align-items-center mb-2">
+						<p class="me-2 text-nowrap mb-0">2 Star Ratings</p>
+						<div class="progress mb-0 w-100" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar bg-warning" style="width: 60%"></div>
+						</div>
+						<p class="progress-count ms-2">560</p>
+					</div>
+					<div class="d-flex align-items-center">
+						<p class="me-2 text-nowrap mb-0">1 Star Ratings</p>
+						<div class="progress mb-0 w-100" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar bg-warning" style="width: 40%"></div>
+						</div>
+						<p class="progress-count ms-2">400</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card review-item mb-3">
+			<div class="card-body p-3">
+				<div class="review-info">
+					<div class="d-flex align-items-center justify-content-between flex-wrap">
+						<div class="d-flex align-items-center mb-2">
+							<span class="avatar avatar-lg me-2 shrink-0">
+								<img src="{% static 'img/profiles/avatar-01.jpg' %}" class="rounded-circle" alt="img">
+							</span>
+							<div>
+								<h6 class="fs-16 fw-medium">Adrian Hendriques</h6>
+								<div class="d-flex align-items-center flex-wrap date-info">
+									<p class="fs-14 mb-0">2 days ago</p>
+									<p class="fs-14 mb-0">Excellent service!</p>
+								</div>
+							</div>
+						</div>
+						<span class="badge bg-success d-inline-flex align-items-center mb-2">
+							<i class="ti ti-star-filled me-1"></i>5
+						</span>
+					</div>
+					<p class="mb-2">The electricians were prompt, professional, and resolved our issues quickly.did a fantastic job upgrading our electrical panel. Highly recommend them for any electrical work.</p>
+					<div class="d-flex align-items-center justify-content-between flex-wrap like-info">
+						<div class="d-inline-flex align-items-center">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>Reply</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>Like</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center"><i class="ti ti-thumb-down me-2"></i>Dislike</a>
+						</div>
+						<div class="d-inline-flex align-items-center">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>45</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-down me-2"></i>21</a>
+						</div>
+					</div>
+				</div>
+				<div class="review-info reply mt-2 p-3">
+					<div class="d-flex align-items-center justify-content-between flex-wrap">
+						<div class="d-flex align-items-center mb-2">
+							<span class="avatar avatar-lg me-2 shrink-0">
+								<img src="{% static 'img/profiles/avatar-02.jpg' %}" class="rounded-circle" alt="img">
+							</span>
+							<div>
+								<h6 class="fs-16 fw-medium">Stephen Vance</h6>
+								<div class="d-flex align-items-center flex-wrap date-info">
+									<p class="fs-14 mb-0">2 days ago</p>
+									<p class="fs-14 mb-0">Excellent service!</p>
+								</div>
+							</div>
+						</div>
+						<span class="badge bg-success d-inline-flex align-items-center mb-2">
+							<i class="ti ti-star-filled me-1"></i>4
+						</span>
+					</div>
+					<p class="mb-2">Thank You!!! For Your Appreciation!!!</p>
+					<div class="d-flex align-items-center justify-content-between flex-wrap like-info">
+						<div class="d-inline-flex align-items-center flex-wrap">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>Reply</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>Like</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center"><i class="ti ti-thumb-down me-2"></i>Dislike</a>
+						</div>
+						<div class="d-inline-flex align-items-center">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>45</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-down me-2"></i>20</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card review-item mb-3">
+			<div class="card-body p-3">
+				<div class="review-info">
+					<div class="d-flex align-items-center justify-content-between flex-wrap">
+						<div class="d-flex align-items-center mb-2">
+							<span class="avatar avatar-lg me-2 shrink-0">
+								<img src="{% static 'img/profiles/avatar-03.jpg' %}" class="rounded-circle" alt="img">
+							</span>
+							<div>
+								<h6 class="fs-16 fw-medium">Don Rosales</h6>
+								<div class="d-flex align-items-center flex-wrap date-info">
+									<p class="fs-14 mb-0">2 days ago</p>
+									<p class="fs-14 mb-0">Great Service!</p>
+								</div>
+							</div>
+						</div>
+						<span class="badge bg-danger d-inline-flex align-items-center mb-2">
+							<i class="ti ti-star-filled me-1"></i>1
+						</span>
+					</div>
+					<p class="mb-2">The quality of work was exceptional, and they left the site clean and tidy. I was impressed by their attention to detail and commitment to safety standards. Highly recommend their services!</p>
+					<div class="d-flex align-items-center justify-content-between flex-wrap like-info">
+						<div class="d-inline-flex align-items-center flex-wrap">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>Reply</a>
+						</div>
+						<div class="d-inline-flex align-items-center">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>15</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-down me-2"></i>1</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card review-item mb-3">
+			<div class="card-body p-3">
+				<div class="review-info">
+					<div class="d-flex align-items-center justify-content-between flex-wrap">
+						<div class="d-flex align-items-center mb-2">
+							<span class="avatar avatar-lg me-2 shrink-0">
+								<img src="{% static 'img/profiles/avatar-04.jpg' %}" class="rounded-circle" alt="img">
+							</span>
+							<div>
+								<h6 class="fs-16 fw-medium">Paul Bronk</h6>
+								<div class="d-flex align-items-center flex-wrap date-info">
+									<p class="fs-14 mb-0">2 days ago</p>
+									<p class="fs-14 mb-0">Reliable and Trustworthy!</p>
+								</div>
+							</div>
+						</div>
+						<span class="badge bg-success d-inline-flex align-items-center mb-2">
+							<i class="ti ti-star-filled me-1"></i>1
+						</span>
+					</div>
+					<p class="mb-2">The quality of work was exceptional, and they left the site clean and tidy. I was impressed by their attention to detail and commitment to safety standards. Highly recommend their services!</p>
+					<div class="d-flex align-items-center justify-content-between flex-wrap like-info">
+						<div class="d-inline-flex align-items-center flex-wrap">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>Reply</a>
+						</div>
+						<div class="d-inline-flex align-items-center">
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-up me-2"></i>10</a>
+							<a href="javascript:void(0);" class="d-inline-flex align-items-center me-2"><i class="ti ti-thumb-down me-2"></i>2</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="text-center">
+			<a href="javascript:void(0);" class="btn btn-light btn-sm">Load More</a>
+		</div>
+	</div>
+</div>

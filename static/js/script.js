@@ -347,39 +347,45 @@ $(document).ready(function () {
 		})
 	}
 
-	// Service Slider
-
-	if ($('.service-slider').length > 0) {
-		$('.service-slider').owlCarousel({
-			loop: false,
-			margin: 24,
-			nav: true,
-			dots: false,
-			smartSpeed: 2000,
-			autoplay: false,
-			navText: [
-				'<i class="fa-solid fa-arrow-left"></i>',
-				'<i class="fa-solid fa-arrow-right"></i>'
-			],
-			responsive: {
-				0: {
-					items: 1
-				},
-				550: {
-					items: 1
-				},
-				768: {
-					items: 2
-				},
-				992: {
-					items: 3
-				},
-				1200: {
-					items: 3
+	// Service Slider - Function to initialize
+	function initServiceSlider() {
+		if ($('.service-slider').length > 0) {
+			// Destroy existing carousel if it exists
+			$('.service-slider').trigger('destroy.owl.carousel');
+			$('.service-slider').owlCarousel({
+				loop: false,
+				margin: 24,
+				nav: true,
+				dots: false,
+				smartSpeed: 2000,
+				autoplay: false,
+				navText: [
+					'<i class="fa-solid fa-arrow-left"></i>',
+					'<i class="fa-solid fa-arrow-right"></i>'
+				],
+				responsive: {
+					0: {
+						items: 1
+					},
+					550: {
+						items: 1
+					},
+					768: {
+						items: 2
+					},
+					992: {
+						items: 3
+					},
+					1200: {
+						items: 3
+					}
 				}
-			}
-		})
+			});
+		}
 	}
+	
+	// Initialize on page load
+	initServiceSlider();
 
 	if ($('.say-about.slider-for').length > 0) {
 		$('.say-about.slider-for').slick({
@@ -561,31 +567,35 @@ $(document).ready(function () {
 		})
 	}
 
-	// Popular Service slider
-	if ($('.popular-slider-3').length > 0) {
-		$('.popular-slider-3').owlCarousel({
-			loop: false,
-			margin: 24,
-			nav: true,
-			dots: false,
-			smartSpeed: 2000,
-			navText: ["<i class='fa-solid fa-angle-left'></i>", "<i class='fa-solid fa-angle-right'></i>"],
-			responsive: {
-				0: {
-					items: 1
-				},
-				550: {
-					items: 2
-				},
-				700: {
-					items: 2
-				},
-				1000: {
-					items: 3
+	// Popular Service slider - Function to initialize
+	function initPopularSlider3() {
+		if ($('.popular-slider-3').length > 0) {
+			$('.popular-slider-3').trigger('destroy.owl.carousel');
+			$('.popular-slider-3').owlCarousel({
+				loop: false,
+				margin: 24,
+				nav: true,
+				dots: false,
+				smartSpeed: 2000,
+				navText: ["<i class='fa-solid fa-angle-left'></i>", "<i class='fa-solid fa-angle-right'></i>"],
+				responsive: {
+					0: {
+						items: 1
+					},
+					550: {
+						items: 2
+					},
+					700: {
+						items: 2
+					},
+					1000: {
+						items: 3
+					}
 				}
-			}
-		})
+			});
+		}
 	}
+	initPopularSlider3();
 
 	// Service slider
 	if ($('.owl-carousel.car-testimonials-five-slider').length > 0) {
@@ -728,67 +738,73 @@ $(document).ready(function () {
 		})
 	}
 
-	//Feature Carousel
-
-	if ($('.feature-slider').length > 0) {
-		$('.feature-slider').owlCarousel({
-			loop: false,
-			margin: 24,
-			nav: true,
-			dots: false,
-			smartSpeed: 2000,
-			autoplay: false,
-			navText: [
-				'<i class="fa-solid fa-arrow-left"></i>',
-				'<i class="fa-solid fa-arrow-right"></i>'
-			],
-			responsive: {
-				0: {
-					items: 1
-				},
-				550: {
-					items: 1
-				},
-				768: {
-					items: 2
-				},
-				1000: {
-					items: 4
+	//Feature Carousel - Function to initialize
+	function initFeatureSlider() {
+		if ($('.feature-slider').length > 0) {
+			$('.feature-slider').trigger('destroy.owl.carousel');
+			$('.feature-slider').owlCarousel({
+				loop: false,
+				margin: 24,
+				nav: true,
+				dots: false,
+				smartSpeed: 2000,
+				autoplay: false,
+				navText: [
+					'<i class="fa-solid fa-arrow-left"></i>',
+					'<i class="fa-solid fa-arrow-right"></i>'
+				],
+				responsive: {
+					0: {
+						items: 1
+					},
+					550: {
+						items: 1
+					},
+					768: {
+						items: 2
+					},
+					1000: {
+						items: 4
+					}
 				}
-			}
-		})
+			});
+		}
 	}
+	initFeatureSlider();
 
-	//Card Image Carousel
-
-	if ($('.img-slider').length > 0) {
-		$('.img-slider').owlCarousel({
-			loop: true,
-			margin: 24,
-			nav: true,
-			dots: true,
-			smartSpeed: 2000,
-			autoplay: false,
-			navText: [
-				'<i class="fa-solid fa-chevron-left"></i>',
-				'<i class="fa-solid fa-chevron-right"></i>'
-			],
-			responsive: {
-				0: {
-					items: 1
-				},
-				550: {
-					items: 1
-				},
-				768: {
-					items: 1
-				},
-				1000: {
-					items: 1
+	//Card Image Carousel - Function to initialize
+	function initImgSlider() {
+		if ($('.img-slider').length > 0) {
+			$('.img-slider').trigger('destroy.owl.carousel');
+			$('.img-slider').owlCarousel({
+				loop: true,
+				margin: 24,
+				nav: true,
+				dots: true,
+				smartSpeed: 2000,
+				autoplay: false,
+				navText: [
+					'<i class="fa-solid fa-chevron-left"></i>',
+					'<i class="fa-solid fa-chevron-right"></i>'
+				],
+				responsive: {
+					0: {
+						items: 1
+					},
+					550: {
+						items: 1
+					},
+					768: {
+						items: 1
+					},
+					1000: {
+						items: 1
+					}
 				}
-			}
-		})
+			});
+		}
 	}
+	initImgSlider();
 	//catering-slider
 
 	if ($('.catering-slider').length > 0) {
@@ -820,28 +836,32 @@ $(document).ready(function () {
 		})
 	}
 
-	// Testimonial slider
-	if ($('.testimonial-slider').length > 0) {
-		$('.testimonial-slider').owlCarousel({
-			loop: true,
-			margin: 24,
-			nav: true,
-			dots: false,
-			smartSpeed: 2000,
-			navText: ["<i class='ti ti-chevron-left'></i>", "<i class='ti ti-chevron-right'></i>"],
-			responsive: {
-				0: {
-					items: 1
-				},
-				992: {
-					items: 2
-				},
-				1000: {
-					items: 3
+	// Testimonial slider - Function to initialize
+	function initTestimonialSlider() {
+		if ($('.testimonial-slider').length > 0) {
+			$('.testimonial-slider').trigger('destroy.owl.carousel');
+			$('.testimonial-slider').owlCarousel({
+				loop: true,
+				margin: 24,
+				nav: true,
+				dots: false,
+				smartSpeed: 2000,
+				navText: ["<i class='ti ti-chevron-left'></i>", "<i class='ti ti-chevron-right'></i>"],
+				responsive: {
+					0: {
+						items: 1
+					},
+					992: {
+						items: 2
+					},
+					1000: {
+						items: 3
+					}
 				}
-			}
-		})
+			});
+		}
 	}
+	initTestimonialSlider();
 
 	// Testimonial slider
 	if ($('.testimonial-slider-3').length > 0) {
@@ -2814,5 +2834,20 @@ $('.quantity-minus').click(function (e) {
 	var quantity3 = parseInt($('#increment-count2').val());
 	if (quantity3 > 0) {
 		$('#increment-count2').val(quantity3 - 1);
+	}
+});
+
+// HTMX Integration: Re-initialize all carousels after content swap
+document.body.addEventListener('htmx:afterSwap', function(evt) {
+	// Re-initialize all Owl Carousel sliders used in dynamically loaded content
+	if (typeof initServiceSlider === 'function') initServiceSlider();
+	if (typeof initPopularSlider3 === 'function') initPopularSlider3();
+	if (typeof initFeatureSlider === 'function') initFeatureSlider();
+	if (typeof initImgSlider === 'function') initImgSlider();
+	if (typeof initTestimonialSlider === 'function') initTestimonialSlider();
+	
+	// Re-initialize WOW animations for newly loaded content
+	if (typeof WOW !== 'undefined') {
+		new WOW().init();
 	}
 });

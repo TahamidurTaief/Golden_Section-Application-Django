@@ -1,0 +1,45 @@
+{% load static %}
+	<!-- Testimonial Section -->
+	<section class="section testimonial-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
+					<div class="section-header text-center">
+						<h2 class="mb-1">Genuine reviews from <span class="text-linear-primary">Customers</span></h2>
+						<p class="sub-title">Each listing is designed to be clear and concise, providing customers</p>
+					</div>
+				</div>
+			</div>
+			<div class="testimonial-slider owl-carousel nav-center">
+				{% for testimonial in testimonials %}
+				<div class="testimonial-item wow fadeInUp" data-wow-delay="0.2s">
+					<div class="d-flex align-items-center mb-3">
+						{% for i in "12345" %}
+							{% if forloop.counter <= testimonial.rating %}
+							<i class="fa-solid fa-star text-warning me-1"></i>
+							{% else %}
+							<i class="fa-regular fa-star text-warning me-1"></i>
+							{% endif %}
+						{% endfor %}
+					</div>
+					<h5 class="mb-2">{{ testimonial.customer_name }}</h5>
+					<p class="mb-4">"{{ testimonial.testimonial }}"</p>
+					<div class="d-flex align-items-center justify-content-between">
+						<div class="d-flex align-items-center overflow-hidden">
+							<span class="avatar avatar-lg flex-shrink-0">
+								<img src="{{ testimonial.customer_image }}" class="img-fluid rounded-circle" alt="{{ testimonial.customer_name }}">
+							</span>
+							<h6 class="text-truncate ms-2">{{ testimonial.customer_designation }}</h6>
+						</div>
+						<p>{{ testimonial.created_at|timesince }} ago</p>
+					</div>
+				</div>
+				{% empty %}
+				<div class="testimonial-item wow fadeInUp" data-wow-delay="0.2s">
+					<p class="text-center">No testimonials available at the moment.</p>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	<!-- /Testimonial Section -->

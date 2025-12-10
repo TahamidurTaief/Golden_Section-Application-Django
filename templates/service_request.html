@@ -1,0 +1,1064 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Service Request{% endblock %}
+
+{% block content %}
+{% include 'components/request_service/breadcrumb.html' %}
+
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+    <div class="content">
+        <div class="container-fluid px-sm-3 px-lg-4">
+            <div class="fieldset-wizard request-wizard" 
+                 x-data="serviceRequestForm()" 
+                 x-init="initForm()">
+                <div class="row">
+                    <!-- Left Sidebar - Steps -->
+                    <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                        <div class="card shadow-none bg-light-500 booking-sidebar request-sidebar sticky-top" style="top: 20px;">
+                            <div class="card-body">
+                                <div class="service-info bg-white d-flex align-items-center mb-3 p-3 rounded">
+                                    <span class="avatar avatar-xl me-3 shrink-0">
+                                        <img src="{% static 'img/services/service-01.jpg' %}" 
+                                             class="border-0 img-fluid" 
+                                             alt="Removals Service" 
+                                             loading="lazy" />
+                                    </span>
+                                    <div>
+                                        <h5 class="mb-1">Removals Service</h5>
+                                        <p class="fs-14 text-muted mb-0">35 Providers Available</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="booking-wizard p-0">
+                                    <h6 class="mb-3 fw-semibold">Steps</h6>
+                                    <ul class="wizard-progress list-unstyled" id="stepProgress">
+                                        <template x-for="(step, index) in steps" :key="step.id">
+                                            <li class="pb-3" 
+                                                :class="{
+                                                    'active': currentStep === index,
+                                                    'completed': index < currentStep
+                                                }">
+                                                <span x-text="step.title" 
+                                                      class="d-block position-relative"
+                                                      :class="{
+                                                          'text-primary fw-medium': currentStep === index,
+                                                          'text-success': index < currentStep,
+                                                          'text-muted': index > currentStep
+                                                      }"></span>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Content - Forms -->
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="form-container" 
+                             hx-target="this" 
+                             hx-swap="innerHTML" 
+                             hx-indicator="#loading-indicator">
+                            
+                            <!-- Loading Indicator -->
+                            <div id="loading-indicator" class="htmx-indicator text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 1: Basic Information -->
+                            <div x-show="currentStep === 0" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Basic Information</h5>
+                                        <form @submit.prevent="submitStep(0)" id="basicInfoForm">
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       x-model="formData.sameAsProfile" 
+                                                       id="sameAsProfile">
+                                                <label class="form-check-label" for="sameAsProfile">
+                                                    Is the Name and Contact details the same as on your Profile?
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.firstName" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">First Name <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.lastName" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Last Name <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="email" class="form-control" 
+                                                                   x-model="formData.email" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Email Address <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="tel" class="form-control" 
+                                                                   x-model="formData.phone" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Phone Number <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <div class="position-relative">
+                                                            <label class="fs-12 select-floating-label">Booking Estimate <span class="text-danger">*</span></label>
+                                                            <select class="form-select" x-model="formData.bookingEstimate" required>
+                                                                <option value="">Select estimate</option>
+                                                                <option value="0-2">0-2 Hrs</option>
+                                                                <option value="2-3">2-3 Hrs</option>
+                                                                <option value="3-4">3-4 Hrs</option>
+                                                                <option value="4+">4+ Hrs</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-check mb-4">
+                                                        <input class="form-check-input" type="checkbox" 
+                                                               x-model="formData.ccZone" 
+                                                               id="ccZone">
+                                                        <label class="form-check-label" for="ccZone">
+                                                            Do you live in the CC Zone? (Costs £15 extra)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Booking Schedule -->
+                            <div x-show="currentStep === 1" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Booking Schedule</h5>
+                                        <form @submit.prevent="submitStep(1)" id="bookingScheduleForm">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating input-icon position-relative">
+                                                            <input type="datetime-local" class="form-control" 
+                                                                   x-model="formData.bookingDateTime" 
+                                                                   required>
+                                                            <label class="fs-14">Select Date and Time <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <h6 class="fs-16 fw-medium mb-3">Number of People in Luton Vans</h6>
+                                                <div class="custom-increment">
+                                                    <label class="d-block mb-2">Number of People</label>
+                                                    <div class="d-flex align-items-center">
+                                                        <button type="button" class="btn btn-outline-secondary" 
+                                                                @click="decrementPeople()">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="number" class="form-control mx-2 text-center" 
+                                                               x-model="formData.numberOfPeople" 
+                                                               style="width: 80px;" readonly>
+                                                        <button type="button" class="btn btn-outline-secondary" 
+                                                                @click="incrementPeople()">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       x-model="formData.sameNumberAllVans" 
+                                                       id="sameNumberAllVans">
+                                                <label class="form-check-label" for="sameNumberAllVans">
+                                                    Same Number of People in All Vans
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <h6 class="fs-16 mb-3 fw-semibold">Cost Per Hour</h6>
+                                                <div class="d-flex flex-wrap gap-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="hourlyRate" value="70" 
+                                                               x-model="formData.hourlyRate" 
+                                                               id="rate70">
+                                                        <label class="form-check-label" for="rate70">
+                                                            2 People (£70 Per Hour)
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="hourlyRate" value="90" 
+                                                               x-model="formData.hourlyRate" 
+                                                               id="rate90">
+                                                        <label class="form-check-label" for="rate90">
+                                                            3 People (£90 Per Hour)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-light" 
+                                                        @click="previousStep()">
+                                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                                </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Collection Address Details -->
+                            <div x-show="currentStep === 2" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Collection Address Details</h5>
+                                        <form @submit.prevent="submitStep(2)" id="collectionAddressForm">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.collectionAddress" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Collection Address <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.collectionPostalCode" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Postal Code <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.collectionCity" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">City <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <h6 class="mb-3">Property Type</h6>
+                                                <div class="d-flex flex-wrap gap-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="collectionPropertyType" value="house" 
+                                                               x-model="formData.collectionPropertyType" 
+                                                               id="collectionHouse">
+                                                        <label class="form-check-label" for="collectionHouse">House</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="collectionPropertyType" value="flat" 
+                                                               x-model="formData.collectionPropertyType" 
+                                                               id="collectionFlat">
+                                                        <label class="form-check-label" for="collectionFlat">Flat</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="collectionPropertyType" value="business" 
+                                                               x-model="formData.collectionPropertyType" 
+                                                               id="collectionBusiness">
+                                                        <label class="form-check-label" for="collectionBusiness">Business Premise</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Number of Bedrooms</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <button type="button" class="btn btn-outline-secondary" 
+                                                                    @click="decrementBedrooms('collection')">
+                                                                <i class="fas fa-minus"></i>
+                                                            </button>
+                                                            <input type="number" class="form-control mx-2 text-center" 
+                                                                   x-model="formData.collectionBedrooms" 
+                                                                   style="width: 80px;" readonly>
+                                                            <button type="button" class="btn btn-outline-secondary" 
+                                                                    @click="incrementBedrooms('collection')">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="position-relative">
+                                                            <label class="form-label">Floor Level <span class="text-danger">*</span></label>
+                                                            <select class="form-select" x-model="formData.collectionFloorLevel" required>
+                                                                <option value="">Select floor</option>
+                                                                <option value="ground">Ground Floor</option>
+                                                                <option value="1st">1st Floor</option>
+                                                                <option value="2nd">2nd Floor</option>
+                                                                <option value="3rd">3rd Floor</option>
+                                                                <option value="higher">Higher than 3rd Floor</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       x-model="formData.collectionHasLift" 
+                                                       id="collectionLift">
+                                                <label class="form-check-label" for="collectionLift">
+                                                    There is a lift/elevator at the address
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-light" 
+                                                        @click="previousStep()">
+                                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                                </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Delivery Address Details -->
+                            <div x-show="currentStep === 3" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Delivery Address Details</h5>
+                                        <form @submit.prevent="submitStep(3)" id="deliveryAddressForm">
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       x-model="formData.sameAsCollection" 
+                                                       @change="copycollectionToDelivery()" 
+                                                       id="sameAsCollection">
+                                                <label class="form-check-label" for="sameAsCollection">
+                                                    Same as collection address
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.deliveryAddress" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Delivery Address <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.deliveryPostalCode" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Postal Code <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.deliveryCity" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">City <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <h6 class="mb-3">Property Type</h6>
+                                                <div class="d-flex flex-wrap gap-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="deliveryPropertyType" value="house" 
+                                                               x-model="formData.deliveryPropertyType" 
+                                                               id="deliveryHouse">
+                                                        <label class="form-check-label" for="deliveryHouse">House</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="deliveryPropertyType" value="flat" 
+                                                               x-model="formData.deliveryPropertyType" 
+                                                               id="deliveryFlat">
+                                                        <label class="form-check-label" for="deliveryFlat">Flat</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="deliveryPropertyType" value="business" 
+                                                               x-model="formData.deliveryPropertyType" 
+                                                               id="deliveryBusiness">
+                                                        <label class="form-check-label" for="deliveryBusiness">Business Premise</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Number of Bedrooms</label>
+                                                        <div class="d-flex align-items-center">
+                                                            <button type="button" class="btn btn-outline-secondary" 
+                                                                    @click="decrementBedrooms('delivery')">
+                                                                <i class="fas fa-minus"></i>
+                                                            </button>
+                                                            <input type="number" class="form-control mx-2 text-center" 
+                                                                   x-model="formData.deliveryBedrooms" 
+                                                                   style="width: 80px;" readonly>
+                                                            <button type="button" class="btn btn-outline-secondary" 
+                                                                    @click="incrementBedrooms('delivery')">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="position-relative">
+                                                            <label class="form-label">Floor Level <span class="text-danger">*</span></label>
+                                                            <select class="form-select" x-model="formData.deliveryFloorLevel" required>
+                                                                <option value="">Select floor</option>
+                                                                <option value="ground">Ground Floor</option>
+                                                                <option value="1st">1st Floor</option>
+                                                                <option value="2nd">2nd Floor</option>
+                                                                <option value="3rd">3rd Floor</option>
+                                                                <option value="higher">Higher than 3rd Floor</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       x-model="formData.deliveryHasLift" 
+                                                       id="deliveryLift">
+                                                <label class="form-check-label" for="deliveryLift">
+                                                    There is a lift/elevator at the address
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-light" 
+                                                        @click="previousStep()">
+                                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                                </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 5: Additional Items -->
+                            <div x-show="currentStep === 4" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Additional Items</h5>
+                                        <form @submit.prevent="submitStep(4)" id="additionalItemsForm">
+                                            <div class="mb-4">
+                                                <label class="form-label d-block">Please add Pictures or Videos</label>
+                                                <div class="upload-field border-2 border-dashed rounded p-4 text-center" 
+                                                     @dragover.prevent 
+                                                     @drop.prevent="handleFileDrops($event)">
+                                                    <div class="d-flex align-items-center justify-content-center flex-column">
+                                                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                                        <p class="fs-14 text-center mb-2">Drag and drop your files here to upload</p>
+                                                        <span class="d-block mt-2">Or</span>
+                                                        <div class="file-upload btn btn-primary mt-2">
+                                                            Browse Files
+                                                            <input type="file" multiple accept="image/*,video/*" 
+                                                                   @change="handleFileSelect($event)">
+                                                        </div>
+                                                        <p class="text-center fs-12 text-muted mt-2">Only .jpg, .png, .mp4 file types allowed and file size must be less than 10 MB each</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- File Preview -->
+                                                <div x-show="formData.files.length > 0" class="mt-3">
+                                                    <h6>Uploaded Files:</h6>
+                                                    <div class="row g-2">
+                                                        <template x-for="(file, index) in formData.files" :key="index">
+                                                            <div class="col-md-3 col-sm-4 col-6">
+                                                                <div class="position-relative">
+                                                                    <div class="card">
+                                                                        <div class="card-body p-2 text-center">
+                                                                            <i class="fas fa-file fa-2x text-primary"></i>
+                                                                            <p class="small mb-0 mt-1" x-text="file.name"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" 
+                                                                            @click="removeFile(index)" style="transform: translate(50%, -50%);">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <label class="form-label">Additional Notes/Special Requirements</label>
+                                                <textarea class="form-control" rows="4" 
+                                                          x-model="formData.additionalNotes" 
+                                                          placeholder="Please provide any special requirements or additional information..."></textarea>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-light" 
+                                                        @click="previousStep()">
+                                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                                </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 6: Review Order -->
+                            <div x-show="currentStep === 5" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4">Review Order</h5>
+                                        
+                                        <!-- Cost Breakdown -->
+                                        <div class="row mb-4">
+                                            <div class="col-12">
+                                                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                                                    <div class="bg-light rounded p-3 text-center flex-fill" style="min-width: 140px;">
+                                                        <h6 class="fw-medium fs-16 mb-1">Booking Charges</h6>
+                                                        <span class="text-primary fw-bold">£ 42.00</span>
+                                                    </div>
+                                                    <div class="bg-light rounded p-3 text-center flex-fill" style="min-width: 140px;">
+                                                        <h6 class="fw-medium fs-16 mb-1">CC Zone</h6>
+                                                        <span class="text-primary fw-bold" x-text="formData.ccZone ? '£ 15.00' : '£ 0.00'"></span>
+                                                    </div>
+                                                    <div class="bg-light rounded p-3 text-center flex-fill" style="min-width: 140px;">
+                                                        <h6 class="fw-medium fs-16 mb-1">Hourly Rate</h6>
+                                                        <span class="text-primary fw-bold" x-text="'£ ' + (formData.hourlyRate || '70') + '.00'"></span>
+                                                    </div>
+                                                    <div class="bg-light rounded p-3 text-center flex-fill" style="min-width: 140px;">
+                                                        <h6 class="fw-medium fs-16 mb-1">V.A.T</h6>
+                                                        <span class="text-primary fw-bold">£ 0.00</span>
+                                                    </div>
+                                                    <div class="bg-primary text-white rounded p-3 text-center flex-fill" style="min-width: 140px;">
+                                                        <h6 class="fw-medium fs-16 mb-1">Total Payment</h6>
+                                                        <span class="fw-bold" x-text="'£ ' + calculateTotal() + '.00'"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Order Summary -->
+                                        <div class="border rounded p-4">
+                                            <div class="row">
+                                                <!-- Basic Information -->
+                                                <div class="col-lg-6">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2">Basic Information</h6>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Name:</small>
+                                                        <p class="mb-1" x-text="formData.firstName + ' ' + formData.lastName"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Email:</small>
+                                                        <p class="mb-1" x-text="formData.email"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Phone:</small>
+                                                        <p class="mb-1" x-text="formData.phone"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Booking Estimate:</small>
+                                                        <p class="mb-1" x-text="formData.bookingEstimate + ' hours'"></p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Booking Schedule -->
+                                                <div class="col-lg-6">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2">Booking Schedule</h6>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Date & Time:</small>
+                                                        <p class="mb-1" x-text="formatDateTime(formData.bookingDateTime)"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Number of People:</small>
+                                                        <p class="mb-1" x-text="formData.numberOfPeople"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Hourly Rate:</small>
+                                                        <p class="mb-1" x-text="'£' + formData.hourlyRate + ' per hour'"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <hr class="my-4">
+                                            
+                                            <div class="row">
+                                                <!-- Collection Address -->
+                                                <div class="col-lg-6">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2">Collection Address</h6>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Address:</small>
+                                                        <p class="mb-1" x-text="formData.collectionAddress"></p>
+                                                        <p class="mb-1" x-text="formData.collectionCity + ', ' + formData.collectionPostalCode"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Property Type:</small>
+                                                        <p class="mb-1" x-text="formData.collectionPropertyType"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Bedrooms:</small>
+                                                        <p class="mb-1" x-text="formData.collectionBedrooms"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Floor Level:</small>
+                                                        <p class="mb-1" x-text="formData.collectionFloorLevel"></p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Delivery Address -->
+                                                <div class="col-lg-6">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2">Delivery Address</h6>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Address:</small>
+                                                        <p class="mb-1" x-text="formData.deliveryAddress"></p>
+                                                        <p class="mb-1" x-text="formData.deliveryCity + ', ' + formData.deliveryPostalCode"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Property Type:</small>
+                                                        <p class="mb-1" x-text="formData.deliveryPropertyType"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Bedrooms:</small>
+                                                        <p class="mb-1" x-text="formData.deliveryBedrooms"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Floor Level:</small>
+                                                        <p class="mb-1" x-text="formData.deliveryFloorLevel"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div x-show="formData.additionalNotes" class="mt-4">
+                                                <hr>
+                                                <h6 class="fw-medium mb-2">Additional Notes</h6>
+                                                <p class="text-muted" x-text="formData.additionalNotes"></p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between mt-4">
+                                            <button type="button" class="btn btn-light" 
+                                                    @click="previousStep()">
+                                                <i class="fas fa-arrow-left me-2"></i> Back
+                                            </button>
+                                            <button type="button" class="btn btn-success btn-lg" 
+                                                    @click="sendWhatsAppQuote()">
+                                                <i class="fab fa-whatsapp me-2"></i> Send Quote
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+@media (max-width: 768px) {
+    .form-container {
+        padding: 0 10px;
+    }
+    
+    .cost-breakdown {
+        flex-direction: column;
+    }
+    
+    .cost-breakdown .bg-light {
+        margin-bottom: 10px;
+    }
+}
+
+.step-content {
+    min-height: 400px;
+}
+
+.wizard-progress li {
+    position: relative;
+    padding-left: 25px;
+}
+
+.wizard-progress li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e9ecef;
+    border: 2px solid #dee2e6;
+}
+
+.wizard-progress li.active:before {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.wizard-progress li.completed:before {
+    background: #28a745;
+    border-color: #28a745;
+    content: '✓';
+    color: white;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-upload {
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload input[type=file] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 500ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}
+</style>
+
+<!-- Alpine.js Data and Methods -->
+<script>
+// Load enhancements
+document.addEventListener('DOMContentLoaded', function() {
+    const script = document.createElement('script');
+    script.src = '{% static "js/service-request-enhancements.js" %}';
+    document.head.appendChild(script);
+});
+
+function serviceRequestForm() {
+    return {
+        currentStep: 0,
+        steps: [
+            { id: 'basic-info', title: 'Basic Information' },
+            { id: 'booking-schedule', title: 'Booking Schedule' },
+            { id: 'collection-address', title: 'Collection Address Details' },
+            { id: 'delivery-address', title: 'Delivery Address Details' },
+            { id: 'additional-items', title: 'Additional Items' },
+            { id: 'review-order', title: 'Review Order' }
+        ],
+        formData: {
+            // Basic Information
+            sameAsProfile: false,
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            bookingEstimate: '',
+            ccZone: false,
+            
+            // Booking Schedule
+            bookingDateTime: '',
+            numberOfPeople: 1,
+            sameNumberAllVans: false,
+            hourlyRate: '70',
+            
+            // Collection Address
+            collectionAddress: '',
+            collectionPostalCode: '',
+            collectionCity: '',
+            collectionPropertyType: '',
+            collectionBedrooms: 1,
+            collectionFloorLevel: '',
+            collectionHasLift: false,
+            
+            // Delivery Address
+            deliveryAddress: '',
+            deliveryPostalCode: '',
+            deliveryCity: '',
+            deliveryPropertyType: '',
+            deliveryBedrooms: 1,
+            deliveryFloorLevel: '',
+            deliveryHasLift: false,
+            sameAsCollection: false,
+            
+            // Additional Items
+            files: [],
+            additionalNotes: ''
+        },
+        
+        initForm() {
+            // Set minimum date to today
+            const today = new Date();
+            const minDateTime = today.toISOString().slice(0, 16);
+            document.querySelector('input[type="datetime-local"]')?.setAttribute('min', minDateTime);
+        },
+        
+        nextStep() {
+            if (this.currentStep < this.steps.length - 1) {
+                this.currentStep++;
+            }
+        },
+        
+        previousStep() {
+            if (this.currentStep > 0) {
+                this.currentStep--;
+            }
+        },
+        
+        submitStep(stepIndex) {
+            // Validate current step
+            const currentForm = document.getElementById(this.getCurrentFormId());
+            if (currentForm && currentForm.checkValidity()) {
+                this.nextStep();
+            } else {
+                currentForm?.reportValidity();
+            }
+        },
+        
+        getCurrentFormId() {
+            const formIds = [
+                'basicInfoForm',
+                'bookingScheduleForm', 
+                'collectionAddressForm',
+                'deliveryAddressForm',
+                'additionalItemsForm',
+                'reviewOrderForm'
+            ];
+            return formIds[this.currentStep] || '';
+        },
+        
+        incrementPeople() {
+            this.formData.numberOfPeople++;
+        },
+        
+        decrementPeople() {
+            if (this.formData.numberOfPeople > 1) {
+                this.formData.numberOfPeople--;
+            }
+        },
+        
+        incrementBedrooms(type) {
+            if (type === 'collection') {
+                this.formData.collectionBedrooms++;
+            } else {
+                this.formData.deliveryBedrooms++;
+            }
+        },
+        
+        decrementBedrooms(type) {
+            if (type === 'collection' && this.formData.collectionBedrooms > 0) {
+                this.formData.collectionBedrooms--;
+            } else if (type === 'delivery' && this.formData.deliveryBedrooms > 0) {
+                this.formData.deliveryBedrooms--;
+            }
+        },
+        
+        copycollectionToDelivery() {
+            if (this.formData.sameAsCollection) {
+                this.formData.deliveryAddress = this.formData.collectionAddress;
+                this.formData.deliveryPostalCode = this.formData.collectionPostalCode;
+                this.formData.deliveryCity = this.formData.collectionCity;
+                this.formData.deliveryPropertyType = this.formData.collectionPropertyType;
+                this.formData.deliveryBedrooms = this.formData.collectionBedrooms;
+                this.formData.deliveryFloorLevel = this.formData.collectionFloorLevel;
+                this.formData.deliveryHasLift = this.formData.collectionHasLift;
+            }
+        },
+        
+        handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            this.addFiles(files);
+        },
+        
+        handleFileDrops(event) {
+            const files = Array.from(event.dataTransfer.files);
+            this.addFiles(files);
+        },
+        
+        addFiles(files) {
+            files.forEach(file => {
+                if (this.isValidFile(file)) {
+                    this.formData.files.push(file);
+                }
+            });
+        },
+        
+        isValidFile(file) {
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'video/mp4'];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            if (!validTypes.includes(file.type)) {
+                alert('Invalid file type. Only JPG, PNG, and MP4 files are allowed.');
+                return false;
+            }
+            
+            if (file.size > maxSize) {
+                alert('File size too large. Maximum size is 10MB.');
+                return false;
+            }
+            
+            return true;
+        },
+        
+        removeFile(index) {
+            this.formData.files.splice(index, 1);
+        },
+        
+        calculateTotal() {
+            let total = 42; // Base booking charge
+            total += this.formData.ccZone ? 15 : 0; // CC Zone
+            total += parseInt(this.formData.hourlyRate || 70); // Hourly rate
+            return total;
+        },
+        
+        formatDateTime(dateTime) {
+            if (!dateTime) return 'Not selected';
+            return new Date(dateTime).toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        },
+        
+        sendWhatsAppQuote() {
+            const whatsappNumber = '+8801534855125';
+            const message = this.generateWhatsAppMessage();
+            const whatsappURL = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+            
+            // Open WhatsApp in a new window
+            window.open(whatsappURL, '_blank');
+        },
+        
+        generateWhatsAppMessage() {
+            const total = this.calculateTotal();
+            const dateTime = this.formatDateTime(this.formData.bookingDateTime);
+            
+            return `🚚 *SERVICE REQUEST QUOTE*\n\n` +
+                   `👤 *Customer Details:*\n` +
+                   `Name: ${this.formData.firstName} ${this.formData.lastName}\n` +
+                   `Email: ${this.formData.email}\n` +
+                   `Phone: ${this.formData.phone}\n\n` +
+                   
+                   `📅 *Booking Schedule:*\n` +
+                   `Date & Time: ${dateTime}\n` +
+                   `Number of People: ${this.formData.numberOfPeople}\n` +
+                   `Hourly Rate: £${this.formData.hourlyRate}/hour\n` +
+                   `Estimated Duration: ${this.formData.bookingEstimate} hours\n\n` +
+                   
+                   `📍 *Collection Address:*\n` +
+                   `${this.formData.collectionAddress}\n` +
+                   `${this.formData.collectionCity}, ${this.formData.collectionPostalCode}\n` +
+                   `Property Type: ${this.formData.collectionPropertyType}\n` +
+                   `Bedrooms: ${this.formData.collectionBedrooms}\n` +
+                   `Floor Level: ${this.formData.collectionFloorLevel}\n` +
+                   `Lift Available: ${this.formData.collectionHasLift ? 'Yes' : 'No'}\n\n` +
+                   
+                   `🏠 *Delivery Address:*\n` +
+                   `${this.formData.deliveryAddress}\n` +
+                   `${this.formData.deliveryCity}, ${this.formData.deliveryPostalCode}\n` +
+                   `Property Type: ${this.formData.deliveryPropertyType}\n` +
+                   `Bedrooms: ${this.formData.deliveryBedrooms}\n` +
+                   `Floor Level: ${this.formData.deliveryFloorLevel}\n` +
+                   `Lift Available: ${this.formData.deliveryHasLift ? 'Yes' : 'No'}\n\n` +
+                   
+                   `💰 *Cost Breakdown:*\n` +
+                   `Booking Charges: £42.00\n` +
+                   `CC Zone: £${this.formData.ccZone ? '15.00' : '0.00'}\n` +
+                   `Hourly Rate: £${this.formData.hourlyRate}.00\n` +
+                   `V.A.T: £0.00\n` +
+                   `*Total: £${total}.00*\n\n` +
+                   
+                   (this.formData.additionalNotes ? `📝 *Additional Notes:*\n${this.formData.additionalNotes}\n\n` : '') +
+                   
+                   `Please confirm the quote and availability. Thank you! 🙏`;
+        }
+    };
+}
+</script>
+{% endblock %}

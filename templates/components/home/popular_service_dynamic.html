@@ -1,0 +1,57 @@
+{% load static %}
+	<!-- Popular Section -->
+	<section class="section popular-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
+					<div class="section-header text-center mb-4">
+						<h2 class="mb-1">Our Popular <span class="text-linear-primary">Services</span></h2>
+						<p class="sub-title">Each listing is designed to be clear and concise, providing customers</p>
+					</div>
+				</div>
+			</div>
+			<div class="feature-slider owl-carousel nav-center">
+				{% for service in popular_services %}
+				<div class="service-item wow fadeInUp" data-wow-delay="0.2s">
+					<div class="service-img">
+						<div class="img-slider owl-carousel nav-center">
+							<div class="slide-images">
+								<a href="{% url 'services:detail' service.id %}">
+									<img src="{{ service.featured_image }}" class="img-fluid" alt="{{ service.name }}" style="height: 250px; object-fit: cover; width: 100%;">
+								</a>
+							</div>
+						</div>
+						{% if service.is_popular %}
+						<div class="trend-icon">
+							<span class="bg-primary">
+								<i class="feather-trending-up"></i>
+							</span>
+						</div>
+						{% endif %}
+						<div class="fav-item">
+							<a href="javascript:void(0);" class="fav-icon">
+								<i class="ti ti-heart"></i>
+							</a>
+						</div>
+					</div>
+					<div class="service-content">
+						<h6 class="text-truncate mb-1"><a href="{% url 'services:detail' service.id %}">{{ service.name }}</a></h6>
+						<div class="d-flex align-items-center justify-content-between">
+							{% with first_tier=service.pricing_tiers.first %}
+								<p class="fw-medium fs-14 mb-0">Service starts at ${{ first_tier.price|default:"0" }}</p>
+							{% endwith %}
+							<span class="d-inline-flex align-items-center fs-14"><i class="ti ti-star-filled text-warning me-1"></i>{{ service.rating|floatformat:1 }}</span>
+						</div>
+					</div>
+				</div>
+				{% empty %}
+				<div class="service-item wow fadeInUp" data-wow-delay="0.2s">
+					<div class="service-content">
+						<p class="text-center">No popular services available at the moment.</p>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	<!-- /Popular Section -->

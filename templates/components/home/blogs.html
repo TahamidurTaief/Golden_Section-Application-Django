@@ -14,96 +14,37 @@
 				</div>
 			</div>
 			<div class="blog-slider owl-carousel nav-center nav-center">
+				{% for post in blog_posts %}
 				<div class="blog-item wow fadeInUp" data-wow-delay="0.2s">
 					<div class="blog-img">
-						<a href="blog-details.html">
-							<img src="{% static 'img/blogs/blog-01.jpg' %}" class="img-fluid" alt="img">
+						<a href="#">
+							<img src="{{ post.featured_image }}" class="img-fluid" alt="{{ post.title }}" style="height: 200px; object-fit: cover; width: 100%;">
 						</a>
 					</div>
 					<div class="blog-content">
-						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">Admin<i
-								class="ti ti-circle-filled fs-6 mx-1"></i>1 Jan 2023</p>
-						<h6 class="text-truncate mb-2"><a href="blog-details.html">Bill Walsh leadership lessons</a>
+						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">{{ post.author.get_full_name }}<i
+								class="ti ti-circle-filled fs-6 mx-1"></i>{{ post.published_at|date:"d M Y" }}</p>
+						<h6 class="text-truncate mb-2"><a href="#">{{ post.title }}</a>
 						</h6>
-						<p class="two-line-ellipsis mb-3">Like to know the secrets of transforming a 2-14</p>
+						<p class="two-line-ellipsis mb-3">{{ post.excerpt }}</p>
 						<div class="d-flex align-items-center flex-wrap">
-							<span class="badge badge-info-transparent me-2">Leadership</span>
-							<span class="badge badge-dark-transparent">Management</span>
+							{% if post.category %}
+							<span class="badge badge-info-transparent me-2">{{ post.category.name }}</span>
+							{% endif %}
+							<span class="badge badge-dark-transparent">{{ post.views_count }} views</span>
 						</div>
 					</div>
 				</div>
+				{% empty %}
 				<div class="blog-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="blog-img">
-						<a href="blog-details.html">
-							<img src="{% static 'img/blogs/blog-02.jpg' %}" class="img-fluid" alt="img">
-						</a>
-					</div>
 					<div class="blog-content">
-						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">Admin<i
-								class="ti ti-circle-filled fs-6 mx-1"></i>18 Jan 2023</p>
-						<h6 class="text-truncate mb-2"><a href="blog-details.html">Transform Your Space</a></h6>
-						<p class="two-line-ellipsis mb-3">Find out how we can help you create the perfect environment.
-						</p>
-						<div class="d-flex align-items-center flex-wrap">
-							<span class="badge badge-info-transparent me-2">Remodeling</span>
-							<span class="badge badge-dark-transparent">Transformation</span>
-						</div>
+						<p class="text-center">No blog posts available at the moment.</p>
 					</div>
 				</div>
-				<div class="blog-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="blog-img">
-						<a href="blog-details.html">
-							<img src="{% static 'img/blogs/blog-03.jpg' %}" class="img-fluid" alt="img">
-						</a>
-					</div>
-					<div class="blog-content">
-						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">Admin<i
-								class="ti ti-circle-filled fs-6 mx-1"></i>08 Feb 2023</p>
-						<h6 class="text-truncate mb-2"><a href="blog-details.html">Top Tips for Service Success</a></h6>
-						<p class="two-line-ellipsis mb-3">Learn key tips to make the most out of our services.</p>
-						<div class="d-flex align-items-center flex-wrap">
-							<span class="badge badge-info-transparent me-2">Success</span>
-							<span class="badge badge-dark-transparent">Advice</span>
-						</div>
-					</div>
-				</div>
-				<div class="blog-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="blog-img">
-						<a href="blog-details.html">
-							<img src="{% static 'img/blogs/blog-04.jpg' %}" class="img-fluid" alt="img">
-						</a>
-					</div>
-					<div class="blog-content">
-						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">Admin<i
-								class="ti ti-circle-filled fs-6 mx-1"></i>10 Feb 2023</p>
-						<h6 class="text-truncate mb-2"><a href="blog-details.html">Service Innovations</a></h6>
-						<p class="two-line-ellipsis mb-3">Explore the latest advancements in our field.</p>
-						<div class="d-flex align-items-center flex-wrap">
-							<span class="badge badge-info-transparent me-2">Innovations</span>
-							<span class="badge badge-dark-transparent">Latest Trends</span>
-						</div>
-					</div>
-				</div>
-				<div class="blog-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="blog-img">
-						<a href="blog-details.html">
-							<img src="{% static 'img/blogs/blog-05.jpg' %}" class="img-fluid" alt="img">
-						</a>
-					</div>
-					<div class="blog-content">
-						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">Admin<i
-								class="ti ti-circle-filled fs-6 mx-1"></i>1 Jan 2023</p>
-						<h6 class="text-truncate mb-2"><a href="blog-details.html">Revamp Your Home</a></h6>
-						<p class="two-line-ellipsis mb-3">Explore how our services can refresh and upgrade.</p>
-						<div class="d-flex align-items-center flex-wrap">
-							<span class="badge badge-info-transparent me-2">Innovations</span>
-							<span class="badge badge-dark-transparent">Latest Trends</span>
-						</div>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 			<div class="text-center wow fadeInUp" data-wow-delay="0.2s">
-				<a href="blog.html" class="btn btn-dark">View All<i class="ti ti-arrow-right ms-2"></i></a>
+				<a href="#" class="btn btn-dark">View All<i class="ti ti-arrow-right ms-2"></i></a>
 			</div>
 		</div>
 	</section>

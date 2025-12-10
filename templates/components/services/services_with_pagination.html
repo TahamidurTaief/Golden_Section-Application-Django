@@ -1,0 +1,118 @@
+{% load static %}
+
+{% if services %}
+  {% for service in services %}
+  <div class="col-md-12">
+    <!-- Service List -->
+    <div class="service-list">
+      <div class="service-cont">
+        <div class="service-cont-img">
+          <a href="{% url 'core:service_details' service.pk %}">
+            <img
+              class="img-fluid serv-img"
+              alt="{{ service.name }}"
+              src="{% if service.featured_image %}{{ service.featured_image.url }}{% else %}{% static 'img/services/service-01.jpg' %}{% endif %}"
+              onerror="this.onerror=null; this.src='{% static 'img/services/service-01.jpg' %}'"
+            />
+          </a>
+          <div class="fav-item">
+            <a href="javascript:void(0)" class="fav-icon">
+              <i class="feather-heart"></i>
+            </a>
+          </div>
+        </div>
+        <div class="service-cont-info">
+          <span class="badge bg-light fs-14 mb-2">{{ service.category.name }}</span>
+          {% if service.subcategory %}
+          <span class="badge bg-light fs-14 mb-2">{{ service.subcategory.name }}</span>
+          {% endif %}
+          <h3 class="title">
+            <a href="{% url 'core:service_details' service.pk %}">{{ service.name }}</a>
+          </h3>
+          <p>{{ service.short_description|truncatewords:15 }}</p>
+          <div class="service-pro-img">
+            <img src="{% static 'img/profiles/avatar-01.jpg' %}" alt="Provider" />
+            <span><i class="fas fa-star filled"></i>{{ service.rating }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="service-action">
+        {% if service.has_pricing %}
+          {% with first_tier=service.pricing_tiers.first %}
+          <h6>${{ first_tier.price }}</h6>
+          {% endwith %}
+        {% else %}
+          <h6>Contact for price</h6>
+        {% endif %}
+        <a href="{% url 'core:booking' %}" class="btn btn-light">Book Now</a>
+      </div>
+    </div>
+    <!-- /Service List -->
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="col-md-12">
+    <div class="alert alert-info text-center" role="alert">
+      <i class="feather-info me-2"></i>No services found matching your criteria. Try adjusting your filters.
+    </div>
+  </div>
+{% endif %}
+
+<!-- Pagination -->
+{% if paginator.num_pages > 1 %}
+<div class="col-md-12">
+  <nav aria-label="Page navigation">
+    <ul class="paginations d-flex justify-content-center align-items-center">
+      <!-- Previous Button -->
+      <li class="page-item me-3 {% if not page_obj.has_previous %}disabled{% endif %}">
+        <a class="page-link" 
+           {% if page_obj.has_previous %}
+           hx-get="{% url 'core:services' %}?page={{ page_obj.previous_page_number }}"
+           hx-target="#services-list"
+           hx-swap="innerHTML"
+           hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
+           hx-indicator="#loading-indicator"
+           {% else %}
+           style="cursor: not-allowed;"
+           {% endif %}>
+          <i class="ti ti-arrow-left me-2"></i>Prev
+        </a>
+      </li>
+      
+      <!-- Page Numbers -->
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+          <li class="page-item me-2">
+            <a class="page-link-1 active d-flex justify-content-center align-items-center">{{ num }}</a>
+          </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <li class="page-item me-2">
+            <a class="page-link-1 d-flex justify-content-center align-items-center"
+               hx-get="{% url 'core:services' %}?page={{ num }}"
+               hx-target="#services-list"
+               hx-swap="innerHTML"
+               hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
+               hx-indicator="#loading-indicator">{{ num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      
+      <!-- Next Button -->
+      <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+        <a class="page-link"
+           {% if page_obj.has_next %}
+           hx-get="{% url 'core:services' %}?page={{ page_obj.next_page_number }}"
+           hx-target="#services-list"
+           hx-swap="innerHTML"
+           hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
+           hx-indicator="#loading-indicator"
+           {% else %}
+           style="cursor: not-allowed;"
+           {% endif %}>
+          Next<i class="ti ti-arrow-right ms-2"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+{% endif %}

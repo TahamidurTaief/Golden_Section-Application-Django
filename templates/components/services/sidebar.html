@@ -1,0 +1,164 @@
+{% load static %}
+
+<div class="col-xl-3 col-lg-4">
+  <div class="card mb-4 mb-lg-0 position-sticky" style="top: 20px;">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+        <h5>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2" style="display: inline-block; vertical-align: middle;">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filters
+        </h5>
+        <a href="{% url 'core:services' %}" class="text-decoration-none small">Reset</a>
+      </div>
+
+        <!-- Search Keywords -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold small mb-2">Search</label>
+          <div class="position-relative">
+            <input
+              type="text"
+              name="keyword"
+              class="form-control form-control-sm"
+              placeholder="Search services..."
+              hx-get="{% url 'core:services' %}?page=1"
+              hx-trigger="keyup changed delay:500ms"
+              hx-target="#services-list"
+              hx-swap="innerHTML"
+              hx-include="[name='category']:checked, [name='subcategory']:checked"
+              hx-indicator="#loading-indicator"
+            />
+            <span class="position-absolute top-50 end-0 translate-middle-y pe-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold small mb-2">Categories</label>
+          
+          <!-- Category Search -->
+          <div class="position-relative mb-2">
+            <input
+              type="text"
+              id="category-search"
+              class="form-control form-control-sm"
+              placeholder="Search categories..."
+              hx-post="{% url 'core:search_categories' %}"
+              hx-trigger="keyup changed delay:300ms"
+              hx-target="#category-list"
+              hx-swap="innerHTML"
+            />
+            <span class="position-absolute top-50 end-0 translate-middle-y pe-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+            </span>
+          </div>
+
+          <!-- Category List -->
+          <div id="category-list" class="category-list" style="max-height: 200px; overflow: hidden; transition: max-height 0.3s ease;">
+            {% include 'components/services/category_list_partial.html' with categories=all_categories show_all=True %}
+          </div>
+          
+          <button type="button" id="category-toggle" class="btn btn-link btn-sm text-primary p-0 mt-2 text-decoration-none" onclick="toggleCategories()">
+            <span id="category-toggle-text">See more</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="category-toggle-icon">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sub Categories -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold small mb-2">Sub Categories</label>
+          
+          <!-- Sub Category Search -->
+          <div class="position-relative mb-2">
+            <input
+              type="text"
+              id="subcategory-search"
+              class="form-control form-control-sm"
+              placeholder="Search sub categories..."
+              hx-post="{% url 'core:search_subcategories' %}"
+              hx-trigger="keyup changed delay:300ms"
+              hx-target="#subcategory-list"
+              hx-swap="innerHTML"
+            />
+            <span class="position-absolute top-50 end-0 translate-middle-y pe-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+            </span>
+          </div>
+
+          <!-- Sub Category List -->
+          <div id="subcategory-list" class="subcategory-list" style="max-height: 200px; overflow: hidden; transition: max-height 0.3s ease;">
+            {% include 'components/services/subcategory_list_partial.html' with subcategories=all_subcategories show_all=True %}
+          </div>
+
+          <button type="button" id="subcategory-toggle" class="btn btn-link btn-sm text-primary p-0 mt-2 text-decoration-none" onclick="toggleSubCategories()">
+            <span id="subcategory-toggle-text">See more</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="subcategory-toggle-icon">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleCategories() {
+  const hiddenItems = document.querySelectorAll('.category-hidden');
+  const toggleText = document.getElementById('category-toggle-text');
+  const toggleIcon = document.getElementById('category-toggle-icon');
+  const list = document.getElementById('category-list');
+  
+  const isExpanded = hiddenItems[0].style.display !== 'none';
+  
+  hiddenItems.forEach(item => {
+    item.style.display = isExpanded ? 'none' : 'block';
+  });
+  
+  toggleText.textContent = isExpanded ? 'See more' : 'See less';
+  
+  if (isExpanded) {
+    list.style.maxHeight = '200px';
+    toggleIcon.innerHTML = '<path d="m6 9 6 6 6-6"/>';
+  } else {
+    list.style.maxHeight = '600px';
+    toggleIcon.innerHTML = '<path d="m18 15-6-6-6 6"/>';
+  }
+}
+
+function toggleSubCategories() {
+  const hiddenItems = document.querySelectorAll('.subcategory-hidden');
+  const toggleText = document.getElementById('subcategory-toggle-text');
+  const toggleIcon = document.getElementById('subcategory-toggle-icon');
+  const list = document.getElementById('subcategory-list');
+  
+  const isExpanded = hiddenItems[0].style.display !== 'none';
+  
+  hiddenItems.forEach(item => {
+    item.style.display = isExpanded ? 'none' : 'block';
+  });
+  
+  toggleText.textContent = isExpanded ? 'See more' : 'See less';
+  
+  if (isExpanded) {
+    list.style.maxHeight = '200px';
+    toggleIcon.innerHTML = '<path d="m6 9 6 6 6-6"/>';
+  } else {
+    list.style.maxHeight = '600px';
+    toggleIcon.innerHTML = '<path d="m18 15-6-6-6 6"/>';
+  }
+}
+</script>

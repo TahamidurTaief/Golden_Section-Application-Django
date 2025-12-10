@@ -1,0 +1,129 @@
+{% load static %}
+<div class="col-xl-4">
+    <div class="" style="top: 20px; z-index: 1;">
+        <div class="card border-0 mb-3">
+            {% comment %} <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between border-bottom mb-3 pb-2">
+                    <div class="d-flex align-items-center">
+                        <div class="mb-0">											
+                            <p class="fs-14 mb-0">Starts From</p>
+                            <h4><span class="display-6 fw-bold">$457</span><span class="text-decoration-line-through text-default fs-16"> $875</span></h4>
+                        </div>
+                    </div>
+                    <span class="badge bg-success d-inline-flex align-items-center fw-medium"><i class="ti ti-circle-percentage me-1"></i>50% Offer</span>
+                </div>
+                <a href="{% url 'core:service_request' %}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center mb-2"><i class="ti ti-calendar me-2"></i>Book Service</a>
+                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add-enquiry" class="btn btn-outline-light d-flex align-items-center justify-content-center w-100"><i class="ti ti-mail me-2"></i>Send Enquiry</a>
+            </div> {% endcomment %}
+        </div>
+        <div class="card border-0 mb-3">
+            <div class="card-body p-3">
+                <h4 class="mb-3">Service Provider</h4>
+                <div class="provider-info text-center bg-light-500 p-3 mb-3 rounded">
+                    <div class="avatar avatar-xl mb-2">
+                        <img src="{% static 'img/profiles/avatar-02.jpg' %}" alt="img" class="img-fluid rounded-circle">
+                        <span class="service-active-dot"><i class="ti ti-check"></i></span>
+                    </div>
+                    <h5 class="mb-1">Thomas Herzberg</h5>
+                    <p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-2"></i><span class="text-gray-9 fw-semibold">4.9</span> (255 reviews)</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0"><i class="ti ti-user text-default me-2"></i>Member Since</h6>
+                    <p class="mb-0">14 Apr 2023</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0"><i class="ti ti-map-pin me-1"></i>Address</h6>
+                    <p class="mb-0">Hanover, Maryland</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0"><i class="ti ti-mail me-1"></i>Email</h6>
+                    <p class="mb-0"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ea9e8285878b99929292aa8f928b879a868fc4898587">[email&#160;protected]</a></p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0"><i class="ti ti-phone me-1"></i>Phone</h6>
+                    <p class="mb-0">+1 888 8XX XXXX</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fs-16 fw-medium mb-0"><i class="ti ti-file-text me-1"></i>No of Listings</h6>
+                    <p class="mb-0">03</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fs-16 fw-medium mb-0">Social Profiles</h6>
+                    <div class="d-flex align-items-center">
+                        <div class="social-icon">
+                            <a href="javascript:void(0);" class="me-2"><img src="{% static 'img/icons/fb.svg' %}" class="img" alt="icon"></a>
+                            <a href="javascript:void(0);" class="me-2"><img src="{% static 'img/icons/instagram.svg' %}" class="img" alt="icon"></a>
+                            <a href="javascript:void(0);" class="me-2"><img src="{% static 'img/icons/twitter.svg' %}" class="img" alt="icon"></a>
+                            <a href="javascript:void(0);" class="me-2"><img src="{% static 'img/icons/whatsapp.svg' %}" class="img" alt="icon"></a>
+                            <a href="javascript:void(0);" class="me-2"><img src="{% static 'img/icons/youtube.svg' %}" class="img" alt="icon"></a>
+                            <a href="javascript:void(0);"><img src="{% static 'img/icons/linkedin.svg' %}" class="img" alt="icon"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row border-top pt-3 g-2">
+                    <div class="col-sm-6">
+                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add-contact" class="btn btn-dark btn-sm fs-14 px-1 w-100"><i class="ti ti-user me-2"></i>Contact Provider</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="provider-chat.html" class="btn btn-light btn-sm fs-14 px-1 w-100"><i class="ti ti-user me-2"></i>Chat Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card border-0 mb-3">
+            <div class="card-body p-3">
+                <h4 class="mb-3">Business Hours</h4>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0">Monday</h6>
+                    <p class="mb-0">9:30 AM - 7:00 PM</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0">Tuesday</h6>
+                    <p class="mb-0">9:30 AM - 7:00 PM</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0">Wednesday</h6>
+                    <p class="mb-0">9:30 AM - 7:00 PM</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0">Thursday</h6>
+                    <p class="mb-0">9:30 AM - 7:00 PM</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0">Friday</h6>
+                    <p class="mb-0">9:30 AM - 7:00 PM</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="fs-16 fw-medium mb-0">Saturday</h6>
+                    <p class="mb-0">9:30 AM - 7:00 PM</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-0">
+                    <h6 class="fs-16 fw-medium mb-0">Sunday</h6>
+                    <p class="text-danger mb-0">Closed</p>
+                </div>
+            </div>
+        </div>
+        <div class="card border-0 mb-3">
+            <div class="card-body p-3">
+                <h4 class="mb-3">Location</h4>
+                <div class="map-wrap">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="contact-map"></iframe>
+                    <div class="map-location bg-white d-flex align-items-center p-2">
+                        <div class="d-flex align-items-center me-2">
+                            <span class="avatar avatar-lg flex-shrink-0">
+                                <img src="{% static 'img/services/service-thumb-01.jpg' %}" alt="img" class="br-10">
+                            </span>
+                            <div class="ms-2 overflow-hidden">
+                                <p class="two-line-ellipsis mb-0">12301 Lake Underhill Rd, Suite 126, Orlando, 32828</p>
+                            </div>
+                        </div>
+                        <span>
+                            <i class="feather-send fs-16"></i>
+                        </span>
+                    </div>									
+                </div>
+            </div>
+        </div>
+        <a href="#" class="text-danger fs-14 d-block text-center"><i class="ti ti-pennant-filled me-2"></i>Report Provider</a>
+    </div>
+</div>

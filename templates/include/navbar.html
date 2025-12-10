@@ -5,7 +5,7 @@
 		<div class="container" style="height: 100%;">
 			<nav class="navbar navbar-expand-lg header-nav" style="height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0;">
 				<div class="navbar-header" style="display: flex; align-items: center;">
-					<a href="index.html" class="navbar-brand logo" style="margin: 0; padding: 0;">
+					<a href="{% url 'core:home' %}" class="navbar-brand logo" style="margin: 0; padding: 0;">
 						<img src="{% static 'img/logo.svg' %}" style="height: 50px; width: auto;" alt="Logo">
 					</a>
 					<a id="mobile_btn" href="javascript:void(0);" style="display: none; margin-left: auto; cursor: pointer; z-index: 1001;">
@@ -19,13 +19,13 @@
 				<div class="main-menu-wrapper" style="display: flex; align-items: center; flex: 1; justify-content: center;">
 					<ul class="main-nav" style="display: flex; align-items: center; margin: 0; padding: 0; list-style: none; gap: 30px;">
 						<li style="position: relative;">
-							<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Home</a>
+							<a href="{% url 'core:home' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Home</a>
 						</li>
 						<li style="position: relative;">
-							<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">About</a>
+							<a href="#" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">About</a>
 						</li>
 						<li class="has-submenu" style="position: relative;">
-							<a href="services-list.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Services <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 5px;"></i></a>
+							<a href="{% url 'core:services' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Services <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 5px;"></i></a>
 							<ul class="submenu" style="position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 0; min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; list-style: none; margin-top: 10px;">
 								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">House Cleaning</a></li>
 								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Plumbing</a></li>
@@ -36,7 +36,10 @@
 							</ul>
 						</li>
 						<li style="position: relative;">
-							<a href="providers.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Provider</a>
+							<a href="#" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Provider</a>
+						</li>
+						<li style="position: relative;">
+							<a href="{% url 'core:service_request' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Request For Service</a>
 						</li>
 					</ul>
 				</div>

@@ -1,0 +1,59 @@
+{% load static %}
+
+{% if services %}
+  {% for service in services %}
+  <div class="col-md-12">
+    <!-- Service List -->
+    <div class="service-list">
+      <div class="service-cont">
+        <div class="service-cont-img">
+          <a href="{% url 'core:service_details' service.pk %}">
+            <img
+              class="img-fluid serv-img"
+              alt="{{ service.name }}"
+              src="{% if service.featured_image %}{{ service.featured_image.url }}{% else %}{% static 'img/services/service-default.jpg' %}{% endif %}"
+              onerror="this.onerror=null; this.src='{% static 'img/services/service-default.jpg' %}'"
+            />
+          </a>
+          <div class="fav-item">
+            <a href="javascript:void(0)" class="fav-icon">
+              <i class="feather-heart"></i>
+            </a>
+          </div>
+        </div>
+        <div class="service-cont-info">
+          <span class="badge bg-light fs-14 mb-2">{{ service.category.name }}</span>
+          {% if service.subcategory %}
+          <span class="badge bg-light fs-14 mb-2">{{ service.subcategory.name }}</span>
+          {% endif %}
+          <h3 class="title">
+            <a href="{% url 'core:service_details' service.pk %}">{{ service.name }}</a>
+          </h3>
+          <p>{{ service.short_description|truncatewords:15 }}</p>
+          <div class="service-pro-img">
+            <img src="{% static 'img/profiles/avatar-01.jpg' %}" alt="Provider" />
+            <span><i class="fas fa-star filled"></i>{{ service.rating }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="service-action">
+        {% if service.has_pricing %}
+          {% with first_tier=service.pricing_tiers.first %}
+          <h6>${{ first_tier.price }}</h6>
+          {% endwith %}
+        {% else %}
+          <h6>Contact for price</h6>
+        {% endif %}
+        <a href="{% url 'core:booking' %}" class="btn btn-light">Book Now</a>
+      </div>
+    </div>
+    <!-- /Service List -->
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="col-md-12">
+    <div class="alert alert-info text-center" role="alert">
+      <i class="feather-info me-2"></i>No services found matching your criteria. Try adjusting your filters.
+    </div>
+  </div>
+{% endif %}

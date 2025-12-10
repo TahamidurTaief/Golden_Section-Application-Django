@@ -19,6 +19,10 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
+# Custom User Model
+AUTH_USER_MODEL = 'accounts.User'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +43,13 @@ INSTALLED_APPS = [
     'django_browser_reload',
 
     # Your apps
+    'accounts',
+    'site_config',
+    'categories',
+    'services',
+    'providers',
+    'quotations',
+    'content',
     'core',
 ]
 
@@ -75,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'core.context_processors.site_settings',  # Site configuration
             ],
             'builtins': ['django_cotton.templatetags.cotton'],
         },
@@ -139,6 +151,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },

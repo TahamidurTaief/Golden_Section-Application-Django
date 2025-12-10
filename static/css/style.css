@@ -12,7 +12,7 @@ body {
 
 :root {
   /* -- Light Mode Colors -- */
-  --primary: #E3651D;
+  --primary: #0077ff;
   /* Orange */
   --secondary: #750E21;
   /* Dark Red */
@@ -22,7 +22,7 @@ body {
   /* Gray 100 */
   --card: #f8f8f8;
   /* Card background */
-  --title: #e76209;
+  --title: #272727;
   /* Text color (Dark Gray) */
   --sub-title: #191919;
   /* Text color */
