@@ -27,12 +27,12 @@
 						<li class="has-submenu" style="position: relative;">
 							<a href="{% url 'core:services' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Services <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 5px;"></i></a>
 							<ul class="submenu" style="position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 0; min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; list-style: none; margin-top: 10px;">
-								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">House Cleaning</a></li>
-								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Plumbing</a></li>
-								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Electrical</a></li>
-								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Carpentry</a></li>
-								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Painting</a></li>
-								<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">Appliance Repair</a></li>
+								
+								
+								{% for category in nav_categories %}
+									<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">{{category.name}}</a></li>	
+								{% endfor %}
+									
 							</ul>
 						</li>
 						<li style="position: relative;">
@@ -81,12 +81,10 @@
 						<i class="fas fa-chevron-down" style="font-size: 12px; transition: transform 0.3s;"></i>
 					</a>
 					<ul class="mobile-submenu" style="list-style: none; padding-left: 15px; margin: 10px 0 0 0; display: none;">
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">House Cleaning</a></li>
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Plumbing</a></li>
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Electrical</a></li>
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Carpentry</a></li>
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Painting</a></li>
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">Appliance Repair</a></li>
+						
+						{% for category in nav_categories %}
+						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">{{ category.name }}</a></li>
+						{% endfor %}
 					</ul>
 				</li>
 				<li style="margin-bottom: 15px;">

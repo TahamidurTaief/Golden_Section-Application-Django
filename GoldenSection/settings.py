@@ -87,6 +87,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'core.context_processors.site_settings',  # Site configuration
+                'core.context_processors.navbar',  # Navbar categories
             ],
             'builtins': ['django_cotton.templatetags.cotton'],
         },

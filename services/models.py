@@ -25,15 +25,10 @@ class Service(models.Model):
     name = models.CharField(max_length=300)
     slug = models.SlugField(unique=True, max_length=300)
     short_description = models.CharField(max_length=500)
-    description = models.TextField()
+    overview = models.TextField(default='', help_text='Detailed overview of the service')
     
     # Media
     featured_image = models.ImageField(upload_to='services/')
-    gallery_images = models.JSONField(
-        default=list, 
-        blank=True,
-        help_text='List of additional image URLs'
-    )
     
     # Contact
     whatsapp_number = models.CharField(
@@ -42,18 +37,22 @@ class Service(models.Model):
         help_text='Service-specific WhatsApp. Leave empty to use category/default WhatsApp.'
     )
     
-    # Status & Display
-    is_featured = models.BooleanField(default=False, help_text='Show in featured section')
-    is_popular = models.BooleanField(default=False, help_text='Show in popular section')
-    is_active = models.BooleanField(default=True)
-    views_count = models.IntegerField(default=0)
+    # Statistics & Metrics
+    views_count = models.IntegerField(default=0, help_text='Number of times viewed')
     rating = models.DecimalField(
         max_digits=3, 
         decimal_places=1, 
         default=0.0,
         validators=[MinValueValidator(0)],
-        help_text='Service rating (0.0 - 5.0)'
+        help_text='Average service rating (0.0 - 5.0)'
     )
+    total_reviews = models.IntegerField(default=0, help_text='Total number of reviews')
+    services_provided = models.IntegerField(default=0, help_text='Total services completed')
+    
+    # Status & Display
+    is_featured = models.BooleanField(default=False, help_text='Show in featured section')
+    is_popular = models.BooleanField(default=False, help_text='Show in popular section')
+    is_active = models.BooleanField(default=True)
     order = models.IntegerField(default=0, help_text='Display order (lower numbers first)')
     
     # Metadata
@@ -81,74 +80,171 @@ class Service(models.Model):
         return self.category.get_whatsapp()
     
     @property
-    def has_pricing(self):
-        return self.pricing_tiers.filter(is_active=True).exists()
-
-
-class ServicePricingTier(models.Model):
-    """Service pricing tiers: Basic, Standard, Premium"""
+    def average_rating_display(self):
+        """Return formatted rating"""
+        return f"{self.rating:.1f}"
     
-    TIER_CHOICES = [
-        ('basic', 'Basic'),
-        ('standard', 'Standard'),
-        ('premium', 'Premium'),
-    ]
+    def increment_views(self):
+        """Increment view count"""
+        self.views_count += 1
+        self.save(update_fields=['views_count'])
+
+
+class AdditionalImage(models.Model):
+    """Additional images for services"""
     
     service = models.ForeignKey(
         Service, 
         on_delete=models.CASCADE, 
-        related_name='pricing_tiers'
+        related_name='additional_images'
     )
-    tier_type = models.CharField(max_length=20, choices=TIER_CHOICES)
-    name = models.CharField(max_length=200, help_text='e.g., "Basic Package"')
-    price = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2, 
-        validators=[MinValueValidator(0)],
-        help_text='Price in GBP'
-    )
-    description = models.TextField()
-    features = models.JSONField(
-        default=list,
-        help_text='List of features included in this tier'
-    )
+    image = models.ImageField(upload_to='services/additional/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0, help_text='Display order')
     
-    # Display
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'service_additional_images'
+        ordering = ['service', 'order']
+        verbose_name = 'Additional Image'
+        verbose_name_plural = 'Additional Images'
+    
+    def __str__(self):
+        return f"{self.service.name} - Image {self.order}"
+
+
+class SubService(models.Model):
+    """Sub-services under main service (e.g., Fan, AC, Light maintenance under Electrical)"""
+    
+    service = models.ForeignKey(
+        Service, 
+        on_delete=models.CASCADE, 
+        related_name='sub_services'
+    )
+    name = models.CharField(max_length=200, help_text='e.g., Fan Repair, AC Installation')
+    description = models.TextField(blank=True)
+    icon = models.CharField(
+        max_length=50, 
+        blank=True,
+        help_text='Icon class (e.g., feather-fan, ti-air-conditioning)'
+    )
     is_active = models.BooleanField(default=True)
-    is_recommended = models.BooleanField(default=False, help_text='Highlight as recommended')
-    order = models.IntegerField(default=0)
+    order = models.IntegerField(default=0, help_text='Display order')
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = 'service_pricing_tiers'
-        unique_together = ['service', 'tier_type']
-        ordering = ['service', 'order', 'tier_type']
-        verbose_name = 'Service Pricing Tier'
-        verbose_name_plural = 'Service Pricing Tiers'
+        db_table = 'service_sub_services'
+        ordering = ['service', 'order', 'name']
+        verbose_name = 'Sub Service'
+        verbose_name_plural = 'Sub Services'
     
     def __str__(self):
-        return f"{self.service.name} - {self.get_tier_type_display()}"
+        return f"{self.service.name} - {self.name}"
 
 
-class ServiceGallery(models.Model):
-    """Additional service images"""
+class ServiceInclude(models.Model):
+    """What's included in the service"""
     
     service = models.ForeignKey(
         Service, 
         on_delete=models.CASCADE, 
-        related_name='gallery'
+        related_name='includes'
     )
-    image = models.ImageField(upload_to='services/gallery/')
-    caption = models.CharField(max_length=200, blank=True)
-    order = models.IntegerField(default=0)
+    title = models.CharField(max_length=200, help_text='e.g., Free Consultation, 24/7 Support')
+    description = models.TextField(blank=True, help_text='Optional detailed description')
+    icon = models.CharField(
+        max_length=50, 
+        blank=True,
+        help_text='Icon class (e.g., feather-check, ti-shield-check)'
+    )
+    order = models.IntegerField(default=0, help_text='Display order')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        db_table = 'service_gallery'
+        db_table = 'service_includes'
         ordering = ['service', 'order']
-        verbose_name = 'Service Gallery Image'
-        verbose_name_plural = 'Service Gallery Images'
+        verbose_name = 'Service Include'
+        verbose_name_plural = 'Service Includes'
     
     def __str__(self):
-        return f"{self.service.name} - Image {self.order}"
+        return f"{self.service.name} - {self.title}"
+
+
+class ServiceFAQ(models.Model):
+    """Frequently Asked Questions for services"""
+    
+    service = models.ForeignKey(
+        Service, 
+        on_delete=models.CASCADE, 
+        related_name='faqs'
+    )
+    question = models.CharField(max_length=500)
+    answer = models.TextField()
+    order = models.IntegerField(default=0, help_text='Display order')
+    is_active = models.BooleanField(default=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'service_faqs'
+        ordering = ['service', 'order']
+        verbose_name = 'Service FAQ'
+        verbose_name_plural = 'Service FAQs'
+    
+    def __str__(self):
+        return f"{self.service.name} - {self.question[:50]}"
+
+
+class BusinessHours(models.Model):
+    """Business hours for services"""
+    
+    WEEKDAY_CHOICES = [
+        (0, 'Monday'),
+        (1, 'Tuesday'),
+        (2, 'Wednesday'),
+        (3, 'Thursday'),
+        (4, 'Friday'),
+        (5, 'Saturday'),
+        (6, 'Sunday'),
+    ]
+    
+    service = models.ForeignKey(
+        Service, 
+        on_delete=models.CASCADE, 
+        related_name='business_hours'
+    )
+    weekday = models.IntegerField(
+        choices=WEEKDAY_CHOICES,
+        help_text='Day of the week'
+    )
+    opening_time = models.TimeField(null=True, blank=True, help_text='Opening time (e.g., 09:30 AM)')
+    closing_time = models.TimeField(null=True, blank=True, help_text='Closing time (e.g., 07:00 PM)')
+    is_closed = models.BooleanField(default=False, help_text='Check if closed on this day')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'service_business_hours'
+        unique_together = ['service', 'weekday']
+        ordering = ['service', 'weekday']
+        verbose_name = 'Business Hours'
+        verbose_name_plural = 'Business Hours'
+    
+    def __str__(self):
+        weekday_name = self.get_weekday_display()
+        if self.is_closed:
+            return f"{self.service.name} - {weekday_name}: Closed"
+        return f"{self.service.name} - {weekday_name}: {self.opening_time.strftime('%I:%M %p')} - {self.closing_time.strftime('%I:%M %p')}"
+    
+    @property
+    def formatted_hours(self):
+        """Return formatted business hours"""
+        if self.is_closed:
+            return "Closed"
+        return f"{self.opening_time.strftime('%I:%M %p')} - {self.closing_time.strftime('%I:%M %p')}"

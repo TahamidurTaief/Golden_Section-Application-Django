@@ -1,0 +1,371 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Service Booking{% endblock %}
+
+{% block content %}
+	
+
+
+    <!-- Breadcrumb -->
+	<div class="breadcrumb-bar text-center">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-12">
+					<h2 class="breadcrumb-title mb-2">Bookings</h2>
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb justify-content-center mb-0">
+							<li class="breadcrumb-item"><a href="index.html"><i class="ti ti-home-2"></i></a></li>
+                            <li class="breadcrumb-item">Customer</li>
+							<li class="breadcrumb-item active" aria-current="page">Bookings</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+			<div class="breadcrumb-bg">
+				<img src="{% static 'img/bg/breadcrumb-bg-01.png' %}" class="breadcrumb-bg-1" alt="Img">
+				<img src="{% static 'img/bg/breadcrumb-bg-02.png' %}" class="breadcrumb-bg-2" alt="Img">
+			</div>
+		</div>
+	</div>
+	<!-- /Breadcrumb -->
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Page Wrapper -->
+     <div class="page-wrapper">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+					
+					<!-- Booking -->
+					<div class="col-lg-12">
+
+						
+						<!-- Appointment -->
+						<div class="booking-service card shadow-none">
+							<div class="card-body">
+								<div class="row align-items-center">
+									<div class="col-lg-5">
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0 service-img me-3">
+												<img src="{% static 'img/services/service-27.jpg' %}" alt="img">
+											</div>
+											<div class="serv-profile">
+												<span class="badge badge-soft-primary">Car Wash</span>
+												<h5 class="my-2">Car Repair Services</h5>
+												<div class="d-flex align-items-center">
+													<span class="avatar avatar-md rounded-circle me-2"><img src="assets/img/profiles/avatar-01.jpg" class="rounded-circle" alt="img"></span>
+													<div class="serv-pro-info">
+														<h6 class="fs-14 fw-medium">Thomas Herzberg</h6>
+														<p class="serv-review"><i class="fa-solid fa-star"></i> <span>4.9 </span>(255 reviews)</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-5">
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="">
+													<div class="provide-box d-flex align-items-center mb-3">
+														<span class="me-2"><i class="feather-phone"></i></span>
+														<div class="provide-info">
+															<h6 class="fs-14 fw-medium mb-1">Phone</h6>
+															<p>+1 888 888 8888</p>
+														</div>
+													</div>
+													<div class="provide-box d-flex align-items-center">
+														<span class="me-2"><i class="feather-mail"></i></span>
+														<div class="provide-info">
+															<h6 class="fs-14 fw-medium mb-1">Email</h6>
+															<p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="22564a4d4f435162475a434f524e470c414d4f">[email&#160;protected]</a></p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="">
+													<div class="provide-box d-flex align-items-center mb-3">
+														<span class="me-2"><i class="feather-map-pin"></i></span>
+														<div class="provide-info">
+															<h6 class="fs-14 fw-medium mb-1">Address</h6>
+															<p>Hanover, Maryland</p>
+														</div>
+													</div>
+													<div class="provide-box d-flex align-items-center">
+														<span class="me-2"><i class="ti ti-wallet"></i></span>
+														<div class="provide-info">
+															<h6 class="fs-14 fw-medium mb-1">Service Amount</h6>
+															<h5>$150.00 </h5>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="d-flex align-items-center social">
+											<a href="javascript:void(0);" class="d-flex align-items-center justify-content-center"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>						
+						<div class="book-form border-top border-bottom pt-4 pb-2">
+							<div class="row">
+								<div class="col-md-4">		
+									<div class="mb-3">		
+										<label class="form-label">City</label>
+										<select class="select">
+											<option>Select City</option>
+											<option>Tornoto</option>
+											<option>Texas</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4">	
+									<div class="mb-3">		
+										<label class="form-label">State</label>					
+										<select class="select">
+											<option>Select State</option>
+											<option>Tornoto</option>
+											<option>Texas</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4">		
+									<div class="mb-3">		
+										<label class="form-label">Country</label>					
+										<select class="select">
+											<option>Select Country</option>
+											<option>US</option>
+											<option>UK</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Appointment -->						
+						
+						<!-- Appointment Date & Time -->
+						<div class="row">
+							<div class="col-lg-4">	
+								<div class="book-title">	
+									<h5>Appointment Date</h5>
+								</div>
+								<div class="card">
+									<div class="card-body p-2 pt-3">
+										<div id="datetimepickershow"></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-8">	
+								<div class="row">	
+									<div class="col-md-12">	
+										<div class="book-title">	
+											<h5>Appointment Time</h5>
+										</div>
+									</div>
+								</div>
+								<div class="token-slot mt-2">
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">09.00 AM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">09.30 AM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">10.00 AM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">10.30 AM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">11.00 AM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">11.30 AM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">12.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">12.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">01.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">01.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">02.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">02.30 PM</span>
+                                       </label>
+                                   </div>
+									<div class="form-check-inline visits me-0">
+										<label class="visit-btns">
+											<input type="radio" class="form-check-input" name="appintment">
+											<span class="visit-rsn">03.00 PM</span>
+										</label>
+									</div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">03.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">04.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">04.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">05.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">05.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">06.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">06.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">07.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">07.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">08.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">08.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">09.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">09.30 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">10.00 PM</span>
+                                       </label>
+                                   </div>
+                                   <div class="form-check-inline visits me-0">
+                                       <label class="visit-btns">
+                                           <input type="radio" class="form-check-input" name="appintment">
+                                           <span class="visit-rsn">10.30 PM</span>
+                                       </label>
+                                   </div>
+								</div>
+								<div class="d-flex align-items-center justify-content-end mt-4">
+									<a href="javascript:void(0);" class="btn btn-light me-2">Cancel</a>
+									<a href="booking-payment.html" class="btn btn-dark">Book Appointment</a>
+								</div>															
+							</div>
+						</div>
+						<!-- /Appointment Date & Time -->
+						
+					</div>
+					<!-- /Booking -->
+					
+				</div>
+            </div>
+        </div>
+     </div>
+    <!-- /Page Wrapper -->
+
+
+
+
+{% endblock %}

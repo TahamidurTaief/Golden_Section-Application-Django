@@ -30,20 +30,21 @@
             <a href="{% url 'core:service_details' service.pk %}">{{ service.name }}</a>
           </h3>
           <p>{{ service.short_description|truncatewords:15 }}</p>
-          <div class="service-pro-img">
-            <img src="{% static 'img/profiles/avatar-01.jpg' %}" alt="Provider" />
-            <span><i class="fas fa-star filled"></i>{{ service.rating }}</span>
+          <div class="d-flex align-items-center mt-2">
+            <div class="service-pro-img me-3">
+              <img src="{% static 'img/profiles/avatar-01.jpg' %}" alt="Provider" />
+              <span><i class="fas fa-star filled"></i>{{ service.rating }}</span>
+            </div>
+            <div class="service-stats small text-muted">
+              <span class="me-2"><i class="feather-eye"></i> {{ service.views_count }}</span>
+              <span class="me-2"><i class="feather-message-circle"></i> {{ service.total_reviews }}</span>
+              <span><i class="feather-check-circle"></i> {{ service.services_provided }} served</span>
+            </div>
           </div>
         </div>
       </div>
       <div class="service-action">
-        {% if service.has_pricing %}
-          {% with first_tier=service.pricing_tiers.first %}
-          <h6>${{ first_tier.price }}</h6>
-          {% endwith %}
-        {% else %}
-          <h6>Contact for price</h6>
-        {% endif %}
+        <a href="{% url 'core:service_details' service.pk %}" class="btn btn-dark">View Details</a>
         <a href="{% url 'core:booking' %}" class="btn btn-light">Book Now</a>
       </div>
     </div>

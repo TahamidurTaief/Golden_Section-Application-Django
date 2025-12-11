@@ -129,8 +129,9 @@ def search_subcategories(request):
 def service_details(request, pk):
     """Display service details page"""
     # TODO: Get service details from database
+    service = Service.objects.get(pk=pk)
     context = {
-        'service_id': pk,
+        'service': service,
     }
     return render(request, 'service_details.html', context)
 
@@ -269,3 +270,6 @@ def get_service_request_data(request):
 
 def categories(request):
     return render(request, 'categories.html')
+
+def booking(request):
+    return render(request, 'booking.html')
