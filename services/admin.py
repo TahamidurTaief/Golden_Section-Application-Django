@@ -9,7 +9,7 @@ class AdditionalImageInline(admin.TabularInline):
     """Inline for additional service images"""
     model = AdditionalImage
     extra = 1
-    fields = ['image', 'caption', 'order']
+    fields = ['image', 'caption', 'alt_text', 'order']
     ordering = ['order']
 
 
@@ -17,7 +17,7 @@ class SubServiceInline(admin.TabularInline):
     """Inline for sub-services"""
     model = SubService
     extra = 1
-    fields = ['name', 'description', 'icon', 'is_active', 'order']
+    fields = ['name', 'description', 'image', 'alt_text', 'icon', 'price', 'duration', 'is_active', 'order']
     ordering = ['order']
 
 
@@ -54,12 +54,12 @@ class BusinessHoursInline(admin.TabularInline):
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = [
-        'name', 'category', 'subcategory', 'is_featured', 
+        'name', 'provider', 'category', 'subcategory', 'is_featured', 
         'is_popular', 'is_active', 'rating', 'total_reviews',
         'services_provided', 'views_count', 'created_at'
     ]
-    list_filter = ['category', 'subcategory', 'is_featured', 'is_popular', 'is_active', 'created_at']
-    search_fields = ['name', 'short_description', 'overview']
+    list_filter = ['provider', 'category', 'subcategory', 'is_featured', 'is_popular', 'is_active', 'created_at']
+    search_fields = ['name', 'short_description', 'overview', 'provider__business_name']
     list_editable = ['is_featured', 'is_popular', 'is_active']
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['-is_featured', 'order', '-created_at']
@@ -73,10 +73,10 @@ class ServiceAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('category', 'subcategory', 'name', 'slug', 'short_description', 'overview')
+            'fields': ('provider', 'category', 'subcategory', 'name', 'slug', 'short_description', 'overview')
         }),
         ('Media', {
-            'fields': ('featured_image',)
+            'fields': ('featured_image', 'alt_text')
         }),
         ('Contact', {
             'fields': ('whatsapp_number',)

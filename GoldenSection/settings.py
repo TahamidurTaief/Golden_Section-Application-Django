@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party apps
+    'imagekit',
     'django_extensions',
     'django_cotton',
     'django_tailwind_cli',

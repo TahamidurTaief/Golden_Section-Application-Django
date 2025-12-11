@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill, ResizeToFit
 from accounts.models import User
 from services.models import Service
 from categories.models import Category
@@ -17,7 +19,31 @@ class Provider(models.Model):
     
     # Business Information
     business_name = models.CharField(max_length=300)
-    business_logo = models.ImageField(upload_to='providers/logos/', null=True, blank=True)
+    business_logo = ProcessedImageField(
+        upload_to='providers/logos/',
+        processors=[ResizeToFill(300, 300)],
+        format='WEBP',
+        options={'quality': 90},
+        null=True,
+        blank=True,
+        help_text='Business logo (optimized automatically)'
+    )
+    
+    # ImageKit specifications for different uses
+    logo_thumbnail = ImageSpecField(
+        source='business_logo',
+        processors=[ResizeToFill(100, 100)],
+        format='WEBP',
+        options={'quality': 85}
+    )
+    
+    logo_card = ImageSpecField(
+        source='business_logo',
+        processors=[ResizeToFill(150, 150)],
+        format='WEBP',
+        options={'quality': 85}
+    )
+    
     bio = models.TextField(help_text='Tell us about your business')
     
     # Contact Information
@@ -103,7 +129,29 @@ class ProviderGallery(models.Model):
         on_delete=models.CASCADE, 
         related_name='gallery'
     )
-    image = models.ImageField(upload_to='providers/gallery/')
+    image = ProcessedImageField(
+        upload_to='providers/gallery/',
+        processors=[ResizeToFit(1200, 900)],
+        format='WEBP',
+        options={'quality': 90},
+        help_text='Gallery image (optimized automatically)'
+    )
+    
+    # ImageKit specifications for different uses
+    image_gallery = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(1200, 900)],
+        format='WEBP',
+        options={'quality': 95}
+    )
+    
+    image_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(200, 200)],
+        format='WEBP',
+        options={'quality': 80}
+    )
+    
     caption = models.CharField(max_length=200, blank=True)
     order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

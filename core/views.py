@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -127,18 +127,108 @@ def search_subcategories(request):
 
 
 def service_details(request, pk):
-    """Display service details page"""
-    # TODO: Get service details from database
-    service = Service.objects.get(pk=pk)
+    """
+    Service details view with all related data:
+    - Service with category/subcategory
+    - Provider information
+    - Additional images for gallery
+    - Sub-services
+    - Service includes
+    - FAQs
+    - Business hours
+    """
+    service = get_object_or_404(
+        Service.objects.select_related(
+            'category', 
+            'subcategory', 
+            'provider'
+        ).prefetch_related(
+            'additional_images',
+            'sub_services',
+            'includes',
+            'faqs',
+            'business_hours'
+        ),
+        pk=pk
+    )
+    
+    # Increment views count
+    service.increment_views()
+    
     context = {
         'service': service,
+        'additional_images': service.additional_images.all(),
+        'sub_services': service.sub_services.all(),
+        'includes': service.includes.all(),
+        'faqs': service.faqs.all(),
+        'business_hours': service.business_hours.all().order_by('weekday'),
     }
     return render(request, 'service_details.html', context)
 
 
-def booking(request):
-    # TODO: Handle booking form submission
-    return render(request, 'booking.html')
+def booking(request, service_id):
+    """Handle booking page with service details"""
+    import json
+    
+    # Fetch service data by ID
+    service = get_object_or_404(
+        Service.objects.select_related('provider', 'category', 'subcategory')
+        .prefetch_related('sub_services', 'includes', 'faqs', 'additional_images'),
+        id=service_id
+    )
+    
+    provider = service.provider
+    sub_services_list = list(service.sub_services.all())
+    
+    # Initialize context with service data
+    context = {
+        'service': service,
+        'provider': provider,
+        'service_name': service.name,
+        'provider_name': provider.business_name if provider else '',
+        'all_sub_services': sub_services_list,
+        'selected_sub_services': [],
+        'location_latitude': '',
+        'location_longitude': '',
+        'location_address': '',
+        'from_service_details': True
+    }
+    
+    # If POST request, get additional data from form
+    if request.method == 'POST':
+        selected_sub_services_json = request.POST.get('selected_sub_services')
+        location_latitude = request.POST.get('location_latitude')
+        location_longitude = request.POST.get('location_longitude')
+        location_address = request.POST.get('location_address')
+        
+        # Debug: Print received data
+        print("=" * 50)
+        print("Booking POST Data Received:")
+        print(f"Service ID: {service_id}")
+        print(f"Service Name: {service.name}")
+        print(f"Provider: {provider.business_name if provider else 'N/A'}")
+        print(f"Location: {location_address}")
+        print(f"Coordinates: {location_latitude}, {location_longitude}")
+        print(f"Sub-services JSON: {selected_sub_services_json}")
+        print("=" * 50)
+        
+        # Parse selected sub-services
+        try:
+            selected_sub_services = json.loads(selected_sub_services_json) if selected_sub_services_json else []
+            print(f"Parsed sub-services: {selected_sub_services}")
+        except Exception as e:
+            print(f"Error parsing sub-services: {e}")
+            selected_sub_services = []
+        
+        # Update context with POST data
+        context.update({
+            'selected_sub_services': selected_sub_services,
+            'location_latitude': location_latitude,
+            'location_longitude': location_longitude,
+            'location_address': location_address,
+        })
+    
+    return render(request, 'booking.html', context)
 
 def service_request(request):
     """Handle service request page with multi-step form"""
@@ -270,6 +360,3 @@ def get_service_request_data(request):
 
 def categories(request):
     return render(request, 'categories.html')
-
-def booking(request):
-    return render(request, 'booking.html')

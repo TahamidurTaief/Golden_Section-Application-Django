@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill, ResizeToFit
 
 
 class Page(models.Model):
@@ -91,7 +93,23 @@ class Testimonial(models.Model):
     """Customer testimonials"""
     
     customer_name = models.CharField(max_length=200)
-    customer_image = models.ImageField(upload_to='testimonials/', null=True, blank=True)
+    customer_image = ProcessedImageField(
+        upload_to='testimonials/',
+        processors=[ResizeToFill(200, 200)],
+        format='WEBP',
+        options={'quality': 90},
+        null=True,
+        blank=True,
+        help_text='Customer photo (optimized automatically)'
+    )
+    
+    image_thumbnail = ImageSpecField(
+        source='customer_image',
+        processors=[ResizeToFill(100, 100)],
+        format='WEBP',
+        options={'quality': 85}
+    )
+    
     customer_designation = models.CharField(max_length=200, blank=True, help_text='e.g., "CEO, Company Name"')
     
     testimonial = models.TextField()
@@ -132,7 +150,28 @@ class BlogPost(models.Model):
     
     title = models.CharField(max_length=300)
     slug = models.SlugField(unique=True, max_length=300)
-    featured_image = models.ImageField(upload_to='blog/')
+    featured_image = ProcessedImageField(
+        upload_to='blog/',
+        processors=[ResizeToFit(1200, 800)],
+        format='WEBP',
+        options={'quality': 90},
+        help_text='Blog featured image (optimized automatically)'
+    )
+    
+    image_card = ImageSpecField(
+        source='featured_image',
+        processors=[ResizeToFill(400, 300)],
+        format='WEBP',
+        options={'quality': 85}
+    )
+    
+    image_detail = ImageSpecField(
+        source='featured_image',
+        processors=[ResizeToFit(800, 600)],
+        format='WEBP',
+        options={'quality': 90}
+    )
+    
     excerpt = models.CharField(max_length=500)
     content = models.TextField()
     

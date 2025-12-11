@@ -3,12 +3,16 @@ Management command to populate services with related data
 """
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from datetime import time
 from categories.models import Category, SubCategory
 from services.models import (
     Service, AdditionalImage, SubService, 
     ServiceInclude, ServiceFAQ, BusinessHours
 )
+from providers.models import Provider
+
+User = get_user_model()
 
 
 class Command(BaseCommand):
@@ -22,6 +26,44 @@ class Command(BaseCommand):
         Category.objects.all().delete()
         
         self.stdout.write(self.style.SUCCESS('✓ All service data deleted'))
+        
+        # Create or get providers
+        self.stdout.write(self.style.WARNING('\nCreating providers...'))
+        providers = []
+        providers_data = [
+            {'business_name': 'Elite Electrical Solutions', 'email': 'contact@eliteelectric.com', 'phone': '+1-555-0101', 'city': 'Los Angeles', 'address': '123 Electric Ave, Los Angeles, CA 90001', 'postal_code': '90001'},
+            {'business_name': 'Pro Plumbing Services', 'email': 'info@proplumbing.com', 'phone': '+1-555-0202', 'city': 'San Francisco', 'address': '456 Plumber St, San Francisco, CA 94102', 'postal_code': '94102'},
+            {'business_name': 'Sparkle Clean Co', 'email': 'hello@sparkleclean.com', 'phone': '+1-555-0303', 'city': 'San Diego', 'address': '789 Clean Blvd, San Diego, CA 92101', 'postal_code': '92101'},
+            {'business_name': 'BuildRight Construction', 'email': 'contact@buildright.com', 'phone': '+1-555-0404', 'city': 'Sacramento', 'address': '321 Builder Rd, Sacramento, CA 95814', 'postal_code': '95814'},
+            {'business_name': 'AutoCare Services', 'email': 'info@autocare.com', 'phone': '+1-555-0505', 'city': 'Oakland', 'address': '654 Auto Way, Oakland, CA 94601', 'postal_code': '94601'},
+            {'business_name': 'Design Masters', 'email': 'hello@designmasters.com', 'phone': '+1-555-0606', 'city': 'Fresno', 'address': '987 Design Ave, Fresno, CA 93701', 'postal_code': '93701'},
+        ]
+        
+        for idx, provider_data in enumerate(providers_data, 1):
+            # Create or get user for provider
+            user, created = User.objects.get_or_create(
+                username=f'provider{idx}',
+                defaults={
+                    'email': provider_data['email'],
+                    'first_name': provider_data['business_name'].split()[0],
+                    'last_name': 'Provider',
+                }
+            )
+            
+            # Create or get provider
+            provider, created = Provider.objects.get_or_create(
+                user=user,
+                defaults={
+                    **provider_data,
+                    'bio': f'Professional {provider_data["business_name"]} with years of experience',
+                    'is_verified': True,
+                    'rating': round(4.5 + (idx * 0.1), 1),
+                    'total_reviews': 50 + (idx * 20),
+                    'is_active': True,
+                }
+            )
+            providers.append(provider)
+            self.stdout.write(f'  ✓ Created provider: {provider.business_name}')
         
         # Create Categories
         self.stdout.write(self.style.WARNING('\nCreating categories...'))
@@ -84,10 +126,10 @@ class Command(BaseCommand):
                 'is_featured': True,
                 'is_popular': True,
                 'sub_services': [
-                    {'name': 'Ceiling Fan Installation', 'icon': 'ti-air-conditioning'},
-                    {'name': 'Light Fixture Installation', 'icon': 'feather-sun'},
-                    {'name': 'Outlet & Switch Installation', 'icon': 'feather-power'},
-                    {'name': 'Electrical Panel Upgrade', 'icon': 'feather-box'},
+                    {'name': 'Ceiling Fan Installation', 'description': 'Professional ceiling fan installation service', 'icon': 'ti-air-conditioning', 'price': 45.00, 'duration': 60, 'alt_text': 'Ceiling fan installation service'},
+                    {'name': 'Light Fixture Installation', 'description': 'Install modern lighting fixtures', 'icon': 'feather-sun', 'price': 35.00, 'duration': 45, 'alt_text': 'Light fixture installation'},
+                    {'name': 'Outlet & Switch Installation', 'description': 'Install new outlets and switches', 'icon': 'feather-power', 'price': 25.00, 'duration': 30, 'alt_text': 'Outlet and switch installation'},
+                    {'name': 'Electrical Panel Upgrade', 'description': 'Upgrade electrical panel for higher capacity', 'icon': 'feather-box', 'price': 150.00, 'duration': 120, 'alt_text': 'Electrical panel upgrade service'},
                 ],
                 'includes': [
                     {'title': 'Free Consultation', 'icon': 'feather-message-circle'},
@@ -114,10 +156,10 @@ class Command(BaseCommand):
                 'is_featured': True,
                 'is_popular': True,
                 'sub_services': [
-                    {'name': 'Pipe Leak Detection', 'icon': 'feather-droplet'},
-                    {'name': 'Burst Pipe Repair', 'icon': 'feather-alert-circle'},
-                    {'name': 'Faucet Repair', 'icon': 'feather-tool'},
-                    {'name': 'Drain Cleaning', 'icon': 'feather-filter'},
+                    {'name': 'Pipe Leak Detection', 'description': 'Advanced leak detection with modern equipment', 'icon': 'feather-droplet', 'price': 75.00, 'duration': 45, 'alt_text': 'Pipe leak detection service'},
+                    {'name': 'Burst Pipe Repair', 'description': 'Emergency burst pipe repair service', 'icon': 'feather-alert-circle', 'price': 125.00, 'duration': 90, 'alt_text': 'Burst pipe repair'},
+                    {'name': 'Faucet Repair', 'description': 'Fix dripping and faulty faucets', 'icon': 'feather-tool', 'price': 40.00, 'duration': 30, 'alt_text': 'Faucet repair service'},
+                    {'name': 'Drain Cleaning', 'description': 'Professional drain cleaning and unclogging', 'icon': 'feather-filter', 'price': 85.00, 'duration': 60, 'alt_text': 'Drain cleaning service'},
                 ],
                 'includes': [
                     {'title': '24/7 Availability', 'icon': 'feather-clock'},
@@ -144,10 +186,10 @@ class Command(BaseCommand):
                 'is_featured': True,
                 'is_popular': True,
                 'sub_services': [
-                    {'name': 'Kitchen Deep Clean', 'icon': 'feather-home'},
-                    {'name': 'Bathroom Sanitization', 'icon': 'feather-droplet'},
-                    {'name': 'Floor Cleaning', 'icon': 'feather-square'},
-                    {'name': 'Window Cleaning', 'icon': 'feather-wind'},
+                    {'name': 'Kitchen Deep Clean', 'description': 'Thorough kitchen cleaning including appliances', 'icon': 'feather-home', 'price': 65.00, 'duration': 90, 'alt_text': 'Kitchen deep cleaning service'},
+                    {'name': 'Bathroom Sanitization', 'description': 'Complete bathroom sanitization and cleaning', 'icon': 'feather-droplet', 'price': 50.00, 'duration': 60, 'alt_text': 'Bathroom sanitization'},
+                    {'name': 'Floor Cleaning', 'description': 'Professional floor cleaning all types', 'icon': 'feather-square', 'price': 45.00, 'duration': 45, 'alt_text': 'Floor cleaning service'},
+                    {'name': 'Window Cleaning', 'description': 'Streak-free window cleaning service', 'icon': 'feather-wind', 'price': 40.00, 'duration': 40, 'alt_text': 'Window cleaning service'},
                 ],
                 'includes': [
                     {'title': 'Eco-Friendly Products', 'icon': 'feather-leaf'},
@@ -174,10 +216,10 @@ class Command(BaseCommand):
                 'is_featured': False,
                 'is_popular': True,
                 'sub_services': [
-                    {'name': 'Kitchen Remodeling', 'icon': 'feather-home'},
-                    {'name': 'Bathroom Renovation', 'icon': 'feather-droplet'},
-                    {'name': 'Room Addition', 'icon': 'feather-plus-square'},
-                    {'name': 'Flooring Installation', 'icon': 'feather-layers'},
+                    {'name': 'Kitchen Remodeling', 'description': 'Complete kitchen renovation and remodeling', 'icon': 'feather-home', 'price': 350.00, 'duration': 180, 'alt_text': 'Kitchen remodeling service'},
+                    {'name': 'Bathroom Renovation', 'description': 'Full bathroom renovation service', 'icon': 'feather-droplet', 'price': 280.00, 'duration': 150, 'alt_text': 'Bathroom renovation'},
+                    {'name': 'Room Addition', 'description': 'Add new rooms to your home', 'icon': 'feather-plus-square', 'price': 500.00, 'duration': 300, 'alt_text': 'Room addition service'},
+                    {'name': 'Flooring Installation', 'description': 'Professional flooring installation service', 'icon': 'feather-layers', 'price': 200.00, 'duration': 120, 'alt_text': 'Flooring installation'},
                 ],
                 'includes': [
                     {'title': '3D Design Preview', 'icon': 'feather-eye'},
@@ -204,10 +246,10 @@ class Command(BaseCommand):
                 'is_featured': False,
                 'is_popular': False,
                 'sub_services': [
-                    {'name': 'Exterior Wash & Wax', 'icon': 'feather-droplet'},
-                    {'name': 'Interior Detailing', 'icon': 'feather-home'},
-                    {'name': 'Engine Cleaning', 'icon': 'feather-tool'},
-                    {'name': 'Paint Protection', 'icon': 'feather-shield'},
+                    {'name': 'Exterior Wash & Wax', 'description': 'Complete exterior car wash and waxing', 'icon': 'feather-droplet', 'price': 55.00, 'duration': 60, 'alt_text': 'Exterior car wash and wax'},
+                    {'name': 'Interior Detailing', 'description': 'Deep interior cleaning and detailing', 'icon': 'feather-home', 'price': 75.00, 'duration': 90, 'alt_text': 'Interior car detailing'},
+                    {'name': 'Engine Cleaning', 'description': 'Professional engine bay cleaning', 'icon': 'feather-tool', 'price': 45.00, 'duration': 45, 'alt_text': 'Engine cleaning service'},
+                    {'name': 'Paint Protection', 'description': 'Ceramic coating and paint protection', 'icon': 'feather-shield', 'price': 150.00, 'duration': 120, 'alt_text': 'Car paint protection'},
                 ],
                 'includes': [
                     {'title': 'Premium Products', 'icon': 'feather-star'},
@@ -234,10 +276,10 @@ class Command(BaseCommand):
                 'is_featured': True,
                 'is_popular': False,
                 'sub_services': [
-                    {'name': 'Living Room Design', 'icon': 'feather-home'},
-                    {'name': 'Bedroom Design', 'icon': 'feather-moon'},
-                    {'name': 'Kitchen Design', 'icon': 'feather-coffee'},
-                    {'name': 'Color Consultation', 'icon': 'feather-droplet'},
+                    {'name': 'Living Room Design', 'description': 'Modern living room interior design', 'icon': 'feather-home', 'price': 180.00, 'duration': 120, 'alt_text': 'Living room design service'},
+                    {'name': 'Bedroom Design', 'description': 'Comfortable bedroom interior design', 'icon': 'feather-moon', 'price': 160.00, 'duration': 100, 'alt_text': 'Bedroom design'},
+                    {'name': 'Kitchen Design', 'description': 'Functional kitchen interior design', 'icon': 'feather-coffee', 'price': 200.00, 'duration': 130, 'alt_text': 'Kitchen design service'},
+                    {'name': 'Color Consultation', 'description': 'Professional color scheme consultation', 'icon': 'feather-droplet', 'price': 95.00, 'duration': 60, 'alt_text': 'Color consultation'},
                 ],
                 'includes': [
                     {'title': '3D Visualization', 'icon': 'feather-eye'},
@@ -265,7 +307,7 @@ class Command(BaseCommand):
         ]
         
         # Create services
-        for service_data in services_data:
+        for idx, service_data in enumerate(services_data):
             # Extract related data
             sub_services = service_data.pop('sub_services', [])
             includes = service_data.pop('includes', [])
@@ -275,10 +317,14 @@ class Command(BaseCommand):
             cat_name = service_data.pop('category')
             subcat_key = service_data.pop('subcategory')
             
+            # Assign provider (cycle through providers)
+            provider = providers[idx % len(providers)]
+            
             # Create service
             service = Service.objects.create(
                 category=categories[cat_name],
                 subcategory=subcategories.get(subcat_key),
+                provider=provider,
                 **service_data
             )
             

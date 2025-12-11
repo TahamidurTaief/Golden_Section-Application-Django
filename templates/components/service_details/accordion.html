@@ -7,212 +7,83 @@
     </div>
     <div class="card-body p-0">
       <div class="more-text">
-          <p>
-            Provides reliable and professional electrical solutions for
-            residential and commercial clients. Our licensed electricians are
-            dedicated to delivering top-quality service, ensuring safety, and
-            meeting all your electrical needs. Committed to providing
-            high-quality electrical solutions with a focus on safety and
-            customer satisfaction. Our team of licensed electricians is equipped
-            to handle both residential and commercial projects with expertise
-            and care.
-          </p>
-          <p>
-            Comprehensive overview of Electrical Services, including the types
-            of services offered, key benefits, location, contact details,
-            special offers, and customer reviews.
-          </p>
+          {{ service.overview|linebreaks }}
         </div>
         <a
           href="javascript:void(0);"
           class="link-primary text-decoration-underline more-btn mb-3"
           >Read More</a
         >
-        <div class="bg-light-200 p-3 offer-wrap">
+        
+        {% if sub_services %}
+        <div class="bg-light-200 p-3 offer-wrap" id="servicesOffered">
           <h4 class="mb-3">Services Offered</h4>
-          <div
-            class="offer-item d-md-flex align-items-center justify-content-between bg-white mb-2"
-          >
-            <div class="d-sm-flex align-items-center mb-2">
+          {% for sub_service in sub_services %}
+          <div class="offer-item d-md-flex align-items-center justify-content-between bg-white {% if not forloop.last %}mb-2{% endif %}">
+            <div class="d-sm-flex align-items-center mb-2 flex-grow-1">
               <span class="avatar avatar-lg flex-shrink-0 me-2 mb-2">
-                <img
-                  src="{% static 'img/services/rated-service-01.jpg' %}"
-                  alt="Electrical Repairs"
-                  class="br-10"
-                />
+                {% if sub_service.image %}
+                  <img src="{{ sub_service.image_thumbnail.url }}" alt="{{ sub_service.alt_text|default:sub_service.name }}" class="br-10" />
+                {% else %}
+                  <img src="{% static 'img/services/rated-service-01.jpg' %}" alt="{{ sub_service.name }} service icon" class="br-10" />
+                {% endif %}
               </span>
-              <div class="mb-2">
-                <h6 class="fs-16 fw-medium">Electrical Repairs</h6>
-                <p class="fs-14">
-                  Fixing faulty wiring, outlets, switches, and more to ensure.
-                </p>
+              <div class="mb-2 flex-grow-1">
+                <h6 class="fs-16 fw-medium">{{ sub_service.name }}</h6>
+                <p class="fs-14 mb-0">{{ sub_service.description }}</p>
+                <small class="text-muted">Duration: {{ sub_service.duration }} Min</small>
               </div>
             </div>
-            <div class="pb-3">
-              <h6 class="fs-16 fw-medium text-primary mb-0">$32.00</h6>
-              <p>30 Min</p>
+            <div class="pb-3 ps-3">
+              <input type="checkbox" class="form-check-input" id="service_{{ sub_service.id }}" name="selected_services" value="{{ sub_service.id }}">
+              <label class="form-check-label ms-2" for="service_{{ sub_service.id }}">Select</label>
             </div>
           </div>
-          <div
-            class="offer-item d-md-flex align-items-center justify-content-between bg-white mb-2"
-          >
-            <div class="d-sm-flex align-items-center mb-2">
-              <span class="avatar avatar-lg flex-shrink-0 me-2 mb-2">
-                <img
-                  src="{% static 'img/services/rated-service-02.jpg' %}"
-                  alt="Panel Upgrades"
-                  class="br-10"
-                />
-              </span>
-              <div class="mb-2">
-                <h6 class="fs-16 fw-medium">Panel Upgrades</h6>
-                <p>Upgrade your electrical panel to handle increased power.</p>
-              </div>
-            </div>
-            <div class="pb-3">
-              <h6 class="fs-16 fw-medium text-primary mb-0">$30.00</h6>
-              <p>30 Min</p>
-            </div>
-          </div>
-          <div
-            class="offer-item d-md-flex align-items-center justify-content-between bg-white mb-2"
-          >
-            <div class="d-sm-flex align-items-center mb-2">
-              <span class="avatar avatar-lg flex-shrink-0 me-2 mb-2">
-                <img
-                  src="{% static 'img/services/rated-service-03.jpg' %}"
-                  alt="Troubleshooting & Diagnostics"
-                  class="br-10"
-                />
-              </span>
-              <div class="mb-2">
-                <h6 class="fs-16 fw-medium">Troubleshooting & Diagnostics</h6>
-                <p>
-                  Identify and resolve electrical issues quickly and
-                  effectively.
-                </p>
-              </div>
-            </div>
-            <div class="pb-3">
-              <h6 class="fs-16 fw-medium text-primary mb-0">$40.00</h6>
-              <p>40 Min</p>
-            </div>
-          </div>
-          <div
-            class="offer-item d-md-flex align-items-center justify-content-between bg-white"
-          >
-            <div class="d-sm-flex align-items-center mb-2">
-              <span class="avatar avatar-lg flex-shrink-0 me-2 mb-2">
-                <img
-                  src="{% static 'img/services/rated-service-04.jpg' %}"
-                  alt="Lighting Installation & Maintenance"
-                  class="br-10"
-                />
-              </span>
-              <div class="mb-2">
-                <h6 class="fs-16 fw-medium">
-                  Lighting Installation & Maintenance
-                </h6>
-                <p>Install and maintain energy-efficient lighting solutions</p>
-              </div>
-            </div>
-            <div class="pb-3">
-              <h6 class="fs-16 fw-medium text-primary mb-0">$22.00</h6>
-              <p>20 Min</p>
-            </div>
-          </div>
+          {% endfor %}
         </div>
+        {% endif %}
     </div>
   </div>
 
+  {% if includes %}
   <div class="card border-0 mb-3 p-2 md:p-3">
     <div class="card-header bg-transparent border-0 p-0 pb-2">
       <h4 class="mb-0">Includes</h4>
     </div>
     <div class="card-body p-0">
         <div class="bg-light-200 p-3 pb-2 br-10">
+          {% for include in includes %}
           <p class="d-inline-flex align-items-center mb-2 me-4">
-            <i class="feather-check-circle text-success me-2"></i>Haircut & Hair
-            Styles
+            <i class="feather-check-circle text-success me-2"></i>{{ include.title }}
           </p>
-          <p class="d-inline-flex align-items-center mb-2 me-4">
-            <i class="feather-check-circle text-success me-2"></i>Shampoo &
-            Conditioning
-          </p>
-          <p class="d-inline-flex align-items-center mb-2 me-4">
-            <i class="feather-check-circle text-success me-2"></i>Beard
-            Trim/Shave
-          </p>
-          <p class="d-inline-flex align-items-center mb-2 me-4">
-            <i class="feather-check-circle text-success me-2"></i>Neck Shave
-          </p>
-          <p class="d-inline-flex align-items-center mb-2 me-4">
-            <i class="feather-check-circle text-success me-2"></i>Hot Towel
-            Treatment
-          </p>
+          {% endfor %}
         </div>
     </div>
   </div>
+  {% endif %}
 
+  {% if additional_images %}
   <div class="card border-0 mb-3  p-2 md:p-3">
     <div class="card-header bg-transparent border-0 p-0 pb-2">
       <h4 class="mb-0">Gallery</h4>
     </div>
     <div class="card-body p-0">
         <div class="gallery-slider owl-carousel nav-center">
+          {% for img in additional_images %}
           <a
-            href="{% static 'img/services/service-07.jpg' %}"
-            data-fancybox="gallery"
+            href="{{ img.image_gallery.url }}"
+            data-fancybox="gallery2"
             class="gallery-item"
           >
-            <img src="{% static 'img/services/service-07.jpg' %}" alt="Service Gallery" />
+            <img src="{{ img.image_gallery.url }}" alt="{{ img.alt_text|default:img.caption|default:'Service Gallery Image' }}" />
           </a>
-          <a
-            href="{% static 'img/services/service-08.jpg' %}"
-            data-fancybox="gallery"
-            class="gallery-item"
-          >
-            <img src="{% static 'img/services/service-08.jpg' %}" alt="Service Gallery" />
-          </a>
-          <a
-            href="{% static 'img/services/service-09.jpg' %}"
-            data-fancybox="gallery"
-            class="gallery-item"
-          >
-            <img src="{% static 'img/services/service-09.jpg' %}" alt="Service Gallery" />
-          </a>
-          <a
-            href="{% static 'img/services/service-10.jpg' %}"
-            data-fancybox="gallery"
-            class="gallery-item"
-          >
-            <img src="{% static 'img/services/service-10.jpg' %}" alt="Service Gallery" />
-          </a>
-          <a
-            href="{% static 'img/services/service-11.jpg' %}"
-            data-fancybox="gallery"
-            class="gallery-item"
-          >
-            <img src="{% static 'img/services/service-11.jpg' %}" alt="Service Gallery" />
-          </a>
-          <a
-            href="{% static 'img/services/service-12.jpg' %}"
-            data-fancybox="gallery"
-            class="gallery-item"
-          >
-            <img src="{% static 'img/services/service-12.jpg' %}" alt="Service Gallery" />
-          </a>
-          <a
-            href="{% static 'img/services/service-13.jpg' %}"
-            data-fancybox="gallery"
-            class="gallery-item"
-          >
-            <img src="{% static 'img/services/service-13.jpg' %}" alt="Service Gallery" />
-          </a>
+          {% endfor %}
         </div>
     </div>
   </div>
+  {% endif %}
 
+  {% if service.video_url %}
   <div class="card border-0 mb-3 p-2 md:p-3">
     <div class="card-header bg-transparent border-0 p-0 pb-2">
       <h4 class="mb-0">Video</h4>
@@ -222,80 +93,35 @@
           <a
             class="video-btn video-effect"
             data-fancybox=""
-            href="https://www.youtube.com/watch?v=Vdp6x7Bibtk"
+            href="{{ service.video_url }}"
             ><i class="fa-solid fa-play"></i
           ></a>
         </div>
     </div>
   </div>
+  {% endif %}
 
+  {% if faqs %}
   <div class="card border-0 mb-0 p-2 md:p-3">
     <div class="card-header bg-transparent border-0 p-0 pb-2">
       <h4 class="mb-0">FAQ's</h4>
     </div>
     <div class="card-body p-0">
-        <div x-data="{ active: 1 }" class="space-y-4 gap-5"> <!-- Increased gap between accordions -->
-            <!-- Item 1 -->
-            <div class="bg-neutral-50 rounded-lg border border-neutral-300"> <!-- Updated title and content styles -->
-                <button @click="active = (active === 1 ? null : 1)" class="w-full flex justify-between items-center p-3 text-left font-medium text-gray-900 focus:outline-none">
-                    <span>What is included in a Classic Cut?</span>
-                    <span x-show="active !== 1"><i class="fa-solid fa-chevron-down"></i></span>
-                    <span x-show="active === 1"><i class="fa-solid fa-chevron-up"></i></span>
-                </button>
-                <div x-show="active === 1" x-transition class="px-3 pb-3 text-gray-600 bg-white border-t border-neutral-100"> <!-- Content background and border -->
-                    <p class="mb-0">
-                        The Classic Cut includes a consultation with your barber, a
-                        haircut tailored to your style, and final styling with
-                        product. It does not include a hair wash or beard trim.
-                    </p>
-                </div>
-            </div>
-            <!-- Item 2 -->
+        <div x-data="{ active: 1 }" class="space-y-4 gap-5">
+            {% for faq in faqs %}
             <div class="bg-neutral-50 rounded-lg border border-neutral-300">
-                <button @click="active = (active === 2 ? null : 2)" class="w-full flex justify-between items-center p-3 text-left font-medium text-gray-900 focus:outline-none">
-                    <span>Do you offer services for children?</span>
-                    <span x-show="active !== 2"><i class="fa-solid fa-chevron-down"></i></span>
-                    <span x-show="active === 2"><i class="fa-solid fa-chevron-up"></i></span>
+                <button @click="active = (active === {{ forloop.counter }} ? null : {{ forloop.counter }})" class="w-full flex justify-between items-center p-3 text-left font-medium text-gray-900 focus:outline-none">
+                    <span>{{ faq.question }}</span>
+                    <span x-show="active !== {{ forloop.counter }}"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span x-show="active === {{ forloop.counter }}"><i class="fa-solid fa-chevron-up"></i></span>
                 </button>
-                <div x-show="active === 2" x-transition class="px-3 pb-3 text-gray-600 bg-white border-t border-neutral-300">
-                    <p class="mb-0">
-                        The Classic Cut includes a consultation with your barber, a
-                        haircut tailored to your style, and final styling with
-                        product. It does not include a hair wash or beard trim.
-                    </p>
+                <div x-show="active === {{ forloop.counter }}" x-transition class="px-3 pb-3 text-gray-600 bg-white border-t border-neutral-100">
+                    <p class="mb-0">{{ faq.answer }}</p>
                 </div>
             </div>
-            <!-- Item 3 -->
-            <div class="bg-neutral-50 rounded-lg border border-neutral-300">
-                <button @click="active = (active === 3 ? null : 3)" class="w-full flex justify-between items-center p-3 text-left font-medium text-gray-900 focus:outline-none">
-                    <span>What is the difference between a Hot Towel Shave and a regular shave?</span>
-                    <span x-show="active !== 3"><i class="fa-solid fa-chevron-down"></i></span>
-                    <span x-show="active === 3"><i class="fa-solid fa-chevron-up"></i></span>
-                </button>
-                <div x-show="active === 3" x-transition class="px-3 pb-3 text-gray-600 bg-white border-t border-neutral-300">
-                    <p class="mb-0">
-                        The Classic Cut includes a consultation with your barber, a
-                        haircut tailored to your style, and final styling with
-                        product. It does not include a hair wash or beard trim.
-                    </p>
-                </div>
-            </div>
-            <!-- Item 4 -->
-            <div class="bg-neutral-50 rounded-lg border border-neutral-300">
-                <button @click="active = (active === 4 ? null : 4)" class="w-full flex justify-between items-center p-3 text-left font-medium text-gray-900 focus:outline-none">
-                    <span>Can I get a haircut and beard trim together?</span>
-                    <span x-show="active !== 4"><i class="fa-solid fa-chevron-down"></i></span>
-                    <span x-show="active === 4"><i class="fa-solid fa-chevron-up"></i></span>
-                </button>
-                <div x-show="active === 4" x-transition class="px-3 pb-3 text-gray-600 bg-white border-t border-neutral-300">
-                    <p class="mb-0">
-                        The Classic Cut includes a consultation with your barber, a
-                        haircut tailored to your style, and final styling with
-                        product. It does not include a hair wash or beard trim.
-                    </p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
       </div>
     </div>
+  {% endif %}
 </div>

@@ -14,6 +14,7 @@ dependencies = [
     "django-cotton==2.5.1",
     "django-extensions==4.1",
     "django-htmx==1.27.0",
+    "django-imagekit>=6.0.0",
     "django-jazzmin==3.0.1",
     "django-tailwind-cli==4.4.2",
     "django-typer==3.5.0",

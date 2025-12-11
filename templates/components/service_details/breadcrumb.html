@@ -5,12 +5,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 col-12">
-					<h2 class="breadcrumb-title mb-2">Service Details</h2>
+					<h2 class="breadcrumb-title mb-2">{{ service.name }}</h2>
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb justify-content-center mb-0">
-							<li class="breadcrumb-item"><a href="index.html"><i class="ti ti-home-2"></i></a></li>
-							<li class="breadcrumb-item">Service</li>
-							<li class="breadcrumb-item active" aria-current="page">Service Details</li>
+							<li class="breadcrumb-item"><a href="{% url 'core:home' %}"><i class="ti ti-home-2"></i></a></li>
+							<li class="breadcrumb-item"><a href="{% url 'core:services' %}">Services</a></li>
+							{% if service.category %}
+							<li class="breadcrumb-item">{{ service.category.name }}</li>
+							{% endif %}
+							<li class="breadcrumb-item active" aria-current="page">{{ service.name|truncatewords:3 }}</li>
 						</ol>
 					</nav>
 				</div>

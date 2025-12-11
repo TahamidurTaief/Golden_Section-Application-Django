@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill, ResizeToFit
 
 
 class Category(models.Model):
@@ -8,8 +10,39 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField(blank=True)
-    icon = models.ImageField(upload_to='categories/icons/', null=True, blank=True)
-    image = models.ImageField(upload_to='categories/', null=True, blank=True)
+    icon = ProcessedImageField(
+        upload_to='categories/icons/',
+        processors=[ResizeToFill(64, 64)],
+        format='WEBP',
+        options={'quality': 90},
+        null=True,
+        blank=True,
+        help_text='Category icon (optimized automatically)'
+    )
+    
+    icon_large = ImageSpecField(
+        source='icon',
+        processors=[ResizeToFill(128, 128)],
+        format='WEBP',
+        options={'quality': 90}
+    )
+    
+    image = ProcessedImageField(
+        upload_to='categories/',
+        processors=[ResizeToFit(800, 600)],
+        format='WEBP',
+        options={'quality': 90},
+        null=True,
+        blank=True,
+        help_text='Category banner image (optimized automatically)'
+    )
+    
+    image_card = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(400, 300)],
+        format='WEBP',
+        options={'quality': 85}
+    )
     whatsapp_number = models.CharField(
         max_length=20, 
         blank=True,
@@ -62,8 +95,39 @@ class SubCategory(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField(blank=True)
-    icon = models.ImageField(upload_to='subcategories/icons/', null=True, blank=True)
-    image = models.ImageField(upload_to='subcategories/', null=True, blank=True)
+    icon = ProcessedImageField(
+        upload_to='subcategories/icons/',
+        processors=[ResizeToFill(64, 64)],
+        format='WEBP',
+        options={'quality': 90},
+        null=True,
+        blank=True,
+        help_text='Subcategory icon (optimized automatically)'
+    )
+    
+    icon_large = ImageSpecField(
+        source='icon',
+        processors=[ResizeToFill(128, 128)],
+        format='WEBP',
+        options={'quality': 90}
+    )
+    
+    image = ProcessedImageField(
+        upload_to='subcategories/',
+        processors=[ResizeToFit(800, 600)],
+        format='WEBP',
+        options={'quality': 90},
+        null=True,
+        blank=True,
+        help_text='Subcategory banner image (optimized automatically)'
+    )
+    
+    image_card = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(400, 300)],
+        format='WEBP',
+        options={'quality': 85}
+    )
     
     # Display settings
     is_active = models.BooleanField(default=True)

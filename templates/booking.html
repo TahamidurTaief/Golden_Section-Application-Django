@@ -4,6 +4,75 @@
 
 {% block title %}Service Booking{% endblock %}
 
+{% block extra_head %}
+<style>
+    /* Compact Date Selection (Time-slot Style) */
+    .token-slot .visit-btns.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white;
+        border-color: #667eea;
+        transform: scale(1.05);
+        {% comment %} box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3); {% endcomment %}
+    }
+    .token-slot .visit-btns.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background-color: #f5f5f5 !important;
+    }
+    .token-slot .visit-btns {
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+        border: none;
+    }
+    .token-slot .visit-btns:hover:not(.disabled) {
+        transform: translateY(-2px);
+        background-color: #e9ecef;
+    }
+    .token-slot .compact-date-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 6px;
+    }
+    .offer-item {
+        transition: all 0.2s ease;
+    }
+    .offer-item:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    .service-img img {
+        max-width: 150px;
+        height: auto;
+        object-fit: cover;
+    }
+    @media (max-width: 768px) {
+        .service-img img {
+            max-width: 100px;
+        }
+        .token-slot .visit-btns {
+            min-width: 60px !important;
+            padding: 6px 4px;
+        }
+    }
+    .card-body::-webkit-scrollbar {
+        width: 6px;
+    }
+    .card-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    .card-body::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    .card-body::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 	
 
@@ -49,312 +118,291 @@
                 <div class="row">
 					
 					<!-- Booking -->
-					<div class="col-lg-12">
+					<div class="col-lg-12" x-data="bookingData()">
 
 						
 						<!-- Appointment -->
-						<div class="booking-service card shadow-none">
+						<div class="booking-service card border">
 							<div class="card-body">
 								<div class="row align-items-center">
-									<div class="col-lg-5">
-										<div class="d-flex align-items-center">
-											<div class="flex-shrink-0 service-img me-3">
-												<img src="{% static 'img/services/service-27.jpg' %}" alt="img">
-											</div>
+								<div class="col-lg-5">
+									<div class="d-flex align-items-center">
+										<div class="shrink-0 service-img me-3">
+											{% if service and service.featured_image %}
+												<img src="{{ service.featured_image.url }}" alt="{{ service.alt_text|default:service.name }}" class="img-fluid rounded">
+											{% else %}
+												<img src="{% static 'img/services/service-27.jpg' %}" alt="Service" class="img-fluid rounded">
+											{% endif %}
+										</div>
 											<div class="serv-profile">
-												<span class="badge badge-soft-primary">Car Wash</span>
-												<h5 class="my-2">Car Repair Services</h5>
+												{% if service %}
+													<span class="badge badge-soft-primary">{{ service.category.name }}</span>
+													<h5 class="my-2">{{ service.name }}</h5>
+												{% else %}
+													<span class="badge badge-soft-primary">Service</span>
+													<h5 class="my-2">{{ service_name|default:"Select a Service" }}</h5>
+												{% endif %}
+												
+												{% if provider %}
 												<div class="d-flex align-items-center">
-													<span class="avatar avatar-md rounded-circle me-2"><img src="assets/img/profiles/avatar-01.jpg" class="rounded-circle" alt="img"></span>
+													<span class="avatar avatar-md rounded-circle me-2">
+														{% if provider.business_logo %}
+															<img src="{{ provider.logo_thumbnail.url }}" class="rounded-circle" alt="{{ provider.business_name }}">
+														{% else %}
+															<img src="{% static 'img/profiles/avatar-01.jpg' %}" class="rounded-circle" alt="Provider">
+														{% endif %}
+													</span>
 													<div class="serv-pro-info">
-														<h6 class="fs-14 fw-medium">Thomas Herzberg</h6>
-														<p class="serv-review"><i class="fa-solid fa-star"></i> <span>4.9 </span>(255 reviews)</p>
+														<h6 class="fs-14 fw-medium">{{ provider.business_name }}</h6>
+														<p class="serv-review"><i class="fa-solid fa-star"></i> <span>{{ provider.rating|floatformat:1 }} </span>({{ provider.total_reviews }} reviews)</p>
 													</div>
 												</div>
+												{% endif %}
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-5">
+									<div class="col-lg-7">
 										<div class="row">
-											<div class="col-lg-6">
-												<div class="">
-													<div class="provide-box d-flex align-items-center mb-3">
-														<span class="me-2"><i class="feather-phone"></i></span>
-														<div class="provide-info">
-															<h6 class="fs-14 fw-medium mb-1">Phone</h6>
-															<p>+1 888 888 8888</p>
-														</div>
-													</div>
-													<div class="provide-box d-flex align-items-center">
-														<span class="me-2"><i class="feather-mail"></i></span>
-														<div class="provide-info">
-															<h6 class="fs-14 fw-medium mb-1">Email</h6>
-															<p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="22564a4d4f435162475a434f524e470c414d4f">[email&#160;protected]</a></p>
-														</div>
-													</div>
+											<div class="col-md-6 col-sm-6">
+												<div class="provide-box mb-2">
+													<label class="form-label"><i class="feather-user me-2"></i>First Name</label>
+													<input type="text" class="form-control" x-model="firstName" placeholder="First name" required>
 												</div>
 											</div>
-											<div class="col-lg-6">
-												<div class="">
-													<div class="provide-box d-flex align-items-center mb-3">
-														<span class="me-2"><i class="feather-map-pin"></i></span>
-														<div class="provide-info">
-															<h6 class="fs-14 fw-medium mb-1">Address</h6>
-															<p>Hanover, Maryland</p>
-														</div>
-													</div>
-													<div class="provide-box d-flex align-items-center">
-														<span class="me-2"><i class="ti ti-wallet"></i></span>
-														<div class="provide-info">
-															<h6 class="fs-14 fw-medium mb-1">Service Amount</h6>
-															<h5>$150.00 </h5>
-														</div>
-													</div>
+											<div class="col-md-6 col-sm-6">
+												<div class="provide-box mb-2">
+													<label class="form-label"><i class="feather-user me-2"></i>Last Name</label>
+													<input type="text" class="form-control" x-model="lastName" placeholder="Last name" required>
 												</div>
 											</div>
+											<div class="col-md-6 col-sm-6">
+												<div class="provide-box mb-2">
+													<label class="form-label"><i class="feather-mail me-2"></i>Email</label>
+													<input type="email" class="form-control" x-model="customerEmail" placeholder="Your email" required>
+												</div>
+											</div>
+											<div class="col-md-6 col-sm-6">
+												<div class="provide-box mb-2">
+													<label class="form-label"><i class="feather-phone me-2"></i>Phone</label>
+													<input type="tel" class="form-control" x-model="customerPhone" placeholder="Your phone" required>
+												</div>
+											</div>
+
 										</div>
 									</div>
 									<div class="col-lg-2">
-										<div class="d-flex align-items-center social">
-											<a href="javascript:void(0);" class="d-flex align-items-center justify-content-center"></a>
+										<div class="d-flex align-items-center justify-content-center">
+											{% if service and service.id %}
+											<a href="{% url 'core:service_details' service.id %}" class="btn btn-outline-primary btn-sm">
+												<i class="ti ti-pencil me-1"></i>Edit
+											</a>
+											{% endif %}
 										</div>
-									</div>
-								</div>
-							</div>
-						</div>						
-						<div class="book-form border-top border-bottom pt-4 pb-2">
-							<div class="row">
-								<div class="col-md-4">		
-									<div class="mb-3">		
-										<label class="form-label">City</label>
-										<select class="select">
-											<option>Select City</option>
-											<option>Tornoto</option>
-											<option>Texas</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-4">	
-									<div class="mb-3">		
-										<label class="form-label">State</label>					
-										<select class="select">
-											<option>Select State</option>
-											<option>Tornoto</option>
-											<option>Texas</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-4">		
-									<div class="mb-3">		
-										<label class="form-label">Country</label>					
-										<select class="select">
-											<option>Select Country</option>
-											<option>US</option>
-											<option>UK</option>
-										</select>
 									</div>
 								</div>
 							</div>
 						</div>
-						<!-- /Appointment -->						
 						
-						<!-- Appointment Date & Time -->
-						<div class="row">
-							<div class="col-lg-4">	
-								<div class="book-title">	
-									<h5>Appointment Date</h5>
-								</div>
-								<div class="card">
-									<div class="card-body p-2 pt-3">
-										<div id="datetimepickershow"></div>
+						<!-- Services Offered & Location Map Side by Side -->
+						<div class="row mb-3">
+							<!-- Services Offered (Left Side) -->
+							<div class="col-lg-6 col-md-12 mb-3 mb-lg-0 d-flex">
+								<div class="card border w-100">
+									<div class="card-body p-3" style="max-height: 600px; overflow-y: auto;">
+										<h5 class="mb-3"><i class="ti ti-list-check me-2 text-primary"></i>Services Offered</h5>
+										{% if service.sub_services.all %}
+										<div class="bg-light-200 p-3 offer-wrap">
+											<template x-for="subService in availableSubServices" :key="subService.id">
+												<div class="offer-item d-md-flex align-items-center justify-content-between bg-white mb-2">
+													<div class="d-sm-flex align-items-center mb-2 flex-grow-1">
+														<span class="avatar avatar-lg flex-shrink-0 me-2 mb-2">
+															<img x-bind:src="subService.image || '{% static 'img/services/rated-service-01.jpg' %}'" x-bind:alt="subService.name" class="br-10" />
+														</span>
+														<div class="mb-2 flex-grow-1">
+															<h6 class="fs-16 fw-medium" x-text="subService.name"></h6>
+															<p class="fs-14 mb-0" x-text="subService.description" x-show="subService.description"></p>
+															{% comment %} <small class="text-muted" x-show="subService.duration">
+																Duration: <span x-text="subService.duration"></span> Min
+															</small> {% endcomment %}
+														</div>
+													</div>
+													<div class="pb-3 ps-3">
+														<input 
+															type="checkbox" 
+															class="form-check-input" 
+															:id="'sub_service_' + subService.id"
+															:value="subService.id"
+															x-model="selectedSubServices"
+														>
+														<label class="form-check-label ms-2" :for="'sub_service_' + subService.id">Select</label>
+													</div>
+												</div>
+											</template>
+										</div>
+										<div class="mt-3" x-show="selectedSubServices.length > 0">
+											<small class="text-success">
+												<i class="ti ti-check-circle me-1"></i>
+												<span x-text="selectedSubServices.length"></span> service(s) selected
+											</small>
+										</div>
+										{% else %}
+										<p class="text-muted">No sub-services available for this service.</p>
+										{% endif %}
 									</div>
 								</div>
 							</div>
-							<div class="col-lg-8">	
-								<div class="row">	
-									<div class="col-md-12">	
-										<div class="book-title">	
-											<h5>Appointment Time</h5>
+							
+							
+							<!-- Location Map (Right Side) -->
+							<div class="col-lg-6 col-md-12 d-flex">
+								<div class="card border w-100">
+									<div class="card-body p-3" style="max-height: 600px; overflow-y: auto;">
+								<h5 class="mb-3"><i class="ti ti-map-pin text-danger me-2"></i>Select Your Service Location</h5>
+								
+								<!-- Location Search Input -->
+								<div class="mb-3">
+									<div class="input-group">
+										<span class="input-group-text bg-white">
+											<i class="ti ti-search"></i>
+										</span>
+										<input type="text" class="form-control" x-model="searchQuery" @keyup.enter="searchLocation" placeholder="Search for a location in Dubai">
+										<button class="btn btn-primary" type="button" @click="searchLocation">
+											<i class="ti ti-map-search me-1"></i>Search
+										</button>
+									</div>
+									<div x-show="searchResults.length > 0" class="list-group mt-2" style="max-height: 200px; overflow-y: auto;">
+										<template x-for="result in searchResults" :key="result.place_id">
+											<a href="#" @click.prevent="selectSearchResult(result)" class="list-group-item list-group-item-action">
+												<div class="d-flex align-items-start">
+													<i class="ti ti-map-pin text-primary me-2 mt-1 fs-18"></i>
+													<div class="flex-grow-1">
+														<div class="fw-medium text-dark" x-text="result.name"></div>
+														<small class="text-muted d-block" style="font-size: 11px;" x-text="result.display_name"></small>
+													</div>
+												</div>
+											</a>
+										</template>
+									</div>
+								</div>
+								
+								<!-- Map Container -->
+								<div id="bookingLocationMap" style="width: 100%; height: 300px; border-radius: 10px; border: 1px solid #e0e0e0;" class="mb-3"></div>
+								
+								<!-- Selected Location Display -->
+								<div x-show="selectedLocation.address" class="bg-light border rounded p-3 mt-3">
+									<div class="d-flex align-items-start mb-2">
+										<span class="me-2">
+											<i class="ti ti-map-pin-filled text-success fs-24"></i>
+										</span>
+										<div class="flex-grow-1">
+											<h6 class="mb-1">Selected Location</h6>
+											<p class="mb-1" x-text="selectedLocation.address"></p>
+											<p class="mb-0 text-muted fs-12" x-text="`${selectedLocation.lat}, ${selectedLocation.lng}`"></p>
+										</div>
+									</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Appointment Date & Time -->
+						<div class="row mb-3">
+							<div class="col-lg-5">	
+								<div class="book-title mb-2">	
+									<h5 class="mb-0"><i class="ti ti-calendar me-2"></i>Appointment Date</h5>
+								</div>
+								<div class="card border">
+									<div class="card-body p-3">
+										<!-- Month Navigation -->
+										<div class="d-flex align-items-center justify-content-between mb-2">
+											<button type="button" class="btn btn-sm btn-outline-primary" @click="previousMonth">
+												<i class="ti ti-chevron-left"></i>
+											</button>
+											<h6 class="mb-0 fw-semibold" x-text="currentMonthYear"></h6>
+											<button type="button" class="btn btn-sm btn-outline-primary" @click="nextMonth">
+												<i class="ti ti-chevron-right"></i>
+											</button>
+										</div>
+										
+										<!-- Day Name Headers -->
+										<div class="d-flex justify-content-between mb-2 px-1">
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Sun</small>
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Mon</small>
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Tue</small>
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Wed</small>
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Thu</small>
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Fri</small>
+											<small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Sat</small>
+										</div>
+										
+										<!-- Date Selection (Time-slot Style) -->
+										<div class="token-slot">
+											<template x-for="day in calendarDays" :key="day.date || Math.random()">
+												<div class="form-check-inline visits me-0 mb-1" x-show="day.day">
+													<label class="visit-btns" :class="{ 'active': selectedDate === day.date, 'disabled': day.isPast }">
+														<input 
+															type="radio" 
+															class="form-check-input" 
+															name="appointment_date"
+															:value="day.date"
+															x-model="selectedDate"
+															:disabled="day.isPast"
+															@change="selectDate(day)"
+														>
+														<span class="visit-rsn" x-text="day.day"></span>
+													</label>
+												</div>
+											</template>
+										</div>
+										
+										<div class="mt-3" x-show="selectedDate">
+											<small class="text-success"><i class="ti ti-check-circle me-1"></i>Selected: <span x-text="selectedDateFormatted"></span></small>
 										</div>
 									</div>
 								</div>
-								<div class="token-slot mt-2">
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">09.00 AM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">09.30 AM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">10.00 AM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">10.30 AM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">11.00 AM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">11.30 AM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">12.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">12.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">01.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">01.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">02.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">02.30 PM</span>
-                                       </label>
-                                   </div>
-									<div class="form-check-inline visits me-0">
-										<label class="visit-btns">
-											<input type="radio" class="form-check-input" name="appintment">
-											<span class="visit-rsn">03.00 PM</span>
-										</label>
+							</div>
+							<div class="col-lg-7 col-md-6 d-flex">
+								<div class="w-100">
+									<div class="book-title mb-2">	
+										<h5 class="mb-0"><i class="ti ti-clock me-2"></i>Appointment Time</h5>
 									</div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">03.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">04.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">04.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">05.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">05.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">06.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">06.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">07.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">07.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">08.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">08.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">09.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">09.30 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">10.00 PM</span>
-                                       </label>
-                                   </div>
-                                   <div class="form-check-inline visits me-0">
-                                       <label class="visit-btns">
-                                           <input type="radio" class="form-check-input" name="appintment">
-                                           <span class="visit-rsn">10.30 PM</span>
-                                       </label>
-                                   </div>
+									<div class="card border h-100">
+										<div class="card-body p-3">
+											<div class="token-slot" style="max-height: 360px; overflow-y: auto;">
+                                   <template x-for="time in timeSlots" :key="time">
+                                       <div class="form-check-inline visits me-0">
+                                           <label class="visit-btns">
+                                               <input type="radio" class="form-check-input" name="appointment_time" :value="time" x-model="selectedTime">
+                                               <span class="visit-rsn" x-text="time"></span>
+                                           </label>
+                                       </div>
+												   </template>
+											</div>
+											<div class="mt-3" x-show="selectedTime">
+												<small class="text-success"><i class="ti ti-check-circle me-1"></i>Selected: <span x-text="selectedTime"></span></small>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="d-flex align-items-center justify-content-end mt-4">
-									<a href="javascript:void(0);" class="btn btn-light me-2">Cancel</a>
-									<a href="booking-payment.html" class="btn btn-dark">Book Appointment</a>
-								</div>															
 							</div>
 						</div>
 						<!-- /Appointment Date & Time -->
+						
+						<!-- Booking Actions -->
+						<div class="row mb-3">
+							<div class="col-12">
+								<div class="d-flex align-items-center justify-content-between gap-3">
+									<a href="{% if service and service.id %}{% url 'core:service_details' service.id %}{% else %}{% url 'core:home' %}{% endif %}" class="btn btn-outline-secondary">
+										<i class="ti ti-arrow-left me-2"></i>Back to Service
+									</a>
+									<button type="button" class="btn btn-primary btn-lg px-5" @click="submitBooking" x-bind:disabled="isSubmitting">
+										<span x-show="!isSubmitting"><i class="ti ti-calendar-check me-2"></i>Book Appointment</span>
+										<span x-show="isSubmitting"><i class="ti ti-loader me-2"></i>Processing...</span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<!-- /Booking Actions -->
 						
 					</div>
 					<!-- /Booking -->
@@ -365,7 +413,312 @@
      </div>
     <!-- /Page Wrapper -->
 
-
-
+	<script>
+				function bookingData() {
+					return {
+						// Customer Info
+						firstName: '',
+						lastName: '',
+						customerPhone: '',
+						customerEmail: '',
+						isSubmitting: false,
+						
+						// Sub Services
+						selectedSubServices: {{ selected_sub_services|safe|default:'[]' }},
+					availableSubServices: [
+						{% if service.sub_services.all %}
+							{% for sub in service.sub_services.all %}
+								{ 
+									id: {{ sub.id }}, 
+									name: '{{ sub.name|escapejs }}', 
+									description: '{{ sub.description|escapejs|default:"" }}',
+									price: {% if sub.price %}'{{ sub.price }}'{% else %}null{% endif %},
+									duration: {% if sub.duration %}{{ sub.duration }}{% else %}null{% endif %},
+									image: {% if sub.image %}'{{ sub.image_thumbnail.url }}'{% else %}null{% endif %}
+								}{% if not forloop.last %},{% endif %}
+							{% endfor %}
+						{% endif %}
+					],
+					
+					// Location Data
+				searchQuery: '',
+				searchResults: [],
+				selectedLocation: {
+					lat: {{ location_latitude|default:'25.2048' }},
+					lng: {{ location_longitude|default:'55.2708' }},
+					address: '{{ location_address|escapejs }}'
+				},
+				map: null,
+				marker: null,
+				
+				// Calendar Data
+				currentMonth: new Date().getMonth(),
+				currentYear: new Date().getFullYear(),
+				selectedDate: null,
+				calendarDays: [],
+				
+				// Time Slots
+				timeSlots: [
+					'9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
+					'11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
+					'01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM',
+					'03:00 PM', '03:30 PM', '4:00 PM', '04:30 PM',
+					'05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM',
+					'07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM',
+					'09:00 PM', '9:30 PM', '10:00 PM'
+				],
+				selectedTime: null,
+				
+				init() {
+					this.generateCalendar();
+					this.$nextTick(() => {
+						this.initMap();
+					});
+				},
+				
+				// Map Functions
+				initMap() {
+					this.map = L.map('bookingLocationMap').setView([this.selectedLocation.lat, this.selectedLocation.lng], 12);
+					
+					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+						attribution: '&copy; OpenStreetMap contributors',
+						maxZoom: 19
+					}).addTo(this.map);
+					
+					// Add marker if location exists
+					if (this.selectedLocation.address) {
+						this.addMarker(this.selectedLocation.lat, this.selectedLocation.lng, this.selectedLocation.address);
+					}
+					
+					// Click to select location
+					this.map.on('click', (e) => {
+						this.handleMapClick(e.latlng.lat, e.latlng.lng);
+					});
+				},
+				
+				addMarker(lat, lng, address = '') {
+					if (this.marker) {
+						this.map.removeLayer(this.marker);
+					}
+					
+					this.marker = L.marker([lat, lng], {
+						icon: L.divIcon({
+							className: 'custom-marker',
+							html: '<i class="ti ti-map-pin-filled text-success" style="font-size: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));"></i>',
+							iconSize: [32, 32],
+							iconAnchor: [16, 32]
+						})
+					}).addTo(this.map);
+					
+					if (address) {
+						this.marker.bindPopup(address).openPopup();
+					}
+				},
+				
+				handleMapClick(lat, lng) {
+					fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1&accept-language=en`, {
+						headers: { 'Accept-Language': 'en', 'User-Agent': 'GoldenSectionApp/1.0' }
+					})
+					.then(response => response.json())
+					.then(data => {
+						this.selectedLocation = {
+							lat: lat,
+							lng: lng,
+							address: data.display_name || 'Selected Location'
+						};
+						this.addMarker(lat, lng, this.selectedLocation.address);
+						this.map.setView([lat, lng], 16);
+					});
+				},
+				
+				searchLocation() {
+					let query = this.searchQuery.trim();
+					if (!query) {
+						query = 'Dubai';
+					}
+					
+					console.log('Searching for:', query);						// Nominatim API with Dubai bias
+						const viewbox = '54.9,24.7,55.6,25.5'; // Dubai bounding box
+						const url = `https://nominatim.openstreetmap.org/search?` +
+							`format=json` +
+							`&q=${encodeURIComponent(query + ', Dubai, UAE')}` +
+							`&viewbox=${viewbox}` +
+							`&bounded=0` +
+							`&limit=8` +
+							`&addressdetails=1` +
+							`&accept-language=en`;
+						
+						fetch(url, {
+							headers: {
+								'Accept-Language': 'en',
+								'User-Agent': 'GoldenSectionApp/1.0'
+							}
+						})
+						.then(response => {
+							if (!response.ok) {
+								throw new Error('Network response was not ok');
+							}
+							return response.json();
+						})
+						.then(data => {
+							console.log('Search results:', data);
+							
+							if (!data || data.length === 0) {
+								this.searchResults = [];
+								return;
+							}
+							
+							this.searchResults = data.map(r => ({
+								place_id: r.place_id,
+								name: r.name || r.display_name.split(',')[0],
+								display_name: r.display_name,
+								lat: parseFloat(r.lat),
+								lon: parseFloat(r.lon)
+							}));
+						})
+						.catch(error => {
+							console.error('Search error:', error);
+							this.searchResults = [];
+						});
+					},				selectSearchResult(result) {
+					this.selectedLocation = {
+						lat: result.lat,
+						lng: result.lon,
+						address: result.display_name
+					};
+					this.addMarker(result.lat, result.lon, result.display_name);
+					this.map.setView([result.lat, result.lon], 16);
+					this.searchResults = [];
+					this.searchQuery = result.name;
+				},
+				
+				// Calendar Functions
+				get currentMonthYear() {
+					const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+					return `${months[this.currentMonth]} ${this.currentYear}`;
+				},
+				
+				get selectedDateFormatted() {
+					if (!this.selectedDate) return '';
+					const date = new Date(this.selectedDate);
+					return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+				},
+				
+				generateCalendar() {
+					const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+					const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+					const today = new Date();
+					today.setHours(0, 0, 0, 0);
+					
+					const days = [];
+					const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+					const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+					
+					// Add days of the month (no empty cells for compact display)
+					for (let day = 1; day <= lastDay.getDate(); day++) {
+						const date = new Date(this.currentYear, this.currentMonth, day);
+						date.setHours(0, 0, 0, 0);
+						const dateString = date.toISOString().split('T')[0];
+						
+						days.push({
+							day: day,
+							date: dateString,
+							dayName: dayNames[date.getDay()],
+							monthDay: monthNames[this.currentMonth],
+							isToday: date.getTime() === today.getTime(),
+							isPast: date < today
+						});
+					}
+					
+					this.calendarDays = days;
+				},
+				
+				selectDate(day) {
+					if (!day.date || day.isPast) return;
+					this.selectedDate = day.date;
+				},
+				
+				previousMonth() {
+					if (this.currentMonth === 0) {
+						this.currentMonth = 11;
+						this.currentYear--;
+					} else {
+						this.currentMonth--;
+					}
+					this.generateCalendar();
+				},
+				
+				nextMonth() {
+					if (this.currentMonth === 11) {
+						this.currentMonth = 0;
+						this.currentYear++;
+					} else {
+						this.currentMonth++;
+					}
+					this.generateCalendar();
+				},
+				
+				// Submit Booking
+				submitBooking() {
+					// Validation
+					if (!this.firstName || !this.lastName) {
+						alert('Please enter your first and last name');
+						return;
+					}
+					if (!this.customerPhone) {
+						alert('Please enter your phone number');
+						return;
+					}
+					if (!this.customerEmail) {
+						alert('Please enter your email');
+						return;
+					}
+					if (this.selectedSubServices.length === 0) {
+						alert('Please select at least one service');
+						return;
+					}
+					if (!this.selectedLocation.address) {
+						alert('Please select a service location on the map');
+						return;
+					}
+					if (!this.selectedDate) {
+						alert('Please select an appointment date');
+						return;
+					}
+					if (!this.selectedTime) {
+						alert('Please select an appointment time');
+						return;
+					}
+					
+					// Collect booking data
+					const bookingData = {
+						service_id: {{ service.id|default:'null' }},
+						service_name: '{{ service.name|escapejs }}',
+						provider_id: {{ provider.id|default:'null' }},
+						provider_name: '{{ provider.business_name|escapejs }}',
+						customer_first_name: this.firstName,
+						customer_last_name: this.lastName,
+						customer_phone: this.customerPhone,
+						customer_email: this.customerEmail,
+						location_lat: this.selectedLocation.lat,
+						location_lng: this.selectedLocation.lng,
+						location_address: this.selectedLocation.address,
+						appointment_date: this.selectedDate,
+						appointment_time: this.selectedTime,
+						selected_sub_services: this.selectedSubServices
+					};
+					
+					console.log('Booking Data:', bookingData);
+					
+					// Show success message
+					const servicesText = this.selectedSubServices.length > 0 ? `\nServices: ${this.selectedSubServices.length} selected` : '';
+					alert(`Booking Confirmed!\n\nCustomer: ${this.firstName} ${this.lastName}\nService: ${bookingData.service_name}${servicesText}\nDate: ${this.selectedDateFormatted}\nTime: ${this.selectedTime}\nLocation: ${this.selectedLocation.address}\n\nConfirmation will be sent to ${this.customerEmail}`);
+					
+					// Here you can send data via HTMX or fetch API
+					// htmx.ajax('POST', '/booking/submit/', { values: bookingData });
+				}
+			}
+		}
+	</script>
 
 {% endblock %}

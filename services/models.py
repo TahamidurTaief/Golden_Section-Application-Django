@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.text import slugify
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill, ResizeToFit
 from categories.models import Category, SubCategory
 
 
@@ -20,6 +22,14 @@ class Service(models.Model):
         blank=True,
         related_name='services'
     )
+    provider = models.ForeignKey(
+        'providers.Provider',
+        on_delete=models.CASCADE,
+        related_name='services_provided',
+        null=True,
+        blank=True,
+        help_text='Service provider'
+    )
     
     # Basic Information
     name = models.CharField(max_length=300)
@@ -28,7 +38,41 @@ class Service(models.Model):
     overview = models.TextField(default='', help_text='Detailed overview of the service')
     
     # Media
-    featured_image = models.ImageField(upload_to='services/')
+    featured_image = ProcessedImageField(
+        upload_to='services/',
+        processors=[ResizeToFit(1200, 800)],
+        format='WEBP',
+        options={'quality': 90},
+        help_text='Main service image (optimized automatically)'
+    )
+    
+    # ImageKit specifications for different uses
+    image_card = ImageSpecField(
+        source='featured_image',
+        processors=[ResizeToFill(400, 300)],
+        format='WEBP',
+        options={'quality': 85}
+    )
+    
+    image_detail = ImageSpecField(
+        source='featured_image',
+        processors=[ResizeToFit(800, 600)],
+        format='WEBP',
+        options={'quality': 90}
+    )
+    
+    image_gallery = ImageSpecField(
+        source='featured_image',
+        processors=[ResizeToFit(1200, 900)],
+        format='WEBP',
+        options={'quality': 95}
+    )
+    
+    alt_text = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text='Alt text for featured image (for accessibility)'
+    )
     
     # Contact
     whatsapp_number = models.CharField(
@@ -98,8 +142,35 @@ class AdditionalImage(models.Model):
         on_delete=models.CASCADE, 
         related_name='additional_images'
     )
-    image = models.ImageField(upload_to='services/additional/')
+    image = ProcessedImageField(
+        upload_to='services/additional/',
+        processors=[ResizeToFit(1200, 900)],
+        format='WEBP',
+        options={'quality': 90},
+        help_text='Additional service image (optimized automatically)'
+    )
+    
+    # ImageKit specification for gallery display
+    image_gallery = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(1200, 900)],
+        format='WEBP',
+        options={'quality': 95}
+    )
+    
+    image_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(150, 150)],
+        format='WEBP',
+        options={'quality': 80}
+    )
+    
     caption = models.CharField(max_length=200, blank=True)
+    alt_text = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text='Alt text for image (for accessibility)'
+    )
     order = models.IntegerField(default=0, help_text='Display order')
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -124,10 +195,43 @@ class SubService(models.Model):
     )
     name = models.CharField(max_length=200, help_text='e.g., Fan Repair, AC Installation')
     description = models.TextField(blank=True)
+    image = ProcessedImageField(
+        upload_to='services/sub_services/',
+        processors=[ResizeToFill(200, 200)],
+        format='WEBP',
+        options={'quality': 85},
+        null=True,
+        blank=True,
+        help_text='Sub-service image (optimized automatically)'
+    )
+    
+    # ImageKit specification for thumbnail display
+    image_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(100, 100)],
+        format='WEBP',
+        options={'quality': 80}
+    )
+    
+    alt_text = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text='Alt text for image (for accessibility)'
+    )
     icon = models.CharField(
         max_length=50, 
         blank=True,
         help_text='Icon class (e.g., feather-fan, ti-air-conditioning)'
+    )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0.00,
+        help_text='Price for this sub-service'
+    )
+    duration = models.IntegerField(
+        default=30,
+        help_text='Duration in minutes'
     )
     is_active = models.BooleanField(default=True)
     order = models.IntegerField(default=0, help_text='Display order')

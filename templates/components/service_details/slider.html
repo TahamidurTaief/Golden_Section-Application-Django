@@ -3,34 +3,42 @@
 <div class="service-wrap mb-3">
 	<div class="slider-wrap">
 		<div class="owl-carousel service-carousel nav-center mb-3" id="large-img">
+			<!-- Main service image -->
 			<div class="service-img">
-				<img src="{% static 'img/services/service-01.jpg' %}" class="img-fluid" alt="Electrical Service">
+				{% if service.featured_image %}
+					<img src="{{ service.image_detail.url }}" class="img-fluid" alt="{{ service.alt_text|default:service.name }}">
+				{% else %}
+					<img src="{% static 'img/services/service-01.jpg' %}" class="img-fluid" alt="{{ service.name }}">
+				{% endif %}
 			</div>
+			
+			<!-- Additional images from AdditionalImage model -->
+			{% for img in additional_images %}
 			<div class="service-img">
-				<img src="{% static 'img/services/service-02.jpg' %}" class="img-fluid" alt="Electrical Service">
+				<img src="{{ img.image_gallery.url }}" class="img-fluid" alt="{{ img.alt_text|default:img.caption|default:service.name }}">
 			</div>
-			<div class="service-img">
-				<img src="{% static 'img/services/service-03.jpg' %}" class="img-fluid" alt="Electrical Service">
-			</div>
-			<div class="service-img">
-				<img src="{% static 'img/services/service-04.jpg' %}" class="img-fluid" alt="Electrical Service">
-			</div>
-			<div class="service-img">
-				<img src="{% static 'img/services/service-05.jpg' %}" class="img-fluid" alt="Electrical Service">
-			</div>
-			<div class="service-img">
-				<img src="{% static 'img/services/service-06.jpg' %}" class="img-fluid" alt="Electrical Service">
-			</div>
+			{% endfor %}
 		</div>
-		<a href="{% static 'img/services/service-01.jpg' %}" data-fancybox="gallery" class="btn btn-white btn-sm view-btn"><i class="feather-image me-1"></i>View all Images</a>
+		{% if service.featured_image %}
+		<a href="{{ service.image_gallery.url }}" data-fancybox="gallery" class="btn btn-white btn-sm view-btn">
+			<i class="feather-image me-1"></i>View all Images
+		</a>
+		{% endif %}
 	</div>
 	<div class="owl-carousel slider-nav-thumbnails nav-center" id="small-img">
-		<div><img src="{% static 'img/services/service-01.jpg' %}" class="img-fluid" alt="Service Thumbnail"></div>
-		<div><img src="{% static 'img/services/service-02.jpg' %}" class="img-fluid" alt="Service Thumbnail"></div>
-		<div><img src="{% static 'img/services/service-03.jpg' %}" class="img-fluid" alt="Service Thumbnail"></div>
-		<div><img src="{% static 'img/services/service-04.jpg' %}" class="img-fluid" alt="Service Thumbnail"></div>
-		<div><img src="{% static 'img/services/service-05.jpg' %}" class="img-fluid" alt="Service Thumbnail"></div>
-		<div><img src="{% static 'img/services/service-06.jpg' %}" class="img-fluid" alt="Service Thumbnail"></div>
+		<!-- Main service thumbnail -->
+		<div>
+			{% if service.featured_image %}
+				<img src="{{ service.image_card.url }}" class="img-fluid" alt="{{ service.alt_text|default:service.name }} thumbnail">
+			{% else %}
+				<img src="{% static 'img/services/service-01.jpg' %}" class="img-fluid" alt="{{ service.name }} thumbnail">
+			{% endif %}
+		</div>
+		
+		<!-- Additional image thumbnails -->
+		{% for img in additional_images %}
+		<div><img src="{{ img.image_thumbnail.url }}" class="img-fluid" alt="{{ img.alt_text|default:img.caption|default:service.name }} thumbnail"></div>
+		{% endfor %}
 	</div>
 </div>
 <!-- /Slider -->
