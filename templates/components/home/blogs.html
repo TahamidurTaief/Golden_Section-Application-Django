@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 
 
@@ -23,7 +25,15 @@
 					</div>
 					<div class="blog-content">
 						<p class="fs-14 fw-meium text-gray-9 d-inline-flex align-items-center mb-2">{{ post.author.get_full_name }}<i
-								class="ti ti-circle-filled fs-6 mx-1"></i>{{ post.published_at|date:"d M Y" }}</p>
+								class="ti ti-circle-filled fs-6 mx-1"></i>
+							{% if LANGUAGE_CODE == "bn" %}
+							{% with post.published_at|date:"d M Y" as formatted_date %}
+							<span class="text-gray-800">{{ formatted_date }}</span>
+							{% endwith %}
+							{% else %}
+							{{ post.published_at|date:"d M Y" }}
+							{% endif %}
+						</p>
 						<h6 class="text-truncate mb-2"><a href="#">{{ post.title }}</a>
 						</h6>
 						<p class="two-line-ellipsis mb-3">{{ post.excerpt }}</p>

@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill, ResizeToFit
 from categories.models import Category, SubCategory
+from ckeditor.fields import RichTextField
 
 
 class Service(models.Model):
@@ -35,7 +36,7 @@ class Service(models.Model):
     name = models.CharField(max_length=300)
     slug = models.SlugField(unique=True, max_length=300)
     short_description = models.CharField(max_length=500)
-    overview = models.TextField(default='', help_text='Detailed overview of the service')
+    overview = RichTextField(default='', help_text='Detailed overview of the service', config_name='default')
     
     # Media
     featured_image = ProcessedImageField(
@@ -194,7 +195,7 @@ class SubService(models.Model):
         related_name='sub_services'
     )
     name = models.CharField(max_length=200, help_text='e.g., Fan Repair, AC Installation')
-    description = models.TextField(blank=True)
+    description = RichTextField(blank=True, config_name='default')
     image = ProcessedImageField(
         upload_to='services/sub_services/',
         processors=[ResizeToFill(200, 200)],
@@ -258,7 +259,7 @@ class ServiceInclude(models.Model):
         related_name='includes'
     )
     title = models.CharField(max_length=200, help_text='e.g., Free Consultation, 24/7 Support')
-    description = models.TextField(blank=True, help_text='Optional detailed description')
+    description = RichTextField(blank=True, help_text='Optional detailed description', config_name='default')
     icon = models.CharField(
         max_length=50, 
         blank=True,
@@ -287,7 +288,7 @@ class ServiceFAQ(models.Model):
         related_name='faqs'
     )
     question = models.CharField(max_length=500)
-    answer = models.TextField()
+    answer = RichTextField(config_name='default')
     order = models.IntegerField(default=0, help_text='Display order')
     is_active = models.BooleanField(default=True)
     

@@ -9,7 +9,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
             'fields': ('site_name', 'site_tagline', 'logo', 'favicon')
         }),
         ('Contact Information', {
-            'fields': ('primary_email', 'primary_phone', 'default_whatsapp', 'address')
+            'fields': ('primary_email', 'primary_phone', 'default_whatsapp', 'default_country_code', 'address')
         }),
         ('SEO Meta Tags', {
             'fields': ('meta_title', 'meta_description', 'meta_keywords'),

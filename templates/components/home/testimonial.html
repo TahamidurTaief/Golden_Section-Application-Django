@@ -1,118 +1,165 @@
-{% load static %}
+﻿{% load static %}
 
+<style>
+.testimonial-card-wrapper {
+position: relative;
+transition: all 0.3s ease;
+}
 
+.testimonial-card-wrapper:hover {
+transform: scale(1.02);
+}
 
-	<!-- Testimonial Section -->
-	<section class="section testimonial-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
-					<div class="section-header text-center">
-						<h2 class="mb-1">Genuine reviews from <span class="text-linear-primary">Customers</span></h2>
-						<p class="sub-title">Each listing is designed to be clear and concise, providing customers</p>
-					</div>
-				</div>
-			</div>
-			<div class="testimonial-slider owl-carousel nav-center">
-				<div class="testimonial-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="d-flex align-items-center mb-3">
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning"></i>
-					</div>
-					<h5 class="mb-2">Quality of work was excellent</h5>
-					<p class="mb-4">“ I had a great experience with ABC Electrical on the Services. The electrician
-						arrived on time!!!“</p>
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center overflow-hidden">
-							<span class="avatar avatar-lg flex-shrink-0">
-								<img src="{% static 'img/profiles/avatar-14.jpg' %}" class="img-fluid rounded-circle" alt="img">
-							</span>
-							<h6 class="text-truncate ms-2">Robert Anderson</h6>
-						</div>
-						<p> 2 Days Ago</p>
-					</div>
-				</div>
-				<div class="testimonial-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="d-flex align-items-center mb-3">
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning"></i>
-					</div>
-					<h5 class="mb-2">Green Cleaning</h5>
-					<p class="mb-4">“ I love that they use eco-friendly products without compromising on cleanliness
-						with care.“</p>
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center overflow-hidden">
-							<span class="avatar avatar-lg flex-shrink-0">
-								<img src="{% static 'img/profiles/avatar-15.jpg' %}" class="img-fluid rounded-circle" alt="img">
-							</span>
-							<h6 class="text-truncate ms-2">Delois Coffin</h6>
-						</div>
-						<p> 3 Days Ago</p>
-					</div>
-				</div>
-				<div class="testimonial-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="d-flex align-items-center mb-3">
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning"></i>
-					</div>
-					<h5 class="mb-2">Luxury Car Cleaning</h5>
-					<p class="mb-4">“Exceptional care for my luxury vehicle. The team treated my car with precision and
-						care.“</p>
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center overflow-hidden">
-							<span class="avatar avatar-lg flex-shrink-0">
-								<img src="{% static 'img/profiles/avatar-13.jpg' %}" class="img-fluid rounded-circle" alt="img">
-							</span>
-							<h6 class="text-truncate ms-2">Matthew Hicks</h6>
-						</div>
-						<p>5 Days Ago</p>
-					</div>
-				</div>
-				<div class="testimonial-item wow fadeInUp" data-wow-delay="0.2s">
-					<div class="d-flex align-items-center mb-3">
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning me-1"></i>
-						<i class="fa-solid fa-star text-warning"></i>
-					</div>
-					<h5 class="mb-2">Quick and reliable</h5>
-					<p class="mb-4">“They fixed my issue in no time and got everything running smoothly again! Good
-						work“</p>
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center overflow-hidden">
-							<span class="avatar avatar-lg flex-shrink-0">
-								<img src="{% static 'img/profiles/avatar-12.jpg' %}" class="img-fluid rounded-circle" alt="img">
-							</span>
-							<h6 class="text-truncate ms-2">Daniel Davis</h6>
-						</div>
-						<p>7 Days Ago</p>
-					</div>
-				</div>
-			</div>
-			<div class="text-center wow fadeInUp" data-wow-delay="0.2s">
-				<h6 class="mb-2">Each listing is designed to be clear and concise, providing customers</h6>
-				<p>
-					<span class="text-dark fw-medium">Excellent</span>
-					<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img">
-					<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img">
-					<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img">
-					<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img">
-					<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img">
-					<span class="fs-14">Based on 456 reviews</span>
-				</p>
-			</div>
-		</div>
-	</section>
-	<!-- /Testimonial Section -->
+.testimonial-gradient-border {
+position: absolute;
+inset: -4px;
+background: linear-gradient(135deg, #8b5cf6, #ec4899);
+border-radius: 0.75rem;
+filter: blur(8px);
+opacity: 0;
+transition: opacity 0.4s ease;
+}
 
-	
+.testimonial-card-wrapper:hover .testimonial-gradient-border {
+opacity: 0.25;
+}
+
+.testimonial-card-content {
+position: relative;
+background: white;
+border-radius: 0.75rem;
+padding: 2rem;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+transition: box-shadow 0.3s ease;
+}
+
+.testimonial-card-wrapper:hover .testimonial-card-content {
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+</style>
+
+<!-- Testimonial Section -->
+<section class="section testimonial-section" style="background-color: #f8fafc;">
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
+<div class="section-header text-center mb-5">
+<div class="d-inline-block px-3 py-2 mb-3 text-sm fw-semibold rounded" style="background-color: rgba(99, 102, 241, 0.1); color: #6366f1;">
+Words from Others
+</div>
+<h2 class="mb-3 fw-bold" style="color: #1e293b; font-size: 2.5rem;">Genuine reviews from <span style="background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Customers</span></h2>
+<p class="sub-title text-muted fs-5">Each listing is designed to be clear and concise, providing customers</p>
+</div>
+</div>
+</div>
+<div class="testimonial-slider owl-carousel nav-center">
+<div class="testimonial-card-wrapper wow fadeInUp" data-wow-delay="0.2s">
+<div class="testimonial-gradient-border"></div>
+<div class="testimonial-card-content">
+<div class="d-flex align-items-center mb-3">
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning"></i>
+</div>
+<h5 class="mb-3 fw-semibold" style="color: #1e293b;">Quality of work was excellent</h5>
+<p class="mb-4 text-muted" style="line-height: 1.6;">" I had a great experience with ABC Electrical on the Services. The electrician arrived on time!!!"</p>
+<div class="d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center overflow-hidden">
+<span class="avatar avatar-lg flex-shrink-0">
+<img src="{% static 'img/profiles/avatar-14.jpg' %}" class="img-fluid rounded-circle border" alt="img" style="width: 48px; height: 48px;">
+</span>
+<h6 class="text-truncate ms-2 mb-0 fw-semibold" style="color: #1e293b;">Robert Anderson</h6>
+</div>
+<p class="mb-0 text-muted small">2 Days Ago</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card-wrapper wow fadeInUp" data-wow-delay="0.2s">
+<div class="testimonial-gradient-border"></div>
+<div class="testimonial-card-content">
+<div class="d-flex align-items-center mb-3">
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning"></i>
+</div>
+<h5 class="mb-3 fw-semibold" style="color: #1e293b;">Green Cleaning</h5>
+<p class="mb-4 text-muted" style="line-height: 1.6;">" I love that they use eco-friendly products without compromising on cleanliness with care."</p>
+<div class="d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center overflow-hidden">
+<span class="avatar avatar-lg flex-shrink-0">
+<img src="{% static 'img/profiles/avatar-15.jpg' %}" class="img-fluid rounded-circle border" alt="img" style="width: 48px; height: 48px;">
+</span>
+<h6 class="text-truncate ms-2 mb-0 fw-semibold" style="color: #1e293b;">Delois Coffin</h6>
+</div>
+<p class="mb-0 text-muted small">3 Days Ago</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card-wrapper wow fadeInUp" data-wow-delay="0.2s">
+<div class="testimonial-gradient-border"></div>
+<div class="testimonial-card-content">
+<div class="d-flex align-items-center mb-3">
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning"></i>
+</div>
+<h5 class="mb-3 fw-semibold" style="color: #1e293b;">Luxury Car Cleaning</h5>
+<p class="mb-4 text-muted" style="line-height: 1.6;">"Exceptional care for my luxury vehicle. The team treated my car with precision and care."</p>
+<div class="d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center overflow-hidden">
+<span class="avatar avatar-lg flex-shrink-0">
+<img src="{% static 'img/profiles/avatar-13.jpg' %}" class="img-fluid rounded-circle border" alt="img" style="width: 48px; height: 48px;">
+</span>
+<h6 class="text-truncate ms-2 mb-0 fw-semibold" style="color: #1e293b;">Matthew Hicks</h6>
+</div>
+<p class="mb-0 text-muted small">5 Days Ago</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card-wrapper wow fadeInUp" data-wow-delay="0.2s">
+<div class="testimonial-gradient-border"></div>
+<div class="testimonial-card-content">
+<div class="d-flex align-items-center mb-3">
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning me-1"></i>
+<i class="fa-solid fa-star text-warning"></i>
+</div>
+<h5 class="mb-3 fw-semibold" style="color: #1e293b;">Quick and reliable</h5>
+<p class="mb-4 text-muted" style="line-height: 1.6;">"They fixed my issue in no time and got everything running smoothly again! Good work"</p>
+<div class="d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center overflow-hidden">
+<span class="avatar avatar-lg flex-shrink-0">
+<img src="{% static 'img/profiles/avatar-12.jpg' %}" class="img-fluid rounded-circle border" alt="img" style="width: 48px; height: 48px;">
+</span>
+<h6 class="text-truncate ms-2 mb-0 fw-semibold" style="color: #1e293b;">Daniel Davis</h6>
+</div>
+<p class="mb-0 text-muted small">7 Days Ago</p>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center wow fadeInUp mt-5" data-wow-delay="0.2s">
+<h6 class="mb-3 fw-semibold" style="color: #1e293b;">Each listing is designed to be clear and concise, providing customers</h6>
+<p class="d-flex align-items-center justify-content-center flex-wrap gap-2">
+<span class="fw-bold" style="color: #1e293b;">Excellent</span>
+<span class="d-inline-flex align-items-center">
+<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img" style="width: 20px;">
+<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img" style="width: 20px;">
+<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img" style="width: 20px;">
+<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img" style="width: 20px;">
+<img src="{% static 'img/icons/star-01.svg' %}" class="img-fluid" alt="img" style="width: 20px;">
+</span>
+<span class="text-muted">Based on 456 reviews</span>
+</p>
+</div>
+</div>
+</section>
+<!-- /Testimonial Section -->

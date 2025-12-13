@@ -15,4 +15,6 @@ urlpatterns = [
     path('service/request/', views.service_request, name='service_request'),
     path('service/request/step/', views.service_request_step, name='service_request_step'),
     path('service/request/data/', views.get_service_request_data, name='service_request_data'),
+    path('filter-preferred-services/', views.filter_preferred_services, name='filter_preferred_services'),
+    path('filter-latest-services/', views.filter_latest_services, name='filter_latest_services'),
 ]

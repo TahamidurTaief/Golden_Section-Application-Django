@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill, ResizeToFit
+from ckeditor.fields import RichTextField
 
 
 class Page(models.Model):
@@ -21,14 +22,14 @@ class Page(models.Model):
         choices=PAGE_TYPE_CHOICES,
         unique=True
     )
-    title = models.CharField(max_length=300)
-    slug = models.SlugField(unique=True, max_length=300)
-    content = models.TextField(help_text='HTML content allowed')
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, max_length=200)
+    content = RichTextField(help_text='HTML content allowed', config_name='awesome_ckeditor')
     
     # SEO
     meta_title = models.CharField(max_length=200, blank=True)
-    meta_description = models.TextField(blank=True)
-    meta_keywords = models.TextField(blank=True)
+    meta_description = RichTextField(blank=True, config_name='default')
+    meta_keywords = RichTextField(blank=True, config_name='default')
     
     # Display
     is_active = models.BooleanField(default=True)

@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party apps
+    'ckeditor',
+    'ckeditor_uploader',
     'imagekit',
     'django_extensions',
     'django_cotton',
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     'quotations',
     'content',
     'core',
+    'bookings',
 ]
 
 
@@ -229,3 +232,44 @@ IMAGEKIT_DEFAULT_CACHEFILE_BACKEND = 'imagekit.cachefiles.backends.Simple'
 IMAGEKIT_CACHEFILE_DIR = 'CACHE/images'
 IMAGEKIT_DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_as_path'
+
+# CKEditor Configuration
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_Full': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['NumberedList', 'BulletedList'],
+            ['Indent', 'Outdent'],
+            ['Maximize'],
+        ],
+        'toolbar': 'Full',
+        'height': 300,
+        'width': '100%',
+        'filebrowserWindowWidth': 940,
+        'filebrowserWindowHeight': 725,
+        'allowedContent': True,  # Allow all HTML content
+        'extraAllowedContent': 'div(*);p(*);span(*);a[*];img[*];h1;h2;h3;h4;h5;h6',  # Allow additional tags with HTMX attributes
+        'forcePasteAsPlainText': False,
+        'removePlugins': '',
+        'extraPlugins': 'divarea,dialog,dialogui',
+    },
+    'awesome_ckeditor': {
+        'toolbar': 'Full',
+        'height': 400,
+        'allowedContent': True,
+        'extraAllowedContent': 'div(*);p(*);span(*);a[*];img[*];button[*];form[*];input[*]',  # Full HTMX support
+    },
+}

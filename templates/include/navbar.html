@@ -22,7 +22,7 @@
 							<a href="{% url 'core:home' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Home</a>
 						</li>
 						<li style="position: relative;">
-							<a href="#" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">About</a>
+							<a href="{% url 'core:categories' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Categories</a>
 						</li>
 						<li class="has-submenu" style="position: relative;">
 							<a href="{% url 'core:services' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; transition: color 0.3s;">Services <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 5px;"></i></a>
@@ -30,7 +30,7 @@
 								
 								
 								{% for category in nav_categories %}
-									<li style="padding: 8px 20px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">{{category.name}}</a></li>	
+									<li style="padding: 8px 20px;"><a href="{% url 'core:services' %}?category={{ category.slug }}&page=1" style="text-decoration: none; color: #555; font-size: 14px; display: block; transition: color 0.3s;">{{category.name}}</a></li>	
 								{% endfor %}
 									
 							</ul>
@@ -73,7 +73,7 @@
 					<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: block; padding: 10px 0; transition: color 0.3s;">Home</a>
 				</li>
 				<li style="margin-bottom: 15px;">
-					<a href="index.html" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: block; padding: 10px 0; transition: color 0.3s;">About</a>
+					<a href="{% url 'core:categories' %}" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: block; padding: 10px 0; transition: color 0.3s;">Categories</a>
 				</li>
 				<li class="has-submenu-mobile" style="margin-bottom: 15px;">
 					<a href="javascript:void(0);" class="submenu-toggle" style="text-decoration: none; color: #333; font-weight: 500; font-size: 16px; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; transition: color 0.3s;">
@@ -83,7 +83,7 @@
 					<ul class="mobile-submenu" style="list-style: none; padding-left: 15px; margin: 10px 0 0 0; display: none;">
 						
 						{% for category in nav_categories %}
-						<li style="margin-bottom: 10px;"><a href="service-details.html" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">{{ category.name }}</a></li>
+						<li style="margin-bottom: 10px;"><a href="{% url 'core:services' %}?category={{ category.slug }}&page=1" style="text-decoration: none; color: #555; font-size: 14px; display: block; padding: 8px 0; transition: color 0.3s;">{{ category.name }}</a></li>
 						{% endfor %}
 					</ul>
 				</li>

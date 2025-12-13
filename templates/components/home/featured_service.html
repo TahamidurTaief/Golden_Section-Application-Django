@@ -1,25 +1,121 @@
 {% load static %}
-	<!-- Service Section -->
+	<!-- Top Rated Services Section -->
 	<section class="section service-section">
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
 					<div class="section-header text-center">
-						<h2 class="mb-1">Our Featured <span class="text-linear-primary">Services</span></h2>
-						<p class="sub-title">Each listing is designed to be clear and concise, providing customers</p>
+						<h2 class="mb-1">Top Rated <span class="text-linear-primary">Services</span></h2>
+						<p class="sub-title">Our most highly-rated services trusted by customers</p>
 					</div>
 				</div>
 			</div>
-			<!-- Debug: {{ featured_services|length }} featured services found -->
+			
+			<!-- Service Cards Grid - Dynamic with Slider -->
+			<div class="position-relative mb-5 wow fadeInUp" data-wow-delay="0.3s" 
+				x-data="{ 
+					currentSlide: 0, 
+					services: {{ top_rated_services|length }},
+					perSlide: window.innerWidth >= 992 ? 3 : (window.innerWidth >= 576 ? 2 : 1),
+					get totalSlides() { return Math.ceil(this.services / this.perSlide); },
+					next() { this.currentSlide = (this.currentSlide + 1) % this.totalSlides; },
+					prev() { this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides; }
+				}">
+				
+				<div class="overflow-hidden">
+					<div class="row g-4 flex-nowrap transition-all" 
+						:style="`transform: translateX(-${currentSlide * 100}%); transition: transform 0.5s ease-in-out;`">
+						{% for service in top_rated_services %}
+						<div class="col-12 col-sm-6 col-lg-4 flex-shrink-0">
+							<div class="card rounded-lg overflow-hidden  h-100 d-flex flex-column border-0">
+						<div class="position-relative">
+							<a href="{% url 'services:detail' service.id %}" hx-get="{% url 'services:detail' service.id %}" hx-target="body" hx-push-url="true">
+										{% if service.featured_image %}
+											<img class="card-img-top w-100" 
+												src="{{ service.featured_image.url }}" 
+												alt="{{ service.alt_text|default:service.name }}"
+												style="height: 220px; object-fit: cover;">
+										{% else %}
+											<img class="card-img-top w-100" 
+												src="{% static 'img/services/service-01.jpg' %}" 
+												alt="{{ service.name }}"
+												style="height: 220px; object-fit: cover;">
+										{% endif %}
+									</a>
+								</div>
+								<div class="card-body px-4 pt-3 flex-grow-1 d-flex flex-column">
+									<h6 class="card-title fw-semibold mb-2 text-dark" style="font-size: 1.1rem;">
+										{{ service.name|truncatewords:8 }}
+									</h6>
+									<p class="card-text text-muted small flex-grow-1" style="font-size: 0.875rem;">
+										{{ service.short_description|truncatewords:15 }}
+									</p>
+								</div>
+								<div class="card-footer bg-white border-0 px-4 pt-0 pb-3">
+									<div class="d-flex justify-content-between align-items-center">
+										<span class="d-flex align-items-center">
+											<i class="ti ti-star-filled text-warning me-1"></i>
+											<span class="fw-semibold text-dark">{{ service.rating|floatformat:1 }}</span>
+											<span class="text-muted small ms-1">({{ service.total_reviews }})</span>
+									</span>
+									<a href="{% url 'services:detail' service.id %}\" hx-get=\"{% url 'services:detail' service.id %}\" hx-target=\"body\" hx-push-url=\"true\" class="text-sm d-flex align-items-center gap-1 btn btn-lg text-primary rounded-lg px-3">
+										See More
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+									</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% empty %}
+						<div class="col-12">
+							<div class="alert alert-info text-center">
+								<i class="ti ti-info-circle me-2"></i>
+								No top rated services available at the moment.
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				
+				<!-- Navigation Controls -->
+				<template x-if="services > perSlide">
+					<div>
+						<!-- Navigation Arrows -->
+						<button @click="prev()" 
+							class="position-absolute top-50 start-0 translate-middle-y btn btn-primary rounded-circle "
+							style="width: 50px; height: 50px; z-index: 10; margin-left: -25px;">
+							<i class="ti ti-chevron-left"></i>
+						</button>
+						<button @click="next()" 
+							class="position-absolute top-50 end-0 translate-middle-y btn btn-primary rounded-circle "
+							style="width: 50px; height: 50px; z-index: 10; margin-right: -25px;">
+							<i class="ti ti-chevron-right"></i>
+						</button>
+						
+						<!-- Dots Indicator -->
+						<div class="d-flex justify-content-center gap-2 mt-4">
+							<template x-for="i in totalSlides" :key="i">
+								<button @click="currentSlide = i - 1"
+									:class="currentSlide === i - 1 ? 'bg-primary' : 'bg-secondary'"
+									class="rounded-circle border-0"
+									style="width: 10px; height: 10px; opacity: 0.7; transition: all 0.3s;">
+								</button>
+							</template>
+						</div>
+					</div>
+				</template>
+			</div>
+			<!-- /Service Cards Grid -->
+
 			<div class="service-slider owl-carousel nav-center">
-				{% for service in featured_services %}
+				{% for service in top_rated_services %}
 				<div class="service-item wow fadeInUp" data-wow-delay="0.2s">
 					<div class="service-img">
 						<div class="img-slider owl-carousel nav-center">
 							<div class="slide-images">
 								<a href="{% url 'services:detail' service.id %}">
 									{% if service.featured_image %}
-										<img src="{{ service.featured_image }}" class="img-fluid" alt="{{ service.name }}" style="height: 250px; object-fit: cover; width: 100%;">
+										<img src="{{ service.featured_image.url }}" class="img-fluid" alt="{{ service.alt_text|default:service.name }}" style="height: 250px; object-fit: cover; width: 100%;">
 									{% else %}
 										<img src="{% static 'img/services/service-01.jpg' %}" class="img-fluid" alt="{{ service.name }}" style="height: 250px; object-fit: cover; width: 100%;">
 									{% endif %}
@@ -42,9 +138,9 @@
 					<div class="service-content">
 						<h6 class="text-truncate mb-1"><a href="{% url 'services:detail' service.id %}">{{ service.name }}</a></h6>
 						<div class="d-flex align-items-center justify-content-between">
-							{% with first_tier=service.pricing_tiers.first %}
-								{% if first_tier %}
-									<p class="fw-medium fs-14 mb-0">Service starts at ${{ first_tier.price }}</p>
+							{% with first_sub=service.sub_services.first %}
+								{% if first_sub and first_sub.price %}
+									<p class="fw-medium fs-14 mb-0">Service starts at ${{ first_sub.price }}</p>
 								{% else %}
 									<p class="fw-medium fs-14 mb-0">Contact for pricing</p>
 								{% endif %}
@@ -52,7 +148,7 @@
 							<span class="d-inline-flex align-items-center fs-14">
 								<i class="ti ti-star-filled text-warning me-1"></i>
 								{% if service.rating > 0 %}
-									{{ service.rating|floatformat:1 }}
+									{{ service.rating|floatformat:1 }} <span class="text-muted ms-1">({{ service.total_reviews }})</span>
 								{% else %}
 									New
 								{% endif %}
@@ -63,11 +159,73 @@
 				{% empty %}
 				<div class="service-item wow fadeInUp" data-wow-delay="0.2s">
 					<div class="service-content">
-						<p class="text-center">No featured services available at the moment.</p>
+						<p class="text-center">No top rated services available at the moment.</p>
 					</div>
 				</div>
 				{% endfor %}
 			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="text-center view-all wow fadeInUp" data-wow-delay="0.2s">
+						<a href="{% url 'services:list' %}" class="btn btn-dark">View All<i class="ti ti-arrow-right ms-2"></i></a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
-	<!-- Service Section -->
+	<!-- /Top Rated Services Section -->
+
+
+
+
+	<!-- Latest Services Section -->
+	<section class="section service-section bg-light-primary">
+		<div class="container">
+			<div class="row justify-content-center">
+			<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
+				<div class="section-header text-center">
+					<h2 class="mb-1">Latest <span class="text-linear-primary">Services</span></h2>
+					<p class="sub-title">Discover our newest services added recently</p>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Category Filter Buttons -->
+		<div class="row justify-content-center mb-4">
+			<div class="col-lg-10">
+				<div class="d-flex flex-wrap justify-content-center gap-2" 
+					x-data="{ selectedCategory: 'all' }">
+					<button 
+						@click="selectedCategory = 'all'" 
+						:class="selectedCategory === 'all' ? 'btn-primary' : 'btn-outline-secondary'"
+						class="btn btn-sm rounded-pill px-4"
+						hx-get="{% url 'core:filter_latest_services' %}?category=all"
+						hx-target="#latest-services-container"
+						hx-swap="innerHTML"
+						style="transition: all 0.3s;">
+						All Services
+					</button>
+					{% for category in latest_categories %}
+					<button 
+						@click="selectedCategory = '{{ category.id }}'" 
+						:class="selectedCategory === '{{ category.id }}' ? 'btn-primary' : 'btn-outline-secondary'"
+						class="btn btn-sm rounded-pill px-4"
+						hx-get="{% url 'core:filter_latest_services' %}?category={{ category.id }}"
+						hx-target="#latest-services-container"
+						hx-swap="innerHTML"
+						style="transition: all 0.3s;">
+						{{ category.name }}
+					</button>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		
+		<div id="latest-services-container">
+			{% include 'components/home/latest_services_partial.html' %}
+		</div>
+		<!-- /Latest Service Cards Slider -->
+		</div>
+	</section>
+	<!-- /Latest Services Section -->
+

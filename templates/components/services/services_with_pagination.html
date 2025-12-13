@@ -45,7 +45,7 @@
       </div>
       <div class="service-action">
         <a href="{% url 'core:service_details' service.pk %}" class="btn btn-dark">View Details</a>
-        <a href="{% url 'core:booking' %}" class="btn btn-light">Book Now</a>
+        <a href="{% url 'core:booking' service.id %}" class="btn btn-light">Book Now</a>
       </div>
     </div>
     <!-- /Service List -->
@@ -69,8 +69,8 @@
         <a class="page-link" 
            {% if page_obj.has_previous %}
            hx-get="{% url 'core:services' %}?page={{ page_obj.previous_page_number }}"
-           hx-target="#services-list"
-           hx-swap="innerHTML"
+           hx-target="#services-row"
+           hx-swap="outerHTML"
            hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
            hx-indicator="#loading-indicator"
            {% else %}
@@ -90,8 +90,8 @@
           <li class="page-item me-2">
             <a class="page-link-1 d-flex justify-content-center align-items-center"
                hx-get="{% url 'core:services' %}?page={{ num }}"
-               hx-target="#services-list"
-               hx-swap="innerHTML"
+               hx-target="#services-row"
+               hx-swap="outerHTML"
                hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
                hx-indicator="#loading-indicator">{{ num }}</a>
           </li>
@@ -103,8 +103,8 @@
         <a class="page-link"
            {% if page_obj.has_next %}
            hx-get="{% url 'core:services' %}?page={{ page_obj.next_page_number }}"
-           hx-target="#services-list"
-           hx-swap="innerHTML"
+           hx-target="#services-row"
+           hx-swap="outerHTML"
            hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
            hx-indicator="#loading-indicator"
            {% else %}

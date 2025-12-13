@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import URLValidator
+from ckeditor.fields import RichTextField
 
 
 class SiteConfiguration(models.Model):
@@ -18,12 +19,17 @@ class SiteConfiguration(models.Model):
         max_length=20, 
         help_text='Default WhatsApp number with country code (e.g., +447123456789)'
     )
-    address = models.TextField(blank=True)
+    default_country_code = models.CharField(
+        max_length=10,
+        default='971',
+        help_text='Default country code for phone numbers (e.g., 971 for UAE, 880 for Bangladesh)'
+    )
+    address = RichTextField(blank=True, config_name='default')
     
     # SEO Meta Tags
     meta_title = models.CharField(max_length=200, blank=True)
-    meta_description = models.TextField(blank=True)
-    meta_keywords = models.TextField(blank=True)
+    meta_description = RichTextField(blank=True, config_name='default')
+    meta_keywords = RichTextField(blank=True, config_name='default')
     
     # Social Media Links
     facebook_url = models.URLField(blank=True)
@@ -37,13 +43,14 @@ class SiteConfiguration(models.Model):
     facebook_pixel_id = models.CharField(max_length=50, blank=True)
     
     # Footer Content
-    footer_description = models.TextField(blank=True)
+    footer_description = RichTextField(blank=True, config_name='default')
     copyright_text = models.CharField(max_length=200, blank=True, default='© 2025 Golden Section. All rights reserved.')
     
     # Business Hours (JSON format)
-    business_hours = models.TextField(
+    business_hours = RichTextField(
         blank=True,
-        help_text='Business hours in JSON format: {"Monday": "9:00 AM - 5:00 PM", ...}'
+        help_text='Business hours in JSON format: {"Monday": "9:00 AM - 5:00 PM", ...}',
+        config_name='default'
     )
     
     updated_at = models.DateTimeField(auto_now=True)

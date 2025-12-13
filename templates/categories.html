@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Home{% endblock %}
+{% block title %}Categories{% endblock %}
 
 {% block content %}
             {% include 'components/categories/breadcrumb.html' %}
@@ -16,15 +16,4 @@
     </div>
 </div>
 
-
-<div hx-get="{% url 'core:home_content' %}" hx-trigger="load" hx-swap="outerHTML">
-  <div class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
-</div>
-
-<!-- Example of setting images using static syntax -->
-{% comment %} <img src="{% static 'img/example-image.jpg' %}" alt="Example Image"> {% endcomment %}
 {% endblock %}

@@ -37,8 +37,8 @@
 					<div class="service-content">
 						<h6 class="text-truncate mb-1"><a href="{% url 'services:detail' service.id %}">{{ service.name }}</a></h6>
 						<div class="d-flex align-items-center justify-content-between">
-							{% with first_tier=service.pricing_tiers.first %}
-								<p class="fw-medium fs-14 mb-0">Service starts at ${{ first_tier.price|default:"0" }}</p>
+							{% with first_sub=service.sub_services.first %}
+								<p class="fw-medium fs-14 mb-0">Service starts at ${{ first_sub.price|default:"0" }}</p>
 							{% endwith %}
 							<span class="d-inline-flex align-items-center fs-14"><i class="ti ti-star-filled text-warning me-1"></i>{{ service.rating|floatformat:1 }}</span>
 						</div>

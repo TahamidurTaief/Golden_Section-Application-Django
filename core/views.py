@@ -4,35 +4,193 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
+from django.db.models import Count, Avg
 import json
 
 from categories.models import Category, SubCategory
-from services.models import Service
+from services.models import *
 from providers.models import Provider
 from content.models import Testimonial, BlogPost
+from bookings.models import Booking
 
 
 def home(request):
-    """Home page with featured content"""
+    """Home page with all dynamic data"""
+    
+    # Hero Section Stats
+    total_services = Service.objects.filter(is_active=True).count()
+    total_providers = Provider.objects.filter(is_active=True).count()
+    total_bookings = Booking.objects.count()
+    total_reviews = Service.objects.aggregate(total=models.Sum('total_reviews'))['total'] or 0
+    
+    # Categories
+    featured_categories = Category.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    )[:6]
+    
+    # Services - Different types
+    top_rated_services = Service.objects.filter(
+        is_active=True,
+        rating__gte=4.0
+    ).select_related('category', 'subcategory', 'provider').order_by('-rating', '-total_reviews')[:8]
+    
+    latest_services = Service.objects.filter(
+        is_active=True
+    ).select_related('category', 'subcategory', 'provider').order_by('-created_at')[:8]
+    
+    popular_services = Service.objects.filter(
+        is_popular=True, 
+        is_active=True
+    ).select_related('category', 'subcategory', 'provider').order_by('-services_provided', '-rating')[:8]
+    
+    featured_services = Service.objects.filter(
+        is_featured=True,
+        is_active=True
+    ).select_related('category', 'subcategory', 'provider').order_by('order', '-rating')[:8]
+    
+    # Providers
+    popular_providers = Provider.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).annotate(
+        service_count=Count('services_provided', filter=models.Q(services_provided__is_active=True))
+    ).order_by('-rating', '-total_reviews')[:4]
+    
+    # Content
+    testimonials = Testimonial.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).select_related('service').order_by('order', '-created_at')[:6]
+    
+    blog_posts = BlogPost.objects.filter(
+        is_published=True
+    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:3]
+    
     context = {
-        'featured_categories': Category.objects.filter(is_featured=True, is_active=True)[:6],
-        'total_services': Service.objects.filter(is_active=True).count(),
-        'total_providers': Provider.objects.filter(is_active=True).count(),
-        'total_customers': 1000,  # Can be calculated from service requests
-        'featured_services': Service.objects.filter(is_featured=True, is_active=True)[:6],
-
+        # Hero Stats
+        'total_services': total_services,
+        'total_providers': total_providers,
+        'total_bookings': total_bookings,
+        'total_reviews': total_reviews,
+        
+        # Categories
+        'featured_categories': featured_categories,
+        
+        # Services
+        'top_rated_services': top_rated_services,
+        'latest_services': latest_services,
+        'popular_services': popular_services,
+        'featured_services': featured_services,
+        
+        # Providers
+        'popular_providers': popular_providers,
+        
+        # Content
+        'testimonials': testimonials,
+        'blog_posts': blog_posts,
     }
     return render(request, 'home.html', context)
 
 
 def home_content(request):
     """Return home page content for HTMX lazy loading"""
+    
+    # Categories
+    featured_categories = Category.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    )[:6]
+    
+    # Services - Different types
+    top_rated_services = Service.objects.filter(
+        is_active=True,
+        rating__gte=4.0
+    ).select_related('category', 'subcategory', 'provider').prefetch_related('sub_services', 'additional_images').order_by('-rating', '-total_reviews')[:8]
+    
+    latest_services = Service.objects.filter(
+        is_active=True
+    ).select_related('category', 'subcategory', 'provider').prefetch_related('sub_services', 'additional_images').order_by('-created_at')[:8]
+    
+    # Get categories that have latest services for filtering
+    latest_categories = Category.objects.filter(
+        services__is_active=True,
+        is_active=True
+    ).annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    ).order_by('-service_count')[:6]
+    
+    popular_services = Service.objects.filter(
+        is_popular=True, 
+        is_active=True
+    ).select_related('category', 'subcategory', 'provider').prefetch_related('sub_services', 'additional_images').order_by('-services_provided', '-rating')[:8]
+    
+    featured_services = Service.objects.filter(
+        is_featured=True,
+        is_active=True
+    ).select_related('category', 'subcategory', 'provider').prefetch_related('sub_services', 'additional_images').order_by('order', '-rating')[:8]
+    
+    # Providers
+    popular_providers = Provider.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).annotate(
+        service_count=Count('services_provided', filter=models.Q(services_provided__is_active=True))
+    ).order_by('-rating', '-total_reviews')[:4]
+    
+    # Content
+    testimonials = Testimonial.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).select_related('service').order_by('order', '-created_at')[:6]
+    
+    blog_posts = BlogPost.objects.filter(
+        is_published=True
+    ).select_related('author', 'category').order_by('-published_at', '-created_at')[:3]
+    
+    # All Categories with Services Section
+    all_categories_with_services = Category.objects.annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    ).filter(
+        is_active=True
+    ).order_by('-updated_at', '-created_at')[:12]
+    
+    # Category Services Section - Get first category by created_at
+    category_for_services = Category.objects.filter(
+        is_active=True
+    ).annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    ).filter(service_count__gte=1).order_by('-created_at').first()
+    
+    category_left_services = []
+    category_right_services = []
+    if category_for_services:
+        all_category_services = Service.objects.filter(
+            category=category_for_services,
+            is_active=True
+        ).select_related('category', 'provider').order_by('-rating', '-created_at')
+        
+        category_left_services = all_category_services[:4]
+        category_right_services = all_category_services[4:6]
+
     context = {
-        'featured_categories': Category.objects.filter(is_featured=True, is_active=True)[:6],
-        'popular_services': Service.objects.filter(is_popular=True, is_active=True)[:8],
-        'popular_providers': Provider.objects.filter(is_featured=True, is_active=True)[:4],
-        'testimonials': Testimonial.objects.filter(is_featured=True, is_active=True)[:6],
-        'blog_posts': BlogPost.objects.filter(is_published=True)[:3],
+        'featured_categories': featured_categories,
+        'top_rated_services': top_rated_services,
+        'latest_services': latest_services,
+        'latest_categories': latest_categories,
+        'popular_services': popular_services,
+        'featured_services': featured_services,
+        'popular_providers': popular_providers,
+        'testimonials': testimonials,
+        'blog_posts': blog_posts,
+        'all_categories_with_services': all_categories_with_services,
+        'category_for_services': category_for_services,
+        'category_left_services': category_left_services,
+        'category_right_services': category_right_services,
     }
     return render(request, 'components/home/home_content_partial.html', context)
 
@@ -81,9 +239,16 @@ def services(request):
         'page_obj': services_page,
     }
     
-    # If it's an HTMX request, return only the services list with pagination
+    # Include currently selected filters in context so the sidebar can reflect checked state
+    context.update({
+        'selected_categories': categories,
+        'selected_subcategories': subcategories,
+        'selected_keyword': keyword,
+    })
+    
+    # If it's an HTMX request, return the entire row (sidebar + product section) so UI updates cleanly
     if request.headers.get('HX-Request'):
-        return render(request, 'components/services/services_with_pagination.html', context)
+        return render(request, 'components/services/services_row_partial.html', context)
     
     return render(request, 'services.html', context)
 
@@ -324,8 +489,13 @@ def service_request(request):
             })
     
     # GET request - render the main template
+    # Get a default service or the first available service
+    from services.models import Service
+    service = Service.objects.filter(is_active=True).first()
+    
     context = {
-        'service_request_data': request.session.get('service_request_data', {})
+        'service_request_data': request.session.get('service_request_data', {}),
+        'service': service
     }
     return render(request, 'service_request.html', context)
 
@@ -358,5 +528,71 @@ def get_service_request_data(request):
     return JsonResponse({'data': data})
 
 
+def filter_preferred_services(request):
+    """Filter preferred services by category using HTMX"""
+    category_slug = request.GET.get('category', 'all')
+    
+    # Get featured categories for the filter buttons
+    featured_categories = Category.objects.filter(
+        is_featured=True, 
+        is_active=True
+    ).annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    )[:6]
+    
+    # Filter services based on category
+    if category_slug == 'all':
+        featured_services = Service.objects.filter(
+            is_featured=True,
+            is_active=True
+        ).select_related('category', 'subcategory', 'provider').order_by('order', '-rating')[:8]
+    else:
+        category = get_object_or_404(Category, slug=category_slug, is_active=True)
+        featured_services = Service.objects.filter(
+            is_featured=True,
+            is_active=True,
+            category=category
+        ).select_related('category', 'subcategory', 'provider').order_by('order', '-rating')[:8]
+    
+    context = {
+        'featured_services': featured_services,
+        'featured_categories': featured_categories,
+    }
+    
+    return render(request, 'components/home/preferred_services_partial.html', context)
+
+
+def filter_latest_services(request):
+    """Filter latest services by category using HTMX"""
+    category_id = request.GET.get('category', 'all')
+    
+    # Get categories that have services for filtering
+    latest_categories = Category.objects.filter(
+        services__is_active=True,
+        is_active=True
+    ).annotate(
+        service_count=Count('services', filter=models.Q(services__is_active=True))
+    ).order_by('-service_count')[:6]
+    
+    # Filter services based on category
+    if category_id == 'all':
+        latest_services = Service.objects.filter(
+            is_active=True
+        ).select_related('category', 'subcategory', 'provider').order_by('-created_at')[:12]
+    else:
+        latest_services = Service.objects.filter(
+            is_active=True,
+            category_id=category_id
+        ).select_related('category', 'subcategory', 'provider').order_by('-created_at')[:12]
+    
+    context = {
+        'latest_services': latest_services,
+        'latest_categories': latest_categories,
+    }
+    
+    return render(request, 'components/home/latest_services_partial.html', context)
+
+
 def categories(request):
-    return render(request, 'categories.html')
+    categories = Category.objects.filter(is_active=True)
+    return render(request, 'categories.html', {'categories': categories})

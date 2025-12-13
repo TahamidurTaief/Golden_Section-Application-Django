@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill, ResizeToFit
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -9,7 +10,7 @@ class Category(models.Model):
     
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200)
-    description = models.TextField(blank=True)
+    description = RichTextField(blank=True, config_name='default')
     icon = ProcessedImageField(
         upload_to='categories/icons/',
         processors=[ResizeToFill(64, 64)],

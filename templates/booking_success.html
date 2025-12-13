@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Booking Confirmed - {{ booking.booking_reference }}{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="content">
+        <div class="container">
+            <div class="row justify-content-center py-5">
+                <div class="col-lg-8">
+                    <!-- Success Card -->
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body text-center py-5">
+                            <!-- Success Icon -->
+                            <div class="mb-4">
+                                <div class="avatar avatar-xxl rounded-circle bg-success-light mx-auto">
+                                    <i class="ti ti-circle-check text-success" style="font-size: 64px;"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <h2 class="text-success fw-bold mb-3">Booking Confirmed!</h2>
+                            <p class="text-muted fs-16 mb-4">Your appointment has been successfully booked.</p>
+                            
+                            <!-- Booking Reference -->
+                            <div class="bg-light-100 border rounded p-3 mb-4">
+                                <small class="text-muted d-block mb-1">Booking Reference</small>
+                                <h4 class="fw-bold mb-0">{{ booking.booking_reference }}</h4>
+                            </div>
+                            
+                            <!-- Booking Details -->
+                            <div class="text-start bg-white border rounded p-4 mb-4">
+                                <h5 class="mb-3 pb-3 border-bottom">Booking Details</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-user me-1"></i>Customer Name
+                                        </small>
+                                        <strong>{{ booking.customer_full_name }}</strong>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-mail me-1"></i>Email
+                                        </small>
+                                        <strong>{{ booking.customer_email }}</strong>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-phone me-1"></i>Phone
+                                        </small>
+                                        <strong>{{ booking.customer_phone }}</strong>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-calendar me-1"></i>Status
+                                        </small>
+                                        <span class="badge bg-warning">{{ booking.get_status_display }}</span>
+                                    </div>
+                                </div>
+                                
+                                <hr class="my-3">
+                                
+                                <div class="row mb-3">
+                                    <div class="col-12 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-tools me-1"></i>Service
+                                        </small>
+                                        <strong class="d-block">{{ booking.service.name }}</strong>
+                                        <small class="text-muted">{{ booking.service.category.name }}</small>
+                                    </div>
+                                    
+                                    {% if booking.sub_services.all %}
+                                    <div class="col-12 mb-3">
+                                        <small class="text-muted d-block mb-2">
+                                            <i class="ti ti-list-check me-1"></i>Selected Services
+                                        </small>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            {% for sub_service in booking.sub_services.all %}
+                                            <span class="badge bg-primary-light text-primary">{{ sub_service.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <hr class="my-3">
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-calendar-event me-1"></i>Date
+                                        </small>
+                                        <strong>{{ booking.appointment_date|date:"F d, Y" }}</strong>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="ti ti-clock me-1"></i>Time
+                                        </small>
+                                        <strong>{{ booking.appointment_time }}</strong>
+                                    </div>
+                                </div>
+                                
+                                <hr class="my-3">
+                                
+                                <div class="mb-0">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="ti ti-map-pin me-1"></i>Service Location
+                                    </small>
+                                    <strong class="d-block mb-2">{{ booking.location_address }}</strong>
+                                    <a href="{{ booking.google_maps_link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="ti ti-map me-1"></i>View on Google Maps
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                <a href="{% url 'core:home' %}" class="btn btn-primary">
+                                    <i class="ti ti-home me-2"></i>Back to Home
+                                </a>
+                                
+                                {% if whatsapp_url %}
+                                <a href="{{ whatsapp_url }}" target="_blank" class="btn btn-success">
+                                    <i class="ti ti-brand-whatsapp me-2"></i>Send via WhatsApp
+                                </a>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Additional Info -->
+                            <div class="mt-4 pt-4 border-top">
+                                <p class="text-muted mb-0">
+                                    <i class="ti ti-info-circle me-1"></i>
+                                    A confirmation email has been sent to <strong>{{ booking.customer_email }}</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

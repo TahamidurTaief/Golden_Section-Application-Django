@@ -11,21 +11,21 @@
 							<p class="mb-3 sub-title">We can connect you to the right Service, first time and every
 								time.</p>
 							<div class="banner-form bg-white border mb-3">
-								<form action="#">
+								<form action="{% url 'services:list' %}" method="get">
 									<div class="d-md-flex align-items-center">
 										<div class="input-group mb-2">
 											<span class="input-group-text px-1"><i class="ti ti-search"></i></span>
-											<input type="text" class="form-control" placeholder="Search for Service">
+											<input type="text" class="form-control" name="keyword" placeholder="Search for Service">
 										</div>
 										<div class="input-group mb-2">
 											<span class="input-group-text px-1"><i class="ti ti-map-pin"></i></span>
-											<input type="text" class="form-control" placeholder="Enter Location">
+											<input type="text" class="form-control" name="location" placeholder="Enter Location">
 										</div>
 										<div class="mb-2">
-											<a href="search.html" class="btn btn-linear-primary d-inline-flex align-items-center w-100">
+											<button type="submit" class="btn btn-linear-primary d-inline-flex align-items-center w-100">
 												<i class="feather-search me-2"></i>
 												Search
-											</a>
+											</button>
 										</div>
 									</div>
 								</form>
@@ -33,32 +33,30 @@
 							</div>
 							<div class="d-flex align-items-center flex-wrap">
 								<h6 class="mb-2 me-2 fw-medium">Popular Searches</h6>
-								<a href="search.html"
-									class="badge badge-dark-transparent fs-14 fw-normal mb-2 me-2">Plumber</a>
-								<a href="search.html"
-									class="badge badge-dark-transparent fs-14 fw-normal mb-2 me-2">Interior</a>
-								<a href="search.html"
-									class="badge badge-dark-transparent fs-14 fw-normal mb-2 me-2">Nail Technicians</a>
+								{% for category in featured_categories|slice:":3" %}
+								<a href="{% url 'categories:detail' category.slug %}"
+									class="badge badge-dark-transparent fs-14 fw-normal mb-2 me-2">{{ category.name }}</a>
+								{% endfor %}
 							</div>
 							<div class="d-flex align-items-center flex-wrap banner-info">
 								<div class="d-flex align-items-center me-4 mt-4">
 									<img src="{% static 'img/icons/success-01.svg' %}" alt="icon">
 									<div class="ms-2">
-										<h6>215,292 +</h6>
+										<h6>{{ total_providers|default:0|floatformat:0 }}+</h6>
 										<p>Verified Providers</p>
 									</div>
 								</div>
 								<div class="d-flex align-items-center me-4 mt-4">
 									<img src="{% static 'img/icons/success-02.svg' %}" alt="icon">
 									<div class="ms-2">
-										<h6>90,000+</h6>
+										<h6>{{ total_bookings|default:0|floatformat:0 }}+</h6>
 										<p>Services Completed</p>
 									</div>
 								</div>
 								<div class="d-flex align-items-center me-4 mt-4">
 									<img src="{% static 'img/icons/success-03.svg' %}" alt="icon">
 									<div class="ms-2">
-										<h6>2,390,968 </h6>
+										<h6>{{ total_reviews|default:0|floatformat:0 }}+</h6>
 										<p>Reviews Globally</p>
 									</div>
 								</div>
@@ -73,12 +71,12 @@
 			<div class="hero-image">
 				<div class="d-inline-flex bg-white p-2 rounded align-items-center shape-01 floating-x">
 					<span class="avatar avatar-md bg-warning rounded-circle me-2"><i class="ti ti-star-filled"></i></span>
-					<span>4.9 / 5<small class="d-block">(255 reviews)</small></span>
+					<span>4.9 / 5<small class="d-block">({{ total_reviews|default:0 }} reviews)</small></span>
 					<i class="border-edge"></i>
 				</div>
 				<div class="d-inline-flex bg-white p-2 rounded align-items-center shape-02 floating-x">
 					<span class="me-2"><img src="{% static 'img/icons/tick-banner.svg' %}" alt=""></span>
-					<p class="fs-12 text-dark mb-0">300 Booking Completed</p>
+					<p class="fs-12 text-dark mb-0">{{ total_bookings|default:0 }} Booking Completed</p>
 					<i class="border-edge"></i>
 				</div>
 				<img src="{% static 'img/bg/bg-03.svg' %}" alt="img" class="shape-03">

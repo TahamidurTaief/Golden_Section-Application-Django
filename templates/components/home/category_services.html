@@ -1,0 +1,93 @@
+{% load static %}
+
+<section class="section bg-white">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <!-- Left Side: 4 Services Grid -->
+            <div class="col-lg-6 order-last order-lg-first">
+                {% if category_for_services %}
+                <div class="mb-3">
+                    <h4 class="mb-1">{{ category_for_services.name }}</h4>
+                    <p class="text-muted small mb-0">Top rated services in {{ category_for_services.name }}</p>
+                </div>
+                {% endif %}
+                <div class="row g-4">
+                    {% for service in category_left_services %}
+                    <div class="col-6">
+                        <div class="card border-0 shadow-none h-100 bg-light p-3 rounded-3 text-center">
+                            <a href="{% url 'services:detail' service.slug %}" hx-get="{% url 'services:detail' service.slug %}" hx-target="body" hx-push-url="true" class="d-block mb-3">
+                                {% if service.featured_image %}
+                                <img src="{{ service.featured_image.url }}" alt="{{ service.name }}" class="img-fluid rounded-3 w-100" style="height: 120px; object-fit: cover;">
+                                {% else %}
+                                <img src="{% static 'img/services/service-01.jpg' %}" alt="{{ service.name }}" class="img-fluid rounded-3 w-100" style="height: 120px; object-fit: cover;">
+                                {% endif %}
+                            </a>
+                            <h6 class="mb-0 fs-15">
+                                <a href="{% url 'services:detail' service.slug %}" hx-get="{% url 'services:detail' service.slug %}" hx-target="body" hx-push-url="true" class="text-dark text-decoration-none">{{ service.name }}</a>
+                            </h6>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <span class="text-warning small"><i class="ti ti-star-filled"></i> {{ service.rating|floatformat:1 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">No services available in this category.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="col-lg-6 order-first order-lg-last ps-lg-5">
+                <!-- Title Section -->
+                <div class="mb-5">
+                    <p class="text-primary fw-medium mb-2 text-uppercase small">
+                        {% if category_for_services %}
+                            {{ category_for_services.name }}
+                        {% else %}
+                            Featured Category
+                        {% endif %}
+                    </p>
+                    <h2 class="mb-3">{% if category_for_services %}{{ category_for_services.name }}{% else %}Explore Top{% endif %} <span class="text-linear-primary">Services</span></h2>
+                    <p class="text-muted">
+                        {% if category_for_services and category_for_services.description %}
+                            {{ category_for_services.description|striptags|truncatewords:25 }}
+                        {% else %}
+                            Discover our wide range of professional services. From home maintenance to personal care, find the perfect expert for your needs.
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'services:list' %}" hx-get="{% url 'services:list' %}" hx-target="body" hx-push-url="true" class="btn btn-primary mt-2">View All Services</a>
+                </div>
+
+                <!-- 2 Services -->
+                <div class="row g-4">
+                    {% for service in category_right_services %}
+                    <div class="col-sm-6">
+                        <div class="card border-0 shadow-none h-100">
+                            <a href="{% url 'services:detail' service.slug %}" hx-get="{% url 'services:detail' service.slug %}" hx-target="body" hx-push-url="true" class="d-block mb-3 position-relative">
+                                {% if service.featured_image %}
+                                <img src="{{ service.featured_image.url }}" alt="{{ service.name }}" class="img-fluid rounded-3 w-100" style="height: 180px; object-fit: cover;">
+                                {% else %}
+                                <img src="{% static 'img/services/service-01.jpg' %}" alt="{{ service.name }}" class="img-fluid rounded-3 w-100" style="height: 180px; object-fit: cover;">
+                                {% endif %}
+                            </a>
+                            <h6 class="mb-1">
+                                <a href="{% url 'services:detail' service.slug %}" hx-get="{% url 'services:detail' service.slug %}" hx-target="body" hx-push-url="true" class="text-dark text-decoration-none">{{ service.name }}</a>
+                            </h6>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="text-muted small mb-0">{{ service.provider.business_name }}</p>
+                                <span class="text-warning small"><i class="ti ti-star-filled"></i> {{ service.rating|floatformat:1 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted">No additional services found.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

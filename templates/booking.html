@@ -74,7 +74,7 @@
 {% endblock %}
 
 {% block content %}
-	
+	{% csrf_token %}
 
 
     <!-- Breadcrumb -->
@@ -366,9 +366,9 @@
 									<div class="book-title mb-2">	
 										<h5 class="mb-0"><i class="ti ti-clock me-2"></i>Appointment Time</h5>
 									</div>
-									<div class="card border h-100">
+									<div class="card border">
 										<div class="card-body p-3">
-											<div class="token-slot" style="max-height: 360px; overflow-y: auto;">
+											<div class="token-slot" style="max-height: 250px; overflow-y: auto;">
                                    <template x-for="time in timeSlots" :key="time">
                                        <div class="form-check-inline visits me-0">
                                            <label class="visit-btns">
@@ -659,43 +659,40 @@
 				},
 				
 				// Submit Booking
-				submitBooking() {
-					// Validation
+				async submitBooking() {
+					// Validation - just check required fields silently
 					if (!this.firstName || !this.lastName) {
-						alert('Please enter your first and last name');
+						console.log('Please enter your first and last name');
 						return;
 					}
 					if (!this.customerPhone) {
-						alert('Please enter your phone number');
+						console.log('Please enter your phone number');
 						return;
 					}
 					if (!this.customerEmail) {
-						alert('Please enter your email');
-						return;
-					}
-					if (this.selectedSubServices.length === 0) {
-						alert('Please select at least one service');
+						console.log('Please enter your email');
 						return;
 					}
 					if (!this.selectedLocation.address) {
-						alert('Please select a service location on the map');
+						console.log('Please select a service location on the map');
 						return;
 					}
 					if (!this.selectedDate) {
-						alert('Please select an appointment date');
+						console.log('Please select an appointment date');
 						return;
 					}
 					if (!this.selectedTime) {
-						alert('Please select an appointment time');
+						console.log('Please select an appointment time');
 						return;
 					}
+					
+					// Set submitting state
+					this.isSubmitting = true;
 					
 					// Collect booking data
 					const bookingData = {
 						service_id: {{ service.id|default:'null' }},
-						service_name: '{{ service.name|escapejs }}',
 						provider_id: {{ provider.id|default:'null' }},
-						provider_name: '{{ provider.business_name|escapejs }}',
 						customer_first_name: this.firstName,
 						customer_last_name: this.lastName,
 						customer_phone: this.customerPhone,
@@ -705,17 +702,49 @@
 						location_address: this.selectedLocation.address,
 						appointment_date: this.selectedDate,
 						appointment_time: this.selectedTime,
-						selected_sub_services: this.selectedSubServices
+						selected_sub_services: this.selectedSubServices,
+						notes: ''
 					};
 					
-					console.log('Booking Data:', bookingData);
+					console.log('Submitting booking:', bookingData);
 					
-					// Show success message
-					const servicesText = this.selectedSubServices.length > 0 ? `\nServices: ${this.selectedSubServices.length} selected` : '';
-					alert(`Booking Confirmed!\n\nCustomer: ${this.firstName} ${this.lastName}\nService: ${bookingData.service_name}${servicesText}\nDate: ${this.selectedDateFormatted}\nTime: ${this.selectedTime}\nLocation: ${this.selectedLocation.address}\n\nConfirmation will be sent to ${this.customerEmail}`);
-					
-					// Here you can send data via HTMX or fetch API
-					// htmx.ajax('POST', '/booking/submit/', { values: bookingData });
+					try {
+						// Get CSRF token
+						const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+						                  document.querySelector('input[name=csrfmiddlewaretoken]')?.value ||
+						                  '';
+						
+						// Send booking to backend
+						const response = await fetch('{% url "bookings:create_booking" %}', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								'X-CSRFToken': csrfToken
+							},
+							body: JSON.stringify(bookingData)
+						});
+						
+						const result = await response.json();
+						console.log('Booking response:', result);
+						
+						if (result.success) {
+							// Automatically open WhatsApp if URL is available
+							if (result.whatsapp_url) {
+								window.open(result.whatsapp_url, '_blank');
+							}
+							
+							// Redirect to home after a short delay
+							setTimeout(() => {
+								window.location.href = '{% url "core:home" %}';
+							}, 1000);
+						} else {
+							console.error('Booking failed:', result.error);
+							this.isSubmitting = false;
+						}
+					} catch (error) {
+						console.error('Booking error:', error);
+						this.isSubmitting = false;
+					}
 				}
 			}
 		}

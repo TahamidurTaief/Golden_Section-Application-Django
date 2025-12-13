@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from accounts.models import User
 from services.models import Service
+from ckeditor.fields import RichTextField
 
 
 class ServiceRequest(models.Model):
@@ -52,10 +53,13 @@ class ServiceRequest(models.Model):
     # Booking Details
     booking_estimate = models.CharField(
         max_length=50, 
-        help_text='e.g., "2-3 Hrs", "1 Day"'
+        help_text='e.g., "2-3 Hrs", "1 Day"',
+        blank=True
     )
-    booking_datetime = models.DateTimeField(help_text='Preferred date and time')
-    number_of_people = models.IntegerField(default=1)
+    booking_date = models.DateField(help_text='Appointment date', null=True, blank=True)
+    booking_time = models.CharField(max_length=20, help_text='Appointment time (e.g., 9:00 AM)', null=True, blank=True)
+    booking_datetime = models.DateTimeField(help_text='Combined date and time', null=True, blank=True)
+    number_of_people = models.IntegerField(default=1, blank=True)
     hourly_rate = models.DecimalField(
         max_digits=10, 
         decimal_places=2, 
@@ -63,34 +67,23 @@ class ServiceRequest(models.Model):
         blank=True
     )
     
-    # Collection Address
-    collection_address = models.TextField()
-    collection_postal_code = models.CharField(max_length=20)
-    collection_city = models.CharField(max_length=100)
-    collection_property_type = models.CharField(
-        max_length=50, 
-        choices=PROPERTY_TYPE_CHOICES,
-        default='house'
-    )
-    collection_bedrooms = models.IntegerField(default=0)
-    collection_floor_level = models.CharField(max_length=50, blank=True)
-    collection_has_lift = models.BooleanField(default=False)
-    
-    # Delivery Address
-    delivery_address = models.TextField(blank=True)
-    delivery_postal_code = models.CharField(max_length=20, blank=True)
-    delivery_city = models.CharField(max_length=100, blank=True)
-    delivery_property_type = models.CharField(
-        max_length=50, 
-        choices=PROPERTY_TYPE_CHOICES,
+    # Location Details
+    location_address = RichTextField(blank=True, help_text='Full address', config_name='default')
+    location_latitude = models.DecimalField(
+        max_digits=10, 
+        decimal_places=7, 
+        null=True, 
         blank=True
     )
-    delivery_bedrooms = models.IntegerField(default=0)
-    delivery_floor_level = models.CharField(max_length=50, blank=True)
-    delivery_has_lift = models.BooleanField(default=False)
+    location_longitude = models.DecimalField(
+        max_digits=10, 
+        decimal_places=7, 
+        null=True, 
+        blank=True
+    )
     
     # Additional Information
-    additional_notes = models.TextField(blank=True)
+    additional_notes = RichTextField(blank=True, config_name='default')
     cc_zone = models.BooleanField(
         default=False, 
         help_text='Congestion Charge Zone'
@@ -129,7 +122,7 @@ class ServiceRequest(models.Model):
     whatsapp_number_used = models.CharField(max_length=20, blank=True)
     
     # Admin Notes
-    admin_notes = models.TextField(blank=True)
+    admin_notes = RichTextField(blank=True, config_name='default')
     
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True)
@@ -145,19 +138,30 @@ class ServiceRequest(models.Model):
         return f"{self.first_name} {self.last_name} - {self.service.name} ({self.get_status_display()})"
     
     def save(self, *args, **kwargs):
-        # Calculate total amount
-        cc_charge = 15.00 if self.cc_zone else 0.00
-        self.cc_zone_charge = cc_charge
-        
-        subtotal = self.booking_charges + cc_charge + (self.hourly_rate or 0)
-        self.vat = round(subtotal * 0.20, 2)  # 20% VAT
-        self.total_amount = subtotal + self.vat
+        # Keep pricing fields for future use but don't auto-calculate
+        # Admin can manually set pricing when responding to the request
+        if not self.total_amount:
+            self.total_amount = 0.00
         
         super().save(*args, **kwargs)
     
     @property
     def customer_name(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def get_whatsapp_number(self):
+        """Get WhatsApp number for this service request (Service > Category > Default)"""
+        if self.service.whatsapp_number:
+            return self.service.whatsapp_number
+        elif self.service.category.whatsapp_number:
+            return self.service.category.whatsapp_number
+        else:
+            try:
+                from site_config.models import SiteConfiguration
+                config = SiteConfiguration.load()
+                return config.default_whatsapp if config and config.default_whatsapp else None
+            except Exception:
+                return None
 
 
 class RequestAttachment(models.Model):
@@ -200,9 +204,9 @@ class QuotationResponse(models.Model):
     )
     
     quoted_price = models.DecimalField(max_digits=10, decimal_places=2)
-    breakdown = models.TextField(help_text='Price breakdown details')
+    breakdown = RichTextField(help_text='Price breakdown details', config_name='default')
     estimated_duration = models.CharField(max_length=100)
-    terms_conditions = models.TextField(blank=True)
+    terms_conditions = RichTextField(blank=True, config_name='default')
     
     valid_until = models.DateTimeField(help_text='Quotation valid until')
     

@@ -1,3 +1,4 @@
+{% load static %}
 	<!-- Footer -->
 	<footer>
 		<div class="footer-top">
@@ -104,8 +105,8 @@
 							</div>
 							<div class="d-flex align-items-center flex-wrap">
 								<h6 class="fs-14 fw-normal me-2">Download Our App</h6>
-								<img src="assets/img/icons/app-store.svg" class="me-2" alt="img">
-								<img src="assets/img/icons/goolge-play.svg" class="me-2" alt="img">
+								<img src="{% static 'img/icons/app-store.svg' %}" class="me-2" alt="img">
+								<img src="{% static 'img/icons/goolge-play.svg' %}" class="me-2" alt="img">
 							</div>
 						</div>
 					</div>
@@ -113,43 +114,43 @@
 				<div class="d-flex align-items-center justify-content-between flex-wrap mt-3">
 					<ul class="social-icon mb-3">
 						<li>
-							<a href="javascript:void(0);"><img src="assets/img/icons/fb.svg" class="img" alt="icon"></a>
+							<a href="javascript:void(0);"><img src="{% static 'img/icons/fb.svg' %}" class="img" alt="icon"></a>
 						</li>
 						<li>
-							<a href="javascript:void(0);"><img src="assets/img/icons/instagram.svg" class="img"
+							<a href="javascript:void(0);"><img src="{% static 'img/icons/instagram.svg' %}" class="img"
 									alt="icon"></a>
 						</li>
 						<li>
-							<a href="javascript:void(0);"><img src="assets/img/icons/twitter.svg" class="img"
+							<a href="javascript:void(0);"><img src="{% static 'img/icons/twitter.svg' %}" class="img"
 									alt="icon"></a>
 						</li>
 						<li>
-							<a href="javascript:void(0);"><img src="assets/img/icons/whatsapp.svg" class="img"
+							<a href="javascript:void(0);"><img src="{% static 'img/icons/whatsapp.svg' %}" class="img"
 									alt="icon"></a>
 						</li>
 						<li>
-							<a href="javascript:void(0);"><img src="assets/img/icons/youtube.svg" class="img"
+							<a href="javascript:void(0);"><img src="{% static 'img/icons/youtube.svg' %}" class="img"
 									alt="icon"></a>
 						</li>
 						<li>
-							<a href="javascript:void(0);"><img src="assets/img/icons/linkedin.svg" class="img"
+							<a href="javascript:void(0);"><img src="{% static 'img/icons/linkedin.svg' %}" class="img"
 									alt="icon"></a>
 						</li>
 					</ul>
 					<div class="d-flex align-items-center">
-						<div class="dropdown me-3 mb-3">
-							<a href="javascript:void(0);" class="dropdown-toggle fw-medium" data-bs-toggle="dropdown">
-								<img src="assets/img/flags/us.png" class="flag me-2" alt="flag">English
-							</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="javascript:void(0);"><img
-											src="assets/img/flags/us.png" class="flag me-2" alt="flag">English</a></li>
-								<li><a class="dropdown-item" href="javascript:void(0);"><img
-											src="assets/img/flags/jp.png" class="flag me-2" alt="flag">Japanese</a></li>
-								<li><a class="dropdown-item" href="javascript:void(0);"><img
-											src="assets/img/flags/cn.png" class="flag me-2" alt="flag">Chinese</a></li>
-							</ul>
-						</div>
+					<div class="dropdown me-3 mb-3">
+						<a href="javascript:void(0);" class="dropdown-toggle fw-medium" data-bs-toggle="dropdown">
+							<img src="{% static 'img/flags/us.png' %}" class="flag me-2" alt="flag">English
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" href="javascript:void(0);"><img
+										src="{% static 'img/flags/us.png' %}" class="flag me-2" alt="flag">English</a></li>
+							<li><a class="dropdown-item" href="javascript:void(0);"><img
+										src="{% static 'img/flags/jp.png' %}" class="flag me-2" alt="flag">Japanese</a></li>
+							<li><a class="dropdown-item" href="javascript:void(0);"><img
+										src="{% static 'img/flags/cn.png' %}" class="flag me-2" alt="flag">Chinese</a></li>
+						</ul>
+					</div>
 						<div class="dropdown mb-3">
 							<a href="javascript:void(0);" class="dropdown-toggle fw-medium" data-bs-toggle="dropdown">
 								USD

@@ -1,16 +1,24 @@
 {% load static %}
 
-<div class="col-xl-3 col-lg-4">
+<div class="col-xl-3 col-lg-4" x-data="serviceFilter()" x-init="init()" id="services-sidebar" 
+  data-selected-categories="{% if selected_categories %}{{ selected_categories|join:',' }}{% endif %}"
+  data-selected-subcategories="{% if selected_subcategories %}{{ selected_subcategories|join:',' }}{% endif %}"
+  data-selected-keyword="{{ selected_keyword }}">
   <div class="card mb-4 mb-lg-0 position-sticky" style="top: 20px;">
     <div class="card-body">
-      <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
         <h5>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2" style="display: inline-block; vertical-align: middle;">
             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
           </svg>
           Filters
         </h5>
-        <a href="{% url 'core:services' %}" class="text-decoration-none small">Reset</a>
+          <a href="{% url 'core:services' %}" class="text-decoration-none small"
+            hx-get="{% url 'core:services' %}"
+            hx-target="#services-row"
+            hx-swap="outerHTML"
+            hx-push-url="true"
+            onclick="document.querySelectorAll('[name=\'category\']').forEach(c => c.checked = false); document.querySelectorAll('[name=\'subcategory\']').forEach(s => s.checked = false); document.querySelector("[name='keyword']").value = '';">Reset</a>
       </div>
 
         <!-- Search Keywords -->
@@ -24,8 +32,8 @@
               placeholder="Search services..."
               hx-get="{% url 'core:services' %}?page=1"
               hx-trigger="keyup changed delay:500ms"
-              hx-target="#services-list"
-              hx-swap="innerHTML"
+              hx-target="#services-row"
+              hx-swap="outerHTML"
               hx-include="[name='category']:checked, [name='subcategory']:checked"
               hx-indicator="#loading-indicator"
             />
@@ -116,6 +124,49 @@
 </div>
 
 <script>
+function serviceFilter() {
+  return {
+    selectedCategories: [],
+    selectedSubcategories: [],
+    keyword: '',
+    init() {
+      // Parse pre-selected values from data attributes and set initial state
+      const sidebarEl = document.getElementById('services-sidebar');
+      const d = sidebarEl ? sidebarEl.dataset : {};
+      this.selectedCategories = d.selectedCategories ? d.selectedCategories.split(',') : [];
+      this.selectedSubcategories = d.selectedSubcategories ? d.selectedSubcategories.split(',') : [];
+      this.keyword = d.selectedKeyword || '';
+      // Set checkbox states accordingly
+      setTimeout(() => {
+        this.selectedCategories.forEach(slug => {
+          const el = document.querySelector(`[name='category'][value='${slug}']`);
+          if (el) el.checked = true;
+        });
+        this.selectedSubcategories.forEach(slug => {
+          const el = document.querySelector(`[name='subcategory'][value='${slug}']`);
+          if (el) el.checked = true;
+        });
+        const keywordInput = document.querySelector("[name='keyword']");
+        if (keywordInput) keywordInput.value = this.keyword;
+        // When user toggles checkboxes, keep the All radio in sync
+        document.querySelectorAll("[name='category']").forEach(el => el.addEventListener('change', () => {
+          const anyChecked = document.querySelectorAll("[name='category']:checked").length > 0;
+          const catAll = document.getElementById('cat-all');
+          if (catAll) catAll.checked = !anyChecked;
+        }));
+        document.querySelectorAll("[name='subcategory']").forEach(el => el.addEventListener('change', () => {
+          const anyChecked = document.querySelectorAll("[name='subcategory']:checked").length > 0;
+          const subcatAll = document.getElementById('subcat-all');
+          if (subcatAll) subcatAll.checked = !anyChecked;
+        }));
+      }, 50);
+    },
+    toggleSidebar() {
+      const sidebar = document.getElementById('services-sidebar');
+      sidebar.classList.toggle('d-none');
+    }
+  }
+}
 function toggleCategories() {
   const hiddenItems = document.querySelectorAll('.category-hidden');
   const toggleText = document.getElementById('category-toggle-text');

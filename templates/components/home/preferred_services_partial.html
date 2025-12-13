@@ -1,0 +1,77 @@
+{% load static %}
+
+<div x-data="carouselComponent({count: {{ featured_services|length }}, breakpoints: {1200:4, 992:3, 768:2, 0:1}})" 
+     x-init="init()" 
+     class="preferred-carousel">
+    <div class="overflow-hidden position-relative" @mouseenter="stopAutoplay" @mouseleave="startAutoplay">
+        <div class="d-flex" :style="'transform: translateX(-' + (current * (100 / perSlide)) + '%); transition: transform 600ms ease'">
+            {% for service in featured_services %}
+            <article class="rounded-xl overflow-hidden me-3 preferred-service-card" 
+                     style="width:320px; height:420px; flex: 0 0 320px; max-width:320px;" 
+                     :style="'width: calc(' + (100 / perSlide) + '% - 12px); height: 420px; flex: 0 0 calc(' + (100 / perSlide) + '% - 12px); max-width: calc(' + (100 / perSlide) + '% - 12px);'">
+                <a href="{% url 'services:detail' service.id %}" class="d-block position-relative h-100 text-decoration-none">
+                    {% if service.featured_image %}
+                    <img src="{{ service.featured_image.url }}" 
+                         alt="{{ service.alt_text|default:service.name }}" 
+                         style="width:100%; height:100%; object-fit:cover; display:block;">
+                    {% else %}
+                    <img src="{% static 'img/services/service-23.jpg' %}" 
+                         alt="{{ service.name }}" 
+                         style="width:100%; height:100%; object-fit:cover; display:block;">
+                    {% endif %}
+
+                    <div class="position-absolute top-0 start-0 end-0 bottom-0" 
+                         style="background: linear-gradient(180deg, rgba(0,0,0,0.0) 35%, rgba(0,0,0,0.65) 100%);"></div>
+
+                    <div class="position-absolute start-0 bottom-0 p-3 text-white">
+                        {% if service.category %}
+                        <span class="badge bg-dark text-white mb-2">{{ service.category.name }}</span>
+                        {% endif %}
+                        <h5 class="mb-1"><span class="text-white">{{ service.name }}</span></h5>
+                        <p class="text-white-50 small mb-2">
+                            {% if service.provider %}{{ service.provider.business_name }}{% endif %}
+                        </p>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">
+                                <i class="ti ti-star-filled text-warning"></i> {{ service.rating|floatformat:1 }}
+                            </span>
+                            <small class="text-white-50">({{ service.total_reviews }} Reviews)</small>
+                        </div>
+                    </div>
+
+                    <div class="position-absolute top-3 end-3">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width:64px;height:64px;">
+                            <div class="text-center small">
+                                <strong>{{ forloop.counter }}</strong>
+                                <div style="font-size:10px;line-height:10px;">View</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </article>
+            {% empty %}
+            <div class="p-4 text-center w-100">
+                <p class="text-muted">No services available in this category.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            <button type="button" @click="prev()" class="btn btn-outline-secondary btn-sm me-2">
+                <i class="ti ti-chevron-left"></i>
+            </button>
+            <button type="button" @click="next()" class="btn btn-outline-secondary btn-sm">
+                <i class="ti ti-chevron-right"></i>
+            </button>
+        </div>
+        <div class="d-flex gap-2">
+            <template x-for="i in Math.max(1, Math.ceil(count / perSlide))" :key="i">
+                <button :class="{'btn btn-sm btn-primary': (i-1) === current, 'btn btn-sm btn-outline-secondary': (i-1) !== current}" 
+                        @click="goTo(i-1)"></button>
+            </template>
+        </div>
+    </div>
+</div>

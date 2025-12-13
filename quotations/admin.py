@@ -20,13 +20,13 @@ class QuotationResponseInline(admin.StackedInline):
 @admin.register(ServiceRequest)
 class ServiceRequestAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'customer_name', 'service', 'booking_datetime',
+        'id', 'customer_name', 'service', 'booking_date', 'booking_time',
         'total_amount', 'status', 'whatsapp_sent', 'created_at'
     ]
     list_filter = ['status', 'whatsapp_sent', 'cc_zone', 'created_at', 'service__category']
     search_fields = [
         'first_name', 'last_name', 'email', 'phone', 
-        'service__name', 'collection_postal_code', 'delivery_postal_code'
+        'service__name', 'location_address'
     ]
     list_editable = ['status']
     ordering = ['-created_at']
@@ -38,26 +38,16 @@ class ServiceRequestAdmin(admin.ModelAdmin):
             'fields': ('user', 'first_name', 'last_name', 'email', 'phone')
         }),
         ('Service Details', {
-            'fields': ('service', 'pricing_tier', 'booking_estimate', 'booking_datetime', 'number_of_people')
+            'fields': ('service', 'pricing_tier', 'booking_estimate', 'number_of_people', 'hourly_rate')
         }),
-        ('Collection Address', {
-            'fields': (
-                'collection_address', 'collection_postal_code', 'collection_city',
-                'collection_property_type', 'collection_bedrooms', 
-                'collection_floor_level', 'collection_has_lift'
-            ),
-            'classes': ('collapse',)
+        ('Booking Schedule', {
+            'fields': ('booking_date', 'booking_time', 'booking_datetime')
         }),
-        ('Delivery Address', {
-            'fields': (
-                'delivery_address', 'delivery_postal_code', 'delivery_city',
-                'delivery_property_type', 'delivery_bedrooms', 
-                'delivery_floor_level', 'delivery_has_lift'
-            ),
-            'classes': ('collapse',)
+        ('Location Details', {
+            'fields': ('location_address', 'location_latitude', 'location_longitude')
         }),
         ('Pricing', {
-            'fields': ('hourly_rate', 'booking_charges', 'cc_zone', 'cc_zone_charge', 'vat', 'total_amount')
+            'fields': ('booking_charges', 'cc_zone', 'cc_zone_charge', 'vat', 'total_amount')
         }),
         ('Additional Information', {
             'fields': ('additional_notes', 'admin_notes')

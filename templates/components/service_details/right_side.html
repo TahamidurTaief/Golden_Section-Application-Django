@@ -58,9 +58,9 @@
                     <p class="mb-0 fw-semibold">{{ service.provider.total_reviews }}</p>
                 </div>
                 <div class="border-top pt-3">
-                    <button type="button" class="btn btn-dark w-100" id="confirmServiceBtn" onclick="confirmService()">
+                    <a href="{% url 'core:booking' service.id %}" class="btn btn-dark w-100" id="confirmServiceBtn" onclick="confirmService()">
                         <i class="ti ti-calendar-check me-2"></i>Confirm Service
-                    </button>
+                    </a>
                 </div>
                 
                 <!-- Hidden form to pass data to booking page -->
@@ -102,15 +102,7 @@
                 });
             });
             
-            // Check if at least one sub-service is selected
-            if (selectedSubServices.length === 0) {
-                alert('Please select at least one service from the "Services Offered" section.');
-                // Scroll to services offered section
-                document.querySelector('#servicesOffered')?.scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-            
-            // Populate hidden form fields
+            // Populate hidden form fields (empty array if none selected)
             document.getElementById('selected_sub_services').value = JSON.stringify(selectedSubServices);
             
             // Debug: Log the data being sent

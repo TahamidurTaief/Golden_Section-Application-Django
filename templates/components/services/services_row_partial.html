@@ -1,0 +1,8 @@
+{% load static %}
+
+<div class="row" id="services-row">
+  {% include 'components/services/sidebar.html' %}
+  {% include 'components/services/product_section.html' %}
+</div>
+
+<!-- This partial is returned via HTMX to update both the sidebar and the product section together. -->

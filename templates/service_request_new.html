@@ -1,0 +1,919 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Service Request{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Calendar & Time Slot Styles from Booking Page */
+    .token-slot .visit-btns.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white;
+        border-color: #667eea;
+        transform: scale(1.05);
+    }
+    .token-slot .visit-btns.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background-color: #f5f5f5 !important;
+    }
+    .token-slot .visit-btns {
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+        border: none;
+    }
+    .token-slot .visit-btns:hover:not(.disabled) {
+        transform: translateY(-2px);
+        background-color: #e9ecef;
+    }
+    .token-slot .compact-date-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 6px;
+    }
+    
+    .step-content {
+        min-height: 400px;
+    }
+    
+    .wizard-progress li {
+        position: relative;
+        padding-left: 25px;
+    }
+    
+    .wizard-progress li:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #e9ecef;
+        border: 2px solid #dee2e6;
+    }
+    
+    .wizard-progress li.active:before {
+        background: #007bff;
+        border-color: #007bff;
+    }
+    
+    .wizard-progress li.completed:before {
+        background: #28a745;
+        border-color: #28a745;
+        content: '✓';
+        color: white;
+        font-size: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .file-upload {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .file-upload input[type=file] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 0 10px;
+        }
+        .token-slot .visit-btns {
+            min-width: 60px !important;
+            padding: 6px 4px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+{% include 'components/request_service/breadcrumb.html' %}
+
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+    <div class="content">
+        <div class="container-fluid px-sm-3 px-lg-4">
+            <div class="fieldset-wizard request-wizard" 
+                 x-data="serviceRequestForm()" 
+                 x-init="initForm()">
+                <div class="row">
+                    <!-- Left Sidebar - Steps -->
+                    <div class="col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                        <div class="card shadow-none bg-light-500 booking-sidebar request-sidebar sticky-top" style="top: 20px;">
+                            <div class="card-body">
+                                <div class="service-info bg-white d-flex align-items-center mb-3 p-3 rounded">
+                                    <span class="avatar avatar-xl me-3 shrink-0">
+                                        {% if service and service.featured_image %}
+                                            <img src="{{ service.featured_image.url }}" 
+                                                 class="border-0 img-fluid" 
+                                                 alt="{{ service.alt_text|default:service.name }}" 
+                                                 loading="lazy" />
+                                        {% else %}
+                                            <img src="{% static 'img/services/service-01.jpg' %}" 
+                                                 class="border-0 img-fluid" 
+                                                 alt="Service" 
+                                                 loading="lazy" />
+                                        {% endif %}
+                                    </span>
+                                    <div>
+                                        <h5 class="mb-1">{{ service.name|default:"Service" }}</h5>
+                                        <p class="fs-14 text-muted mb-0">{{ service.category.name|default:"Service Category" }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="booking-wizard p-0">
+                                    <h6 class="mb-3 fw-semibold">Steps</h6>
+                                    <ul class="wizard-progress list-unstyled" id="stepProgress">
+                                        <template x-for="(step, index) in steps" :key="step.id">
+                                            <li class="pb-3" 
+                                                :class="{
+                                                    'active': currentStep === index,
+                                                    'completed': index < currentStep
+                                                }">
+                                                <span x-text="step.title" 
+                                                      class="d-block position-relative"
+                                                      :class="{
+                                                          'text-primary fw-medium': currentStep === index,
+                                                          'text-success': index < currentStep,
+                                                          'text-muted': index > currentStep
+                                                      }"></span>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Content - Forms -->
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="form-container">
+                            
+                            <!-- Step 1: User Information -->
+                            <div x-show="currentStep === 0" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4"><i class="ti ti-user me-2"></i>User Information</h5>
+                                        <form @submit.prevent="submitStep(0)" id="userInfoForm">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.firstName" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">First Name <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" 
+                                                                   x-model="formData.lastName" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Last Name <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="email" class="form-control" 
+                                                                   x-model="formData.email" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Email Address <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-4">
+                                                        <div class="form-floating">
+                                                            <input type="tel" class="form-control" 
+                                                                   x-model="formData.phone" 
+                                                                   placeholder="" required>
+                                                            <label class="fs-14">Phone Number <span class="text-danger">*</span></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="ti ti-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Booking Schedule with Calendar, Time and Map -->
+                            <div x-show="currentStep === 1" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4"><i class="ti ti-calendar me-2"></i>Booking Schedule</h5>
+                                        <form @submit.prevent="submitStep(1)" id="bookingScheduleForm">
+                                            
+                                            <!-- Calendar and Time Section (2 columns) -->
+                                            <div class="row mb-4">
+                                                <!-- Calendar Column -->
+                                                <div class="col-lg-6 mb-3 mb-lg-0">
+                                                    <div class="book-title mb-2">	
+                                                        <h6 class="mb-0"><i class="ti ti-calendar me-2"></i>Select Date</h6>
+                                                    </div>
+                                                    <div class="card border">
+                                                        <div class="card-body p-3">
+                                                            <!-- Month Navigation -->
+                                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                <button type="button" class="btn btn-sm btn-outline-primary" @click="previousMonth">
+                                                                    <i class="ti ti-chevron-left"></i>
+                                                                </button>
+                                                                <h6 class="mb-0 fw-semibold" x-text="currentMonthYear"></h6>
+                                                                <button type="button" class="btn btn-sm btn-outline-primary" @click="nextMonth">
+                                                                    <i class="ti ti-chevron-right"></i>
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <!-- Day Name Headers -->
+                                                            <div class="d-flex justify-content-between mb-2 px-1">
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Sun</small>
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Mon</small>
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Tue</small>
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Wed</small>
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Thu</small>
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Fri</small>
+                                                                <small class="text-muted fw-medium" style="width: 14.28%; text-align: center; font-size: 11px;">Sat</small>
+                                                            </div>
+                                                            
+                                                            <!-- Date Selection -->
+                                                            <div class="token-slot">
+                                                                <template x-for="day in calendarDays" :key="day.date || Math.random()">
+                                                                    <div class="form-check-inline visits me-0 mb-1" x-show="day.day">
+                                                                        <label class="visit-btns" :class="{ 'active': selectedDate === day.date, 'disabled': day.isPast }">
+                                                                            <input 
+                                                                                type="radio" 
+                                                                                class="form-check-input" 
+                                                                                name="appointment_date"
+                                                                                :value="day.date"
+                                                                                x-model="selectedDate"
+                                                                                :disabled="day.isPast"
+                                                                                @change="selectDate(day)"
+                                                                            >
+                                                                            <span class="visit-rsn" x-text="day.day"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                            
+                                                            <div class="mt-3" x-show="selectedDate">
+                                                                <small class="text-success"><i class="ti ti-check-circle me-1"></i>Selected: <span x-text="selectedDateFormatted"></span></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Time Column -->
+                                                <div class="col-lg-6">
+                                                    <div class="book-title mb-2">	
+                                                        <h6 class="mb-0"><i class="ti ti-clock me-2"></i>Select Time</h6>
+                                                    </div>
+                                                    <div class="card border">
+                                                        <div class="card-body p-3">
+                                                            <div class="token-slot" style="max-height: 320px; overflow-y: auto;">
+                                                                <template x-for="time in timeSlots" :key="time">
+                                                                    <div class="form-check-inline visits me-0">
+                                                                        <label class="visit-btns" :class="{ 'active': selectedTime === time }">
+                                                                            <input type="radio" class="form-check-input" name="appointment_time" :value="time" x-model="selectedTime">
+                                                                            <span class="visit-rsn" x-text="time"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                            <div class="mt-3" x-show="selectedTime">
+                                                                <small class="text-success"><i class="ti ti-check-circle me-1"></i>Selected: <span x-text="selectedTime"></span></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Location Map Section (Full Width Row) -->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="book-title mb-2">	
+                                                        <h6 class="mb-0"><i class="ti ti-map-pin text-danger me-2"></i>Select Your Service Location</h6>
+                                                    </div>
+                                                    <div class="card border">
+                                                        <div class="card-body p-3">
+                                                            <!-- Location Search Input -->
+                                                            <div class="mb-3">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text bg-white">
+                                                                        <i class="ti ti-search"></i>
+                                                                    </span>
+                                                                    <input type="text" class="form-control" x-model="searchQuery" @keyup.enter="searchLocation" placeholder="Search for a location in Dubai">
+                                                                    <button class="btn btn-primary" type="button" @click="searchLocation">
+                                                                        <i class="ti ti-map-search me-1"></i>Search
+                                                                    </button>
+                                                                </div>
+                                                                <div x-show="searchResults.length > 0" class="list-group mt-2" style="max-height: 200px; overflow-y: auto;">
+                                                                    <template x-for="result in searchResults" :key="result.place_id">
+                                                                        <a href="#" @click.prevent="selectSearchResult(result)" class="list-group-item list-group-item-action">
+                                                                            <div class="d-flex align-items-start">
+                                                                                <i class="ti ti-map-pin text-primary me-2 mt-1 fs-18"></i>
+                                                                                <div class="flex-grow-1">
+                                                                                    <div class="fw-medium text-dark" x-text="result.name"></div>
+                                                                                    <small class="text-muted d-block" style="font-size: 11px;" x-text="result.display_name"></small>
+                                                                                </div>
+                                                                            </div>
+                                                                        </a>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <!-- Map Container -->
+                                                            <div id="serviceRequestMap" style="width: 100%; height: 350px; border-radius: 10px; border: 1px solid #e0e0e0;" class="mb-3"></div>
+                                                            
+                                                            <!-- Selected Location Display -->
+                                                            <div x-show="selectedLocation.address" class="bg-light border rounded p-3">
+                                                                <div class="d-flex align-items-start">
+                                                                    <span class="me-2">
+                                                                        <i class="ti ti-map-pin-filled text-success fs-24"></i>
+                                                                    </span>
+                                                                    <div class="flex-grow-1">
+                                                                        <h6 class="mb-1">Selected Location</h6>
+                                                                        <p class="mb-1" x-text="selectedLocation.address"></p>
+                                                                        <p class="mb-0 text-muted fs-12" x-text="`${selectedLocation.lat}, ${selectedLocation.lng}`"></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between mt-4">
+                                                <button type="button" class="btn btn-light" @click="previousStep()">
+                                                    <i class="ti ti-arrow-left me-2"></i> Back
+                                                </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="ti ti-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Additional Items -->
+                            <div x-show="currentStep === 2" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4"><i class="ti ti-paperclip me-2"></i>Additional Items</h5>
+                                        <form @submit.prevent="submitStep(2)" id="additionalItemsForm">
+                                            <div class="mb-4">
+                                                <label class="form-label d-block">Please add Pictures or Videos</label>
+                                                <div class="upload-field border-2 border-dashed rounded p-4 text-center" 
+                                                     @dragover.prevent 
+                                                     @drop.prevent="handleFileDrop($event)">
+                                                    <div class="d-flex align-items-center justify-content-center flex-column">
+                                                        <i class="ti ti-cloud-upload fa-3x text-muted mb-3"></i>
+                                                        <p class="fs-14 text-center mb-2">Drag and drop your files here to upload</p>
+                                                        <span class="d-block mt-2">Or</span>
+                                                        <div class="file-upload btn btn-primary mt-2">
+                                                            Browse Files
+                                                            <input type="file" multiple accept="image/*,video/*,.pdf" 
+                                                                   @change="handleFileSelect($event)">
+                                                        </div>
+                                                        <p class="text-center fs-12 text-muted mt-2">Only .jpg, .png, .mp4, .pdf file types allowed and file size must be less than 10 MB each</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- File Preview -->
+                                                <div x-show="formData.files.length > 0" class="mt-3">
+                                                    <h6>Uploaded Files (<span x-text="formData.files.length"></span>):</h6>
+                                                    <div class="row g-2">
+                                                        <template x-for="(file, index) in formData.files" :key="index">
+                                                            <div class="col-md-3 col-sm-4 col-6">
+                                                                <div class="position-relative">
+                                                                    <div class="card">
+                                                                        <div class="card-body p-2 text-center">
+                                                                            <i class="ti ti-file fa-2x text-primary mb-2"></i>
+                                                                            <p class="small mb-0 text-truncate" x-text="file.name"></p>
+                                                                            <small class="text-muted" x-text="formatFileSize(file.size)"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" 
+                                                                            @click="removeFile(index)" style="transform: translate(50%, -50%);">
+                                                                        <i class="ti ti-x"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <label class="form-label">Additional Notes/Special Requirements</label>
+                                                <textarea class="form-control" rows="5" 
+                                                          x-model="formData.additionalNotes" 
+                                                          placeholder="Please provide any special requirements or additional information..."></textarea>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-light" @click="previousStep()">
+                                                    <i class="ti ti-arrow-left me-2"></i> Back
+                                                </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    Next Step <i class="ti ti-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Review Order -->
+                            <div x-show="currentStep === 3" x-transition.opacity class="step-content">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="mb-4"><i class="ti ti-eye me-2"></i>Review Your Request</h5>
+                                        
+                                        <!-- Order Summary -->
+                                        <div class="border rounded p-4 mb-4">
+                                            <div class="row">
+                                                <!-- User Information -->
+                                                <div class="col-lg-6 mb-4">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2"><i class="ti ti-user me-2"></i>User Information</h6>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Name:</small>
+                                                        <p class="mb-1 fw-medium" x-text="formData.firstName + ' ' + formData.lastName"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Email:</small>
+                                                        <p class="mb-1 fw-medium" x-text="formData.email"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Phone:</small>
+                                                        <p class="mb-1 fw-medium" x-text="formData.phone"></p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Booking Schedule -->
+                                                <div class="col-lg-6 mb-4">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2"><i class="ti ti-calendar me-2"></i>Booking Schedule</h6>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Date:</small>
+                                                        <p class="mb-1 fw-medium" x-text="selectedDateFormatted"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <small class="text-muted">Time:</small>
+                                                        <p class="mb-1 fw-medium" x-text="selectedTime"></p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Location -->
+                                                <div class="col-12 mb-4">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2"><i class="ti ti-map-pin me-2"></i>Service Location</h6>
+                                                    <div class="bg-light p-3 rounded">
+                                                        <p class="mb-0" x-text="selectedLocation.address || 'No location selected'"></p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Additional Information -->
+                                                <div class="col-12" x-show="formData.additionalNotes || formData.files.length > 0">
+                                                    <h6 class="fw-medium mb-3 border-bottom pb-2"><i class="ti ti-info-circle me-2"></i>Additional Information</h6>
+                                                    <div x-show="formData.files.length > 0" class="mb-3">
+                                                        <small class="text-muted">Attached Files:</small>
+                                                        <p class="mb-1"><span class="badge bg-primary" x-text="formData.files.length + ' file(s)'"></span></p>
+                                                    </div>
+                                                    <div x-show="formData.additionalNotes">
+                                                        <small class="text-muted">Notes:</small>
+                                                        <p class="text-muted mb-0" x-text="formData.additionalNotes"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between">
+                                            <button type="button" class="btn btn-light" @click="previousStep()">
+                                                <i class="ti ti-arrow-left me-2"></i> Back
+                                            </button>
+                                            <button type="button" class="btn btn-success btn-lg" 
+                                                    @click="submitRequest()"
+                                                    :disabled="isSubmitting">
+                                                <span x-show="!isSubmitting">
+                                                    <i class="ti ti-send me-2"></i> Send Request
+                                                </span>
+                                                <span x-show="isSubmitting">
+                                                    <i class="ti ti-loader me-2"></i> Processing...
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alpine.js Data and Methods -->
+<script>
+function serviceRequestForm() {
+    return {
+        currentStep: 0,
+        isSubmitting: false,
+        steps: [
+            { id: 'user-info', title: 'User Information' },
+            { id: 'booking-schedule', title: 'Booking Schedule' },
+            { id: 'additional-items', title: 'Additional Items' },
+            { id: 'review-order', title: 'Review Order' }
+        ],
+        formData: {
+            // User Information
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            
+            // Additional Items
+            files: [],
+            additionalNotes: ''
+        },
+        
+        // Location Data
+        searchQuery: '',
+        searchResults: [],
+        selectedLocation: {
+            lat: 25.2048,
+            lng: 55.2708,
+            address: ''
+        },
+        map: null,
+        marker: null,
+        
+        // Calendar Data
+        currentMonth: new Date().getMonth(),
+        currentYear: new Date().getFullYear(),
+        selectedDate: null,
+        calendarDays: [],
+        
+        // Time Slots
+        timeSlots: [
+            '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
+            '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
+            '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM',
+            '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM',
+            '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM',
+            '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM',
+            '09:00 PM', '09:30 PM', '10:00 PM'
+        ],
+        selectedTime: null,
+        
+        initForm() {
+            this.generateCalendar();
+            this.$nextTick(() => {
+                this.initMap();
+            });
+        },
+        
+        // Step Navigation
+        nextStep() {
+            if (this.currentStep < this.steps.length - 1) {
+                this.currentStep++;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        },
+        
+        previousStep() {
+            if (this.currentStep > 0) {
+                this.currentStep--;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        },
+        
+        submitStep(stepIndex) {
+            // Validate current step
+            const currentForm = document.getElementById(this.getCurrentFormId());
+            if (currentForm && currentForm.checkValidity()) {
+                // Additional validation for step 2 (booking schedule)
+                if (stepIndex === 1) {
+                    if (!this.selectedDate) {
+                        alert('Please select a date');
+                        return;
+                    }
+                    if (!this.selectedTime) {
+                        alert('Please select a time');
+                        return;
+                    }
+                    if (!this.selectedLocation.address) {
+                        alert('Please select a location on the map');
+                        return;
+                    }
+                }
+                this.nextStep();
+            } else {
+                currentForm?.reportValidity();
+            }
+        },
+        
+        getCurrentFormId() {
+            const formIds = [
+                'userInfoForm',
+                'bookingScheduleForm', 
+                'additionalItemsForm',
+                'reviewOrderForm'
+            ];
+            return formIds[this.currentStep] || '';
+        },
+        
+        // Map Functions
+        initMap() {
+            this.map = L.map('serviceRequestMap').setView([this.selectedLocation.lat, this.selectedLocation.lng], 12);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(this.map);
+            
+            // Click to select location
+            this.map.on('click', (e) => {
+                this.handleMapClick(e.latlng.lat, e.latlng.lng);
+            });
+        },
+        
+        addMarker(lat, lng, address = '') {
+            if (this.marker) {
+                this.map.removeLayer(this.marker);
+            }
+            
+            this.marker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'custom-marker',
+                    html: '<i class="ti ti-map-pin-filled text-success" style="font-size: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));"></i>',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32]
+                })
+            }).addTo(this.map);
+            
+            if (address) {
+                this.marker.bindPopup(address).openPopup();
+            }
+        },
+        
+        handleMapClick(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1&accept-language=en`, {
+                headers: { 'Accept-Language': 'en', 'User-Agent': 'GoldenSectionApp/1.0' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.selectedLocation = {
+                    lat: lat,
+                    lng: lng,
+                    address: data.display_name || 'Selected Location'
+                };
+                this.addMarker(lat, lng, this.selectedLocation.address);
+                this.map.setView([lat, lng], 16);
+            });
+        },
+        
+        searchLocation() {
+            let query = this.searchQuery.trim();
+            if (!query) {
+                query = 'Dubai';
+            }
+            
+            const viewbox = '54.9,24.7,55.6,25.5';
+            const url = `https://nominatim.openstreetmap.org/search?` +
+                `format=json` +
+                `&q=${encodeURIComponent(query + ', Dubai, UAE')}` +
+                `&viewbox=${viewbox}` +
+                `&bounded=0` +
+                `&limit=8` +
+                `&addressdetails=1` +
+                `&accept-language=en`;
+            
+            fetch(url, {
+                headers: {
+                    'Accept-Language': 'en',
+                    'User-Agent': 'GoldenSectionApp/1.0'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.length === 0) {
+                    this.searchResults = [];
+                    return;
+                }
+                
+                this.searchResults = data.map(r => ({
+                    place_id: r.place_id,
+                    name: r.name || r.display_name.split(',')[0],
+                    display_name: r.display_name,
+                    lat: parseFloat(r.lat),
+                    lon: parseFloat(r.lon)
+                }));
+            })
+            .catch(error => {
+                console.error('Search error:', error);
+                this.searchResults = [];
+            });
+        },
+        
+        selectSearchResult(result) {
+            this.selectedLocation = {
+                lat: result.lat,
+                lng: result.lon,
+                address: result.display_name
+            };
+            this.addMarker(result.lat, result.lon, result.display_name);
+            this.map.setView([result.lat, result.lon], 16);
+            this.searchResults = [];
+            this.searchQuery = result.name;
+        },
+        
+        // Calendar Functions
+        get currentMonthYear() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return `${months[this.currentMonth]} ${this.currentYear}`;
+        },
+        
+        get selectedDateFormatted() {
+            if (!this.selectedDate) return 'Not selected';
+            const date = new Date(this.selectedDate);
+            return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        },
+        
+        generateCalendar() {
+            const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const days = [];
+            
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const date = new Date(this.currentYear, this.currentMonth, day);
+                date.setHours(0, 0, 0, 0);
+                const dateString = date.toISOString().split('T')[0];
+                
+                days.push({
+                    day: day,
+                    date: dateString,
+                    isToday: date.getTime() === today.getTime(),
+                    isPast: date < today
+                });
+            }
+            
+            this.calendarDays = days;
+        },
+        
+        selectDate(day) {
+            if (!day.date || day.isPast) return;
+            this.selectedDate = day.date;
+        },
+        
+        previousMonth() {
+            if (this.currentMonth === 0) {
+                this.currentMonth = 11;
+                this.currentYear--;
+            } else {
+                this.currentMonth--;
+            }
+            this.generateCalendar();
+        },
+        
+        nextMonth() {
+            if (this.currentMonth === 11) {
+                this.currentMonth = 0;
+                this.currentYear++;
+            } else {
+                this.currentMonth++;
+            }
+            this.generateCalendar();
+        },
+        
+        // File Handling
+        handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            this.addFiles(files);
+        },
+        
+        handleFileDrop(event) {
+            const files = Array.from(event.dataTransfer.files);
+            this.addFiles(files);
+        },
+        
+        addFiles(files) {
+            files.forEach(file => {
+                if (this.isValidFile(file)) {
+                    this.formData.files.push(file);
+                }
+            });
+        },
+        
+        isValidFile(file) {
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'video/mp4', 'application/pdf'];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            if (!validTypes.includes(file.type)) {
+                alert('Invalid file type. Only JPG, PNG, MP4, and PDF files are allowed.');
+                return false;
+            }
+            
+            if (file.size > maxSize) {
+                alert('File size too large. Maximum size is 10MB.');
+                return false;
+            }
+            
+            return true;
+        },
+        
+        removeFile(index) {
+            this.formData.files.splice(index, 1);
+        },
+        
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        },
+        
+        // Submit Request
+        async submitRequest() {
+            this.isSubmitting = true;
+            
+            // Prepare form data for file upload
+            const formData = new FormData();
+            formData.append('service_id', {{ service.id|default:'null' }});
+            formData.append('first_name', this.formData.firstName);
+            formData.append('last_name', this.formData.lastName);
+            formData.append('email', this.formData.email);
+            formData.append('phone', this.formData.phone);
+            formData.append('booking_date', this.selectedDate);
+            formData.append('booking_time', this.selectedTime);
+            formData.append('location_address', this.selectedLocation.address);
+            formData.append('location_latitude', this.selectedLocation.lat);
+            formData.append('location_longitude', this.selectedLocation.lng);
+            formData.append('additional_notes', this.formData.additionalNotes);
+            
+            // Append files
+            this.formData.files.forEach((file, index) => {
+                formData.append(`files`, file);
+            });
+            
+            try {
+                // Get CSRF token
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+                
+                // Submit to backend
+                const response = await fetch('{% url "quotations:create_request" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Request submitted successfully!');
+                    
+                    // Redirect to home
+                    setTimeout(() => {
+                        window.location.href = '{% url "core:home" %}';
+                    }, 1000);
+                } else {
+                    alert('Request submission failed: ' + (result.error || 'Unknown error'));
+                    this.isSubmitting = false;
+                }
+            } catch (error) {
+                console.error('Request submission error:', error);
+                alert('An error occurred while submitting your request.');
+                this.isSubmitting = false;
+            }
+        }
+    };
+}
+</script>
+{% endblock %}

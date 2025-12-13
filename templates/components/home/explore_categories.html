@@ -1,52 +1,130 @@
 {% load static %}
-	<!-- Category Section -->
-	<section class="section category-section">
+	<!-- Explore Top Services Section -->
+	<section class="section category-section" style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);">
 		<div class="container">
 			<div class="row justify-content-center">
-				<div class="col-lg-6 text-center wow fadeInUp" data-wow-delay="0.2s">
-					<div class="section-header text-center">
-						<h2 class="mb-1">Explore our <span class="text-linear-primary">Categories</span></h2>
-						<p class="sub-title">Service categories help organize and structure the offerings on a
-							marketplace, making it easier for users to find what they need.</p>
+				<div class="col-lg-8 text-center wow fadeInUp" data-wow-delay="0.2s">
+					<div class="section-header text-center mb-5">
+						<h2 class="mb-3">Explore Top <span class="text-linear-primary">Service Categories</span></h2>
+						<p class="sub-title text-muted">Discover our diverse range of professional services across multiple categories. Quality service providers ready to assist you.</p>
 					</div>
 				</div>
 			</div>
-			<div class="row g-4 row-cols-xxl-6 row-cols-xl-6 row-cols-md-4 row-cols-sm-2 row-cols-1 justify-content-center">
-				{% for category in featured_categories %}
-				<div class="col d-flex">
-					<div class="category-item text-center flex-fill wow fadeInUp" data-wow-delay="0.{{ forloop.counter }}s">
-						<div class="mx-auto mb-3">
-							{% if category.icon %}
-								<img src="{{ category.icon }}" class="img-fluid" alt="{{ category.name }}" style="width: 60px; height: 60px; object-fit: cover;">
-							{% else %}
-								<img src="{% static 'img/icons/category-01.svg' %}" class="img-fluid" alt="{{ category.name }}">
-							{% endif %}
-						</div>
-						<h6 class="fs-14 mb-1">{{ category.name }}</h6>
-						<p class="fs-14 mb-0">{{ category.total_services }} Listing{{ category.total_services|pluralize }}</p>
-						<a href="{% url 'categories:detail' category.slug %}" class="link-primary text-decoration-underline fs-14">View All</a>
-					</div>
-				</div>
-				{% empty %}
-				<div class="col d-flex">
-					<div class="category-item text-center flex-fill wow fadeInUp" data-wow-delay="0.2s">
-						<div class="mx-auto mb-3">
-							<img src="{% static 'img/icons/category-01.svg' %}" class="img-fluid" alt="img">
-						</div>
-						<h6 class="fs-14 mb-1">No categories</h6>
-						<p class="fs-14 mb-0">0 Listings</p>
+
+			<!-- Categories Grid -->
+			{% if all_categories_with_services %}
+			<div class="row g-4 mb-5">
+				{% for category in all_categories_with_services %}
+				<div class="col-lg-3 col-md-4 col-sm-6">
+					<div class="category-card h-100 wow fadeInUp" data-wow-delay="0.2s">
+						<a href="{% url 'categories:detail' category.slug %}" class="text-decoration-none">
+							<div class="category-card-inner position-relative overflow-hidden rounded-3 shadow-sm" style="transition: all 0.3s ease;">
+								<!-- Category Image with Overlay -->
+								<div class="category-image position-relative" style="height: 220px; overflow: hidden;">
+									{% if category.image %}
+									<img src="{{ category.image.url }}" 
+										 class="img-fluid w-100 h-100" 
+										 alt="{{ category.name }}" 
+										 style="object-fit: cover; transition: transform 0.5s ease;">
+									{% else %}
+									<img src="{% static 'img/services/service-01.jpg' %}" 
+										 class="img-fluid w-100 h-100" 
+										 alt="{{ category.name }}" 
+										 style="object-fit: cover; transition: transform 0.5s ease; filter: brightness(0.8);">
+									{% endif %}
+									
+									<!-- Gradient Overlay -->
+									<div class="position-absolute top-0 start-0 w-100 h-100" 
+										 style="background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);"></div>
+									
+									<!-- Service Count Badge -->
+									<span class="badge bg-white text-primary position-absolute top-0 end-0 m-3 shadow-sm">
+										<i class="ti ti-briefcase me-1"></i>{{ category.service_count }} Service{{ category.service_count|pluralize }}
+									</span>
+								</div>
+
+								<!-- Category Info -->
+								<div class="category-info position-absolute bottom-0 start-0 w-100 p-3 text-white">
+									<div class="d-flex align-items-center justify-content-between">
+										<div class="flex-grow-1">
+											<h5 class="mb-1 text-white fw-bold" style="font-size: 1.1rem;">{{ category.name }}</h5>
+											{% if category.description %}
+											<p class="mb-0 small text-white-50" style="font-size: 0.85rem;">
+												{{ category.description|truncatechars:50 }}
+											</p>
+											{% endif %}
+										</div>
+										<div class="ms-2">
+											<i class="ti ti-arrow-right text-white fs-5"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
 					</div>
 				</div>
 				{% endfor %}
 			</div>
+			{% else %}
+			<!-- Fallback if no categories -->
+			<div class="row">
+				<div class="col-12">
+					<div class="text-center py-5">
+						<i class="ti ti-category-2 text-muted mb-3" style="font-size: 80px;"></i>
+						<h5 class="text-muted mb-2">No categories available yet</h5>
+						<p class="text-muted">Check back soon for our service categories!</p>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
+			<!-- View All Categories Button -->
 			<div class="row">
 				<div class="col-md-12">
-					<div class="text-center view-all wow fadeInUp" data-wow-delay="0.2s">
-						<a href="{% url 'categories:list' %}" class="btn btn-dark">View All<i
-								class="ti ti-arrow-right ms-2"></i></a>
+					<div class="text-center view-all mt-4 wow fadeInUp" data-wow-delay="0.5s">
+						<a href="{% url 'categories:list' %}" class="btn btn-dark px-4 py-2 rounded-pill">
+							<i class="ti ti-grid-dots me-2"></i>
+							View All Categories 
+							<i class="ti ti-arrow-right ms-2"></i>
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-	<!-- /Category Section -->
+	<!-- /Explore Top Services Section -->
+
+	<!-- Custom Styles for Category Cards -->
+	<style>
+		.category-card {
+			transition: transform 0.3s ease;
+		}
+
+		.category-card:hover {
+			transform: translateY(-8px);
+		}
+
+		.category-card-inner {
+			background: white;
+			border: 1px solid rgba(0,0,0,0.08);
+		}
+
+		.category-card:hover .category-card-inner {
+			box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
+		}
+
+		.category-card:hover .category-image img {
+			transform: scale(1.1);
+		}
+
+		.category-card:hover .ti-arrow-right {
+			transform: translateX(5px);
+			transition: transform 0.3s ease;
+		}
+
+		@media (max-width: 767px) {
+			.category-image {
+				height: 180px !important;
+			}
+		}
+	</style>

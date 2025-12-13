@@ -1,10 +1,11 @@
 {% if show_all %}
 <div class="form-check mb-1">
-  <input class="form-check-input" type="radio" name="category" value="all" id="cat-all" checked
+  <input class="form-check-input" type="radio" name="category" value="all" id="cat-all"
+    {% if not selected_categories or 'all' in selected_categories %}checked{% endif %}
     hx-get="{% url 'core:services' %}?page=1"
     hx-trigger="change"
-    hx-target="#services-list"
-    hx-swap="innerHTML"
+    hx-target="#services-row"
+    hx-swap="outerHTML"
     hx-include="[name='keyword'], [name='subcategory']:checked"
     hx-indicator="#loading-indicator">
   <label class="form-check-label small" for="cat-all">All Categories</label>
@@ -14,10 +15,11 @@
 {% for category in categories %}
 <div class="form-check mb-1 {% if forloop.counter > 5 %}category-hidden{% endif %}" {% if forloop.counter > 5 %}style="display: none;"{% endif %}>
   <input class="form-check-input" type="checkbox" name="category" value="{{ category.slug }}" id="cat-{{ category.id }}"
+    {% if selected_categories and category.slug in selected_categories %}checked{% endif %}
     hx-get="{% url 'core:services' %}?page=1"
     hx-trigger="change"
-    hx-target="#services-list"
-    hx-swap="innerHTML"
+    hx-target="#services-row"
+    hx-swap="outerHTML"
     hx-include="[name='keyword'], [name='category']:checked, [name='subcategory']:checked"
     hx-indicator="#loading-indicator">
   <label class="form-check-label small" for="cat-{{ category.id }}">

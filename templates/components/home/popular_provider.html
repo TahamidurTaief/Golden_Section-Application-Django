@@ -21,16 +21,16 @@
 							<div class="d-flex align-items-center">
 								<a href="{% url 'providers:detail' provider.id %}" class="avatar avatar-xl me-2">
 									{% if provider.business_logo %}
-									<img src="{{ provider.business_logo }}" alt="{{ provider.business_name }}" class="rounded-circle">
+									<img src="{{ provider.business_logo.url }}" alt="{{ provider.business_name }}" class="rounded-circle">
 									{% else %}
 									<img src="https://i.pravatar.cc/150?img={{ forloop.counter }}" alt="{{ provider.business_name }}" class="rounded-circle">
 									{% endif %}
 								</a>
 								<div>
 									<h6><a href="{% url 'providers:detail' provider.id %}">{{ provider.business_name }}</a></h6>
-									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>{{ provider.rating }} ({{ provider.total_reviews }}
+									<p class="fs-14 mb-0"><i class="ti ti-star-filled text-warning me-1"></i>{{ provider.rating|floatformat:1 }} ({{ provider.total_reviews }}
 										Reviews)</p>
-									<p class="mb-0">{{ provider.services.count }} Services</p>
+									<p class="mb-0">{{ provider.service_count|default:0 }} Service{{ provider.service_count|pluralize }}</p>
 								</div>
 							</div>
 						</div>

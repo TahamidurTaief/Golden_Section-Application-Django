@@ -5,6 +5,7 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 from accounts.models import User
 from services.models import Service
 from categories.models import Category
+from ckeditor.fields import RichTextField
 
 
 class Provider(models.Model):
@@ -53,7 +54,7 @@ class Provider(models.Model):
     website = models.URLField(blank=True)
     
     # Location
-    address = models.TextField()
+    address = RichTextField(config_name='default')
     city = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     latitude = models.DecimalField(
